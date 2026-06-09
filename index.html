@@ -390,19 +390,60 @@ body::after {
 #landing.active {
   display:flex; flex-direction:column;
   align-items:center; justify-content:center;
-  min-height:75vh; text-align:center;
+  text-align:center;
   animation:fadeUp 0.7s ease both;
+  /* 랜딩 배경 이미지 래퍼 역할도 겸함 */
+  position:relative;
+  min-height:75vh;
 }
-.landing-vol {
-  font-family:'IBM Plex Mono',monospace;
-  font-size:9px; letter-spacing:0.35em; text-transform:uppercase;
-  color:var(--text-muted); margin-bottom:24px;
-  display:flex; align-items:center; gap:12px;
+
+/* ─────────────────────────────────────────────
+   랜딩 배경 이미지
+   JS의 LANDING_BG_URL 에 이미지 URL을 넣으면 배경이 적용됩니다.
+   비워두면 기본 --bg 색상 배경 그대로 표시됩니다.
+   배경 이미지가 있을 때는 어두운 오버레이가 자동으로 깔립니다.
+───────────────────────────────────────────── */
+#landing-bg {
+  position:absolute; inset:0; z-index:0;
+  background-size:cover; background-position:center; background-repeat:no-repeat;
+  opacity:0; transition:opacity 0.6s ease;
+  border-radius:inherit;
 }
-.landing-vol::before, .landing-vol::after {
-  content:''; display:block; width:40px; height:1px; background:var(--border)
+#landing-bg.loaded { opacity:1 }
+/* 배경 이미지 위 어두운 오버레이 (텍스트 가독성 확보) */
+#landing-bg::after {
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(
+    to bottom,
+    rgba(14,10,6,0.45) 0%,
+    rgba(14,10,6,0.30) 50%,
+    rgba(14,10,6,0.55) 100%
+  );
 }
-/* 대형 타이틀 */
+/* 배경 이미지 활성화 시 랜딩 컨텐츠를 z-index 위로 */
+#landing.has-bg > *:not(#landing-bg) { position:relative; z-index:1 }
+/* 배경 이미지 있을 때 텍스트 색상 흰색으로 */
+#landing.has-bg .landing-title        { color:#f5ede0 }
+#landing.has-bg .landing-desc         { color:rgba(245,237,224,0.80) }
+#landing.has-bg #landing-title-text   { color:#f5ede0 }
+
+/* ─────────────────────────────────────────────
+   랜딩 타이틀 이미지
+   #landing-title-img 의 src 에 URL을 넣으면
+   텍스트 타이틀 대신 이미지 로고가 크게 표시됩니다.
+───────────────────────────────────────────── */
+#landing-title-img {
+  display:none;                           /* JS가 src 감지 시 block으로 전환 */
+  max-width:min(560px, 85vw);
+  width:auto; height:auto;
+  max-height:220px;
+  object-fit:contain;
+  margin-bottom:20px;
+  filter:drop-shadow(0 4px 24px rgba(14,10,6,0.22));
+  animation:introFadeUp 0.8s ease 0.1s both, titleFloat 4s ease-in-out 1s infinite;
+}
+
+/* 대형 텍스트 타이틀 */
 .landing-title {
   font-family:'Noto Serif SC','Noto Serif KR',serif;
   font-size:clamp(38px,10vw,88px);
@@ -425,43 +466,76 @@ body::after {
   max-width:360px; font-weight:300; margin-bottom:48px;
 }
 
-/* 카테고리 선택 버튼 3개 — 크기 키움 */
-.cat-buttons { display:flex; gap:32px; flex-wrap:wrap; justify-content:center }
+/* ─────────────────────────────────────────────
+   카테고리 선택 버튼 3개
+   이미지를 넣으면 이미지 버튼으로, 없으면 텍스트 버튼으로 표시됩니다.
+   이미지 있을 때는 padding이 제거되고 이미지가 버튼을 꽉 채웁니다.
+───────────────────────────────────────────── */
+.cat-buttons { display:flex; gap:24px; flex-wrap:wrap; justify-content:center }
+
 .cat-btn {
   position:relative; overflow:hidden;
-  padding:16px 40px;        /* 기존 14px 32px → 16px 40px */
+  padding:16px 40px;
   background:var(--surface);
   border:1px solid var(--c-border2);
   cursor:pointer;
   font-family:'IBM Plex Mono',monospace;
-  font-size:13px; letter-spacing:0.18em; text-transform:uppercase;  /* 10px → 13px */
+  font-size:13px; letter-spacing:0.18em; text-transform:uppercase;
   color:var(--text-mid);
   transition:transform var(--trans), box-shadow var(--trans), border-color var(--trans), color var(--trans);
   box-shadow:var(--shadow);
+  border-radius:var(--radius);
 }
-/* 마우스 올리면 버튼이 살짝 확대되는 효과 */
-.cat-btn:hover { color:var(--accent); border-color:var(--accent); box-shadow:0 6px 24px rgba(176,32,32,0.20); transform:scale(1.06) }
+/* 마우스 올리면 살짝 확대 */
+.cat-btn:hover {
+  color:var(--accent); border-color:var(--accent);
+  box-shadow:0 6px 24px rgba(176,32,32,0.20); transform:scale(1.06);
+}
 .cat-btn span { position:relative; z-index:1; display:flex; align-items:center; gap:8px }
-.cat-btn-num { font-size:11px; color:var(--text-dim) }   /* 8px → 11px */
+.cat-btn-num { font-size:11px; color:var(--text-dim) }
 .cat-btn:hover .cat-btn-num { color:var(--accent); opacity:0.7 }
 
 /* 카테고리 버튼 이미지 슬롯
-   src="" 따옴표 안에 URL을 넣으면 이미지가 표시됩니다.
-   이미지가 있으면 버튼이 세로 레이아웃(이미지 위, 텍스트 아래)으로 자동 전환됩니다.
-   이미지가 없으면 기존 가로 레이아웃 그대로 표시됩니다. */
+   ★ HTML 의 <img class="cat-btn-img" src=""> 에 URL을 넣으면 이미지 버튼으로 전환됩니다.
+   이미지가 없으면 기존 텍스트 버튼 그대로 표시됩니다.
+   이미지가 있으면:
+     - 버튼 padding 제거, 이미지가 버튼을 꽉 채움
+     - 이미지 아래 텍스트 라벨은 숨겨집니다 (필요시 표시 가능)
+*/
 .cat-btn-img {
-  display:none;
-  width:100%; max-width:120px;
-  height:auto; max-height:60px;
-  object-fit:contain;
-  margin-bottom:6px;
-  transition:opacity var(--trans);
+  display:none;             /* JS 처리 전 숨김 */
+  width:180px; height:180px;
+  object-fit:cover;
+  border-radius:calc(var(--radius) - 1px);
+  transition:opacity var(--trans), filter var(--trans);
 }
-/* 이미지가 표시될 때 버튼 내부를 세로 정렬로 전환 */
-.cat-btn:has(.cat-btn-img[style*="inline"]) span,
-.cat-btn.has-img span {
-  flex-direction:column; align-items:center; gap:4px;
+/* 이미지 있는 버튼 전용 스타일 */
+.cat-btn.has-img {
+  padding:0;
+  border-radius:var(--radius);
+  overflow:hidden;
+  background:transparent;
 }
+/* 이미지 위에 hover 시 오버레이 효과 */
+.cat-btn.has-img::after {
+  content:''; position:absolute; inset:0; z-index:2;
+  background:rgba(176,32,32,0.0);
+  transition:background var(--trans);
+  border-radius:inherit;
+}
+.cat-btn.has-img:hover::after { background:rgba(176,32,32,0.18) }
+.cat-btn.has-img:hover { transform:scale(1.05); box-shadow:0 8px 32px rgba(176,32,32,0.25) }
+/* 이미지 있는 버튼의 텍스트 라벨: 이미지 하단에 오버레이 */
+.cat-btn.has-img .cat-btn-text {
+  position:absolute; bottom:0; left:0; right:0; z-index:3;
+  padding:8px 10px 10px;
+  background:linear-gradient(to top, rgba(14,10,6,0.68) 0%, transparent 100%);
+  color:#f0e8d8; font-size:11px; letter-spacing:0.16em;
+  display:flex; align-items:center; justify-content:center; gap:6px;
+}
+.cat-btn.has-img .cat-btn-num { color:rgba(240,232,216,0.60); font-size:9px }
+/* 이미지 없을 때 기존 span 정렬 유지 */
+.cat-btn:not(.has-img) span { flex-direction:row }
 
 /* =====================================================
   ■ 카테고리 목록 페이지
@@ -663,6 +737,31 @@ body::after {
   margin:20px 0;
 }
 
+/* ─────────────────────────────────────────────
+   텍스트 파일 마크다운 인라인 서식 스타일
+   **굵게**  →  strong
+   *기울임*  →  em
+   ~~취소선~~ → del
+───────────────────────────────────────────── */
+.fiction-body strong {
+  font-weight:600;
+  color:var(--text);       /* 조금 더 강조 */
+}
+.fiction-body em {
+  font-style:italic;
+  color:var(--text-mid);   /* 기울임은 약간 진한 색 */
+}
+.fiction-body del {
+  text-decoration:line-through;
+  color:var(--text-muted); /* 취소선은 흐린 색 */
+  opacity:0.75;
+}
+/* 중첩: 굵은 기울임 */
+.fiction-body strong em,
+.fiction-body em strong {
+  font-weight:600; font-style:italic;
+}
+
 /* =====================================================
   ■ 아트(이미지) 뷰어
 ===================================================== */
@@ -801,7 +900,10 @@ body::after {
   border:1px solid rgba(192,57,43,0.30);
   border-radius:var(--radius);
 }
-.modal-btns { display:flex; gap:8px; justify-content:flex-end }
+.modal-btns { display:flex; gap:8px; justify-content:flex-end; align-items:center; flex-wrap:wrap }
+/* "인증하러가기" 버튼 — 왼쪽으로 밀어 분리 */
+.modal-btn.link-out { margin-right:auto; color:var(--gold); border-color:var(--gold) }
+.modal-btn.link-out:hover { background:rgba(154,112,16,0.08); border-color:var(--gold) }
 .modal-btn {
   padding:10px 22px; border-radius:var(--radius);   /* 8px 18px → 10px 22px */
   font-family:'IBM Plex Mono',monospace; font-size:11px;   /* 9px → 11px */
@@ -821,6 +923,162 @@ body::after {
 @keyframes fadeUp   { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
 @keyframes fadeIn   { from{opacity:0} to{opacity:1} }
 @keyframes scaleIn  { from{opacity:0;transform:scale(0.96)} to{opacity:1;transform:scale(1)} }
+
+/* =====================================================
+  ■ 동적 효과 — 전체 사이트 생동감
+===================================================== */
+
+/* ── 랜딩 파티클 캔버스 ──
+   랜딩 화면에 떠다니는 미세한 빛 입자입니다.
+   canvas#landingParticles 에 JS로 그려집니다. */
+#landingParticles {
+  position:absolute; inset:0; z-index:1;
+  pointer-events:none;
+  opacity:0.55;
+  width:100%; height:100%;
+}
+
+/* ── 로고 shimmer (헤더 한자 타이틀) ──
+   마우스를 올리면 빛이 스쳐지나갑니다. */
+.logo:hover .logo-hanja {
+  background:linear-gradient(
+    120deg,
+    var(--accent) 0%,
+    var(--gold) 40%,
+    #f0d090 55%,
+    var(--gold) 70%,
+    var(--accent) 100%
+  );
+  background-size:200% auto;
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  animation:shimmerText 1.4s linear infinite;
+}
+@keyframes shimmerText {
+  0%   { background-position:200% center }
+  100% { background-position:-200% center }
+}
+
+/* ── 콘텐츠 카드 등장 애니메이션 ──
+   카드가 아래에서 위로 페이드인됩니다. */
+.content-card {
+  animation:cardIn 0.4s ease both;
+}
+@keyframes cardIn {
+  from { opacity:0; transform:translateY(10px) }
+  to   { opacity:1; transform:translateY(0) }
+}
+/* 순서대로 늦게 등장 (nth-child로 stagger) */
+.content-card:nth-child(1)  { animation-delay:0.04s }
+.content-card:nth-child(2)  { animation-delay:0.08s }
+.content-card:nth-child(3)  { animation-delay:0.12s }
+.content-card:nth-child(4)  { animation-delay:0.16s }
+.content-card:nth-child(5)  { animation-delay:0.20s }
+.content-card:nth-child(6)  { animation-delay:0.24s }
+.content-card:nth-child(7)  { animation-delay:0.28s }
+.content-card:nth-child(8)  { animation-delay:0.32s }
+
+/* ── 뷰어 타이틀 shimmer 장식선 ──
+   제목 아래 짧은 빨간 선이 로딩될 때 왼쪽에서 늘어납니다. */
+.viewer-header::before {
+  animation:lineGrow 0.6s cubic-bezier(0.4,0,0.2,1) both;
+}
+@keyframes lineGrow {
+  from { width:0; opacity:0 }
+  to   { width:60px; opacity:1 }
+}
+
+/* ── 네비게이션 항목 hover glow ──
+   사이드바 소목차에 마우스 올리면 글씨에 은은한 광채 */
+.nav-sub:hover {
+  text-shadow:0 0 12px rgba(154,112,16,0.35);
+}
+.nav-cat.active {
+  text-shadow:0 0 16px rgba(176,32,32,0.25);
+}
+
+/* ── 맨 위로 버튼 pulse ──
+   처음 나타날 때 pulse 효과 */
+#scrollTopBtn.visible {
+  animation:btnPulse 0.4s ease both;
+}
+@keyframes btnPulse {
+  0%   { transform:scale(0.7); opacity:0 }
+  70%  { transform:scale(1.12) }
+  100% { transform:scale(1); opacity:1 }
+}
+
+/* ── 모달 등장 강화 ── */
+.modal { animation:modalIn 0.28s cubic-bezier(0.34,1.56,0.64,1) both }
+@keyframes modalIn {
+  from { opacity:0; transform:scale(0.88) translateY(16px) }
+  to   { opacity:1; transform:scale(1) translateY(0) }
+}
+
+/* ── 인트로 화면 별빛 파티클 ──
+   JS에서 canvas#introParticles 에 그려집니다. */
+#introParticles {
+  position:absolute; inset:0; z-index:0; pointer-events:none;
+}
+
+/* ── 카테고리 버튼 shimmer (이미지 없는 텍스트 버튼) ──
+   hover 시 배경에 빛 스침 효과 */
+.cat-btn:not(.has-img)::before {
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.18) 50%, transparent 70%);
+  transform:translateX(-100%); transition:none;
+}
+.cat-btn:not(.has-img):hover::before {
+  animation:shimmerSlide 0.5s ease forwards;
+}
+@keyframes shimmerSlide {
+  from { transform:translateX(-100%) }
+  to   { transform:translateX(100%) }
+}
+
+/* ── 헤더 아이콘 링크 hover spin (이미지 아이콘) ── */
+.header-icon-link:hover img {
+  animation:iconSpin 0.4s ease;
+}
+@keyframes iconSpin {
+  0%   { transform:rotate(0deg) scale(1) }
+  40%  { transform:rotate(-12deg) scale(1.15) }
+  100% { transform:rotate(0deg) scale(1) }
+}
+
+/* ── sub-tab 활성화 시 슬라이드인 ── */
+.sub-tab.active {
+  animation:tabPop 0.22s cubic-bezier(0.34,1.4,0.64,1) both;
+}
+@keyframes tabPop {
+  from { transform:scale(0.9); opacity:0.6 }
+  to   { transform:scale(1); opacity:1 }
+}
+
+/* ── 섹션 페이지 전환 시 더 부드럽게 ── */
+#catPage.active  { animation:fadeUp 0.45s cubic-bezier(0.4,0,0.2,1) both }
+#viewer.active   { animation:fadeUp 0.45s cubic-bezier(0.4,0,0.2,1) both }
+
+/* ── 사이드바 항목 stagger ── */
+.nav-cat { transition:color var(--trans), border-color var(--trans), text-shadow var(--trans) }
+
+/* ── 랜딩 타이틀 이미지 플로팅 ──
+   이미지 로고가 살짝 위아래로 떠다니는 느낌 */
+#landing-title-img[style*="block"] {
+  animation:titleFloat 4s ease-in-out infinite;
+}
+@keyframes titleFloat {
+  0%,100% { transform:translateY(0px) }
+  50%     { transform:translateY(-8px) }
+}
+
+/* ── 랜딩 desc 텍스트 등장 지연 ── */
+.landing-desc {
+  animation:fadeUp 0.8s ease 0.4s both;
+}
+/* ── 카테고리 버튼 묶음 등장 지연 ── */
+.cat-buttons {
+  animation:fadeUp 0.8s ease 0.6s both;
+}
 
 /* =====================================================
   ■ 스크롤바 커스텀
@@ -845,6 +1103,9 @@ body::after {
   인트로 화면
 ===================================================== -->
 <div id="intro" onclick="dismissIntro()">
+  <!-- 인트로 별빛 파티클 캔버스 -->
+  <canvas id="introParticles"></canvas>
+
   <div class="intro-corner tl"></div>
   <div class="intro-corner tr"></div>
   <div class="intro-corner bl"></div>
@@ -857,7 +1118,7 @@ body::after {
     예) src="https://raw.githubusercontent.com/내이름/webzine/main/intro.png"
   -->
   <div class="intro-img-wrap" id="introImgWrap">
-    <img id="introImg" src="https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EB%A1%9C%EA%B3%A0.png?raw=true" alt="">
+    <img id="introImg" src="" alt="">
   </div>
 
   <h1 class="intro-title">愛情<span>反正</span>日誌</h1>
@@ -925,19 +1186,21 @@ body::after {
 
   <!-- 랜딩 화면: 처음 진입 시 보이는 화면 -->
   <section id="landing" class="active">
-    <!--
-      ▼ 랜딩 타이틀 영역
-        이미지가 있으면 이미지를, 없으면 텍스트 타이틀을 표시합니다.
-    -->
+
+    <!-- 랜딩 배경 이미지 레이어 (JS의 LANDING_BG_URL 에서 제어) -->
+    <div id="landing-bg"></div>
+
+    <!-- 랜딩 파티클 캔버스 (떠다니는 빛 입자) -->
+    <canvas id="landingParticles"></canvas>
 
     <!--
-      ★★★ 링크 삽입 ★★★ 랜딩 타이틀 이미지
-      src="" 따옴표 안에 이미지 URL을 넣으면 텍스트 타이틀 대신 이미지가 표시됩니다.
+      ★★★ 링크 삽입 ★★★ 랜딩 타이틀 이미지 (크게 표시)
+      src="" 따옴표 안에 이미지 URL을 넣으면 텍스트 타이틀 대신 이미지 로고가 크게 표시됩니다.
       비워두면 아래 텍스트 타이틀(愛情反正日誌)이 그대로 보입니다.
-      예) src="https://raw.githubusercontent.com/내이름/webzine/main/title.png"
+      권장 크기: 폭 800px 이상의 투명 PNG
+      예) src="https://raw.githubusercontent.com/내이름/webzine/main/title-logo.png"
     -->
-    <img id="landing-title-img" src="" alt="愛情反正日誌"
-      style="display:none; max-width:480px; width:90%; height:auto; object-fit:contain; margin-bottom:16px;">
+    <img id="landing-title-img" src="" alt="愛情反正日誌">
     <!--
       ▼ 텍스트 타이틀 (이미지 없을 때 표시)
         이미지를 넣으면 자동으로 숨겨집니다.
@@ -948,29 +1211,29 @@ body::after {
 
     <!--
       ★★★ 링크 삽입 ★★★ 메인 카테고리 버튼 이미지
-      각 버튼의 src="" 따옴표 안에 이미지 URL을 넣으면 버튼이 이미지로 바뀝니다.
-      비워두면 텍스트 버튼이 그대로 표시됩니다.
-      예) src="https://raw.githubusercontent.com/내이름/webzine/main/btn-fiction.png"
+      각 버튼의 src="" 따옴표 안에 이미지 URL을 넣으면 이미지 버튼으로 바뀝니다.
+      이미지는 정사각형(180×180px 내외) 권장. 비워두면 텍스트 버튼 그대로 표시됩니다.
+      예) src="https://raw.githubusercontent.com/내이름/webzine/main/btn-fiction.jpg"
     -->
     <div class="cat-buttons">
       <button class="cat-btn" onclick="goCategory('Fiction')">
+        <!-- ★ Fiction 버튼 이미지 → src="" 안에 URL 입력 -->
+        <img class="cat-btn-img" src="" alt="Fiction">
         <span>
-          <!-- ★ Fiction 버튼 이미지 → src="" 안에 URL 입력 -->
-          <img class="cat-btn-img" src="" alt="">
           <span class="cat-btn-text"><span class="cat-btn-num">01</span> Fiction</span>
         </span>
       </button>
       <button class="cat-btn" onclick="goCategory('Art')">
+        <!-- ★ Art 버튼 이미지 → src="" 안에 URL 입력 -->
+        <img class="cat-btn-img" src="" alt="Art">
         <span>
-          <!-- ★ Art 버튼 이미지 → src="" 안에 URL 입력 -->
-          <img class="cat-btn-img" src="" alt="">
           <span class="cat-btn-text"><span class="cat-btn-num">02</span> Art</span>
         </span>
       </button>
       <button class="cat-btn" onclick="goCategory('Videos')">
+        <!-- ★ Videos 버튼 이미지 → src="" 안에 URL 입력 -->
+        <img class="cat-btn-img" src="" alt="Videos">
         <span>
-          <!-- ★ Videos 버튼 이미지 → src="" 안에 URL 입력 -->
-          <img class="cat-btn-img" src="" alt="">
           <span class="cat-btn-text"><span class="cat-btn-num">03</span> Videos</span>
         </span>
       </button>
@@ -1033,7 +1296,7 @@ const ADULT_PW   = '1234';
    비워두면('') 버튼이 표시되지 않습니다.
    예) const ADULT_LINK = 'https://www.example.com/age-verify';
 */
-const ADULT_LINK = 'https://html.onlineviewer.net/';        /* ← 여기에 성인 인증 페이지 URL 입력 */
+const ADULT_LINK = '';        /* ← 여기에 성인 인증 페이지 URL 입력 */
 const MASTER_KEY = 'admin0000';
 
 /* =====================================================
@@ -1110,7 +1373,15 @@ const contentData = {
       {
         title: "3초", type: "fiction", author: "박지원",
         sub: "Flash Fiction", adult: false,
-        bodyURL: `https://raw.githubusercontent.com/htopwebzine/htopwebzine/refs/heads/main/%EC%A3%BD%EC%9D%80_%EB%A1%9C%EB%B4%87%EC%9D%84_%EC%82%AC%EB%9E%91%ED%95%98%EA%B8%B0.txt`
+        body: `그는 항상 3초를 세었다.
+
+신호등이 초록으로 바뀌기 전. 전화를 받기 전. 문을 열기 전.
+
+3초가 세상을 바꿀 수는 없다. 그는 알고 있었다.
+
+그래도 셌다. 습관이 아니라, 기억 때문에.
+
+나는 그녀가 마지막으로 한 말을 기억한다. "3초만 더 있어줘."`
       },
       {
         title: "심야의 기록", type: "fiction", author: "익명",
@@ -1288,6 +1559,33 @@ function buildHeaderIcons() {
 buildHeaderIcons();
 
 /* =====================================================
+  ■ 랜딩 배경 이미지 설정
+  ─────────────────────────────────────────────────────
+  LANDING_BG_URL : 랜딩 화면 전체 배경 이미지 URL
+    → 이미지 URL을 넣으면 배경이 적용됩니다.
+    → 비워두면('') 기본 베이지 배경 그대로입니다.
+    → 배경 이미지가 있으면 자동으로 어두운 오버레이가 깔립니다.
+    예) const LANDING_BG_URL = 'https://raw.githubusercontent.com/내이름/webzine/main/bg.jpg';
+===================================================== */
+const LANDING_BG_URL = '';   /* ← 여기에 배경 이미지 URL 입력 */
+
+/* =====================================================
+  ■ 랜딩 배경 이미지 자동 적용
+    LANDING_BG_URL 이 있으면 #landing-bg 에 배경을 설정합니다.
+===================================================== */
+(function() {
+  if (!LANDING_BG_URL) return;
+  const bg      = document.getElementById('landing-bg');
+  const landing = document.getElementById('landing');
+  if (!bg || !landing) return;
+  bg.style.backgroundImage = `url('${LANDING_BG_URL}')`;
+  /* 이미지 로드 후 fade-in */
+  const preload = new Image();
+  preload.onload = () => { bg.classList.add('loaded'); landing.classList.add('has-bg'); };
+  preload.src = LANDING_BG_URL;
+})();
+
+/* =====================================================
   ■ 랜딩 타이틀 이미지 자동 처리
     landing-title-img src가 있으면 이미지를 보여주고
     텍스트 타이틀을 숨깁니다.
@@ -1317,18 +1615,19 @@ buildHeaderIcons();
 
 /* =====================================================
   ■ 카테고리 버튼 이미지 자동 처리
-    cat-btn-img src가 있으면 이미지를, 없으면 텍스트를 보여줍니다.
-    이미지가 있으면 버튼에 has-img 클래스를 추가해 세로 레이아웃으로 전환합니다.
+    cat-btn-img src가 있으면 이미지 버튼으로 전환됩니다.
+    이미지가 있으면:
+      - 버튼에 has-img 클래스 추가 → 이미지 꽉 채우는 스타일 적용
+      - 이미지를 display:block으로 표시
+    이미지가 없으면 텍스트 버튼 그대로 표시됩니다.
 ===================================================== */
 (function() {
   document.querySelectorAll('.cat-btn-img').forEach(img => {
     if (img.src && img.src !== window.location.href) {
-      img.style.display = 'inline-block';
-      /* 버튼에 has-img 클래스 추가 → 세로 레이아웃 전환 */
+      img.style.display = 'block';
+      /* 버튼에 has-img 클래스 추가 → 이미지 꽉 채우는 레이아웃으로 전환 */
       const btn = img.closest('.cat-btn');
       if (btn) btn.classList.add('has-img');
-      const txt = img.nextElementSibling;
-      if (txt) txt.style.display = 'none';
     }
   });
 })();
@@ -1503,6 +1802,8 @@ function goLanding() {
   hideAll(); show('landing');
   currentCat = null;
   window.scrollTo({ top:0, behavior:'smooth' });
+  /* 랜딩 파티클 시작 (이미 실행 중이면 내부에서 중복 방지) */
+  if (window._startLandingParticles) window._startLandingParticles();
 }
 
 /* =====================================================
@@ -1511,6 +1812,7 @@ function goLanding() {
     해당 소목차 탭을 자동 선택합니다.
 ===================================================== */
 function goCategory(cat, defaultSub) {
+  if (window._stopLandingParticles) window._stopLandingParticles();
   hideAll(); show('catPage');
   currentCat = cat; currentSub = null; currentIdx = null;
 
@@ -1608,23 +1910,17 @@ function attemptLoad(cat, sub, idx) {
     /*
       성인 인증 모달
       비밀번호 입력 + "인증하러가기" 버튼 (ADULT_LINK 있을 때만 표시)
+      "인증하러가기"는 취소·확인 버튼과 같은 가로선에 배치됩니다.
     */
-    const linkBtn = ADULT_LINK
-      ? `<a href="${ADULT_LINK}" target="_blank" style="
-            display:inline-block;margin-top:10px;padding:7px 16px;
-            background:none;border:1px solid var(--border);border-radius:var(--radius);
-            font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.12em;
-            text-transform:uppercase;color:var(--text-muted);text-decoration:none;
-            transition:all 0.3s;cursor:pointer;"
-          onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'"
-          onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-muted)'">
-          인증하러가기 →</a>`
-      : '';
     openModal('성인 인증', `
       <div>이 콘텐츠는 성인 전용입니다.<br>접근 비밀번호를 입력해 주세요.</div>
       <input type="password" id="modalPwInput" placeholder="비밀번호" autocomplete="off">
-      ${linkBtn}
     `, [
+      /* ADULT_LINK 가 있을 때만 "인증하러가기" 버튼 표시 */
+      ...(ADULT_LINK ? [{
+        label:'인증하러가기 →', cls:'link-out',
+        action: () => { window.open(ADULT_LINK, '_blank') }
+      }] : []),
       { label:'취소', cls:'',        action: closeModal },
       { label:'확인', cls:'primary', action: () => {
         const pw = document.getElementById('modalPwInput').value;
@@ -1724,6 +2020,44 @@ function applyFontSize() {
 /* =====================================================
   ■ 본문 렌더링
 ===================================================== */
+
+/*
+  ─────────────────────────────────────────────────────
+  ■ 텍스트 파일 마크다운 인라인 파싱
+  ─────────────────────────────────────────────────────
+  텍스트 파일(.txt) 내의 마크다운 서식을 HTML로 변환합니다.
+  지원 문법:
+    **텍스트**   → <strong> (굵게)
+    *텍스트*     → <em>     (기울임)
+    ~~텍스트~~   → <del>    (취소선)
+    위 세 가지를 중첩해서 사용할 수 있습니다.
+    예) **_굵은 기울임_**  →  <strong><em>굵은 기울임</em></strong>
+  ─────────────────────────────────────────────────────
+  엔터 처리:
+    엔터 한 번(\n)  → 줄바꿈 <br> 유지
+    빈 줄 두 개(\n\n) → 새 단락 <p> 구분
+*/
+function parseInlineMarkdown(text) {
+  /* 1) HTML 특수문자 이스케이프 (XSS 방지) */
+  let s = String(text)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+
+  /* 2) 인라인 서식 변환 — 순서 중요 (긴 패턴 먼저) */
+  /* 굵은 기울임 ***텍스트*** */
+  s = s.replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>');
+  /* 굵게 **텍스트** */
+  s = s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  /* 기울임 *텍스트* (단, ** 는 이미 처리됨) */
+  s = s.replace(/(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)/g, '<em>$1</em>');
+  /* 취소선 ~~텍스트~~ */
+  s = s.replace(/~~(.+?)~~/g, '<del>$1</del>');
+
+  return s;
+}
+
 async function renderBody(item) {
 
   /* Fiction */
@@ -1748,36 +2082,48 @@ async function renderBody(item) {
     }
 
     /*
-      단락 변환 + 들여쓰기 규칙
+      단락 변환 + 들여쓰기 규칙 + 마크다운 인라인 처리
       ─────────────────────────────────────────
-      다음 경우는 무조건 들여쓰기 적용:
+      빈 줄 두 개(엔터 두 번, \n\n) = 새 단락 <p>
+      엔터 한 번(\n)              = 줄바꿈 <br> 유지
+      
+      들여쓰기 적용 기준:
         1. "나 " 로 시작하는 문장
         2. " (큰따옴표) 로 시작하는 문장
         3. ' (작은따옴표/한국어 인용부호 '·「) 로 시작하는 문장
-        4. 단락 내 두 번째 줄 이후 (엔터로 구분된 줄)
+        4. 단락 내 두 번째 줄 이후 (엔터 한 번으로 구분된 줄)
       
-      빈 줄 두 개(엔터 두 번) = 새 단락 (들여쓰기 초기화)
+      인라인 마크다운:
+        **텍스트** → 굵게, *텍스트* → 기울임, ~~텍스트~~ → 취소선
     */
     const QUOTE_CHARS = ['"', '\u201c', '\u2018', '\u300c', '\u300e', "'", '\u2019', '\u201d'];
-    const ps = text.trim().split(/\n\n+/).map((para, pIdx) => {
+
+    /* Windows CRLF(\r\n) → LF(\n) 정규화 */
+    const normalizedText = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+
+    const ps = normalizedText.trim().split(/\n\n+/).map((para) => {
+      /* 단락 내 줄들 처리 */
       const lines = para.split('\n');
       const processed = lines.map((line, lIdx) => {
         const trimmed = line.trimStart();
+
+        /* 마크다운 인라인 파싱 적용 */
+        const parsedLine = parseInlineMarkdown(line);
+        const parsedTrimmed = parseInlineMarkdown(trimmed);
+
         const needsIndent =
-          /* "나 " 로 시작 */
           trimmed.startsWith('나 ') || trimmed === '나' ||
-          /* 따옴표로 시작 */
           QUOTE_CHARS.some(q => trimmed.startsWith(q)) ||
-          /* 단락 내 두 번째 줄 이후 (엔터 한 번으로 구분된 줄) */
           lIdx > 0;
 
         if (needsIndent) {
-          return `<span class="indent-na">${escH(line)}</span>`;
+          return `<span class="indent-na">${parsedLine}</span>`;
         }
-        return escH(line);
+        return parsedTrimmed;
       });
       return `<p>${processed.join('<br>')}</p>`;
     }).join('');
+
     return `<div class="fiction-body">${ps}</div>`;
   }
 
@@ -1883,6 +2229,145 @@ window.addEventListener('scroll', () => {
 scrollBtn.addEventListener('click', () =>
   window.scrollTo({ top:0, behavior:'smooth' })
 );
+
+/* =====================================================
+  ■ 파티클 효과
+  ─────────────────────────────────────────────────────
+  인트로 화면 : 별빛처럼 반짝이는 파티클 (흰색/금색 계열)
+  랜딩 화면   : 떠다니는 미세한 빛 입자 (금색/베이지 계열)
+===================================================== */
+
+/* ── 인트로 파티클 ── */
+(function() {
+  const canvas = document.getElementById('introParticles');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let particles = [], raf;
+
+  function resize() {
+    canvas.width  = canvas.offsetWidth  || window.innerWidth;
+    canvas.height = canvas.offsetHeight || window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  /* 파티클 생성 */
+  for (let i = 0; i < 80; i++) {
+    particles.push({
+      x:    Math.random() * canvas.width,
+      y:    Math.random() * canvas.height,
+      r:    Math.random() * 1.4 + 0.3,
+      /* 반짝임 위상 무작위 */
+      phase: Math.random() * Math.PI * 2,
+      speed: Math.random() * 0.4 + 0.1,
+      /* 금색/흰색 혼합 */
+      hue:  Math.random() > 0.5 ? '255,220,140' : '240,230,210',
+    });
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const t = Date.now() / 1000;
+    particles.forEach(p => {
+      /* 위치를 천천히 떠돌게 */
+      p.x += Math.sin(t * p.speed + p.phase) * 0.3;
+      p.y += Math.cos(t * p.speed * 0.7 + p.phase) * 0.3;
+      /* 캔버스 밖으로 나가면 반대쪽으로 */
+      if (p.x < 0) p.x = canvas.width;
+      if (p.x > canvas.width) p.x = 0;
+      if (p.y < 0) p.y = canvas.height;
+      if (p.y > canvas.height) p.y = 0;
+      /* 반짝임 알파값 */
+      const alpha = (Math.sin(t * p.speed * 2 + p.phase) + 1) / 2 * 0.8 + 0.1;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${p.hue},${alpha.toFixed(2)})`;
+      ctx.fill();
+    });
+    raf = requestAnimationFrame(draw);
+  }
+  draw();
+
+  /* 인트로가 사라지면 파티클도 중지 */
+  const introEl = document.getElementById('intro');
+  if (introEl) {
+    introEl.addEventListener('click', () => {
+      setTimeout(() => cancelAnimationFrame(raf), 1000);
+    });
+  }
+})();
+
+/* ── 랜딩 파티클 ── */
+(function() {
+  let landingRaf = null;
+
+  function startLandingParticles() {
+    const canvas = document.getElementById('landingParticles');
+    if (!canvas) return;
+    /* 이미 실행 중이면 중복 시작 방지 */
+    if (landingRaf) return;
+
+    const ctx = canvas.getContext('2d');
+
+    function resize() {
+      /* 부모의 실제 크기를 써야 하지만 min-height 기반이라 window 기준 사용 */
+      canvas.width  = canvas.parentElement ? canvas.parentElement.getBoundingClientRect().width  || window.innerWidth  : window.innerWidth;
+      canvas.height = canvas.parentElement ? canvas.parentElement.getBoundingClientRect().height || window.innerHeight * 0.75 : window.innerHeight * 0.75;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    /* 작고 느린 빛 입자 */
+    const particles = [];
+    for (let i = 0; i < 55; i++) {
+      particles.push({
+        x:     Math.random() * canvas.width,
+        y:     Math.random() * canvas.height,
+        r:     Math.random() * 1.8 + 0.4,
+        vx:    (Math.random() - 0.5) * 0.28,
+        vy:    (Math.random() - 0.5) * 0.28,
+        phase: Math.random() * Math.PI * 2,
+        speed: Math.random() * 0.5 + 0.2,
+        /* 베이지/금색 계열 */
+        hue:   Math.random() > 0.4 ? '192,154,80' : '220,200,160',
+      });
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const t = Date.now() / 1000;
+      particles.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < 0) p.x = canvas.width;
+        if (p.x > canvas.width) p.x = 0;
+        if (p.y < 0) p.y = canvas.height;
+        if (p.y > canvas.height) p.y = 0;
+        const alpha = (Math.sin(t * p.speed + p.phase) + 1) / 2 * 0.6 + 0.1;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${p.hue},${alpha.toFixed(2)})`;
+        ctx.fill();
+      });
+      landingRaf = requestAnimationFrame(draw);
+    }
+    draw();
+  }
+
+  function stopLandingParticles() {
+    if (landingRaf) { cancelAnimationFrame(landingRaf); landingRaf = null; }
+  }
+
+  /* 초기 랜딩이 active 상태면 바로 시작 */
+  const landing = document.getElementById('landing');
+  if (landing && landing.classList.contains('active')) {
+    startLandingParticles();
+  }
+
+  /* goLanding() 호출 시 시작, 다른 페이지 이동 시 중지 */
+  window._startLandingParticles = startLandingParticles;
+  window._stopLandingParticles  = stopLandingParticles;
+})();
 
 /* =====================================================
   ■ HTML 특수문자 이스케이프
