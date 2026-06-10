@@ -436,8 +436,9 @@ body::after {
   object-fit:cover;
   object-position:center;
   pointer-events:none;
-  animation:titleFloat 4s ease-in-out infinite;
-  filter:drop-shadow(0 6px 10px rgba(0,0,0,0.50));
+  /* 로고와 반대 위상·다른 속도로 둥둥 */
+  animation:overlayFloat 6s ease-in-out infinite;  /* 기본: 부유만 */
+  filter:drop-shadow(0 3px 4px rgba(0,0,0,0.42));
 }
 
 /* ─────────────────────────────────────────────
@@ -447,18 +448,16 @@ body::after {
    권장 크기: 폭 1200px 이상의 투명 PNG
 ───────────────────────────────────────────── */
 #landing-title-img {
-  display:none;                  /* JS가 src 감지 시 block으로 전환 */
+  display:none;
   max-width:min(1200px, 96vw);
   width:96vw;
   height:auto;
-  max-height:450px;
+  max-height:520px;
   object-fit:contain;
-  margin-top:60px;               /* 타이틀 로고 위치 아래로 */
+  margin-top:60px;
   margin-bottom:12px;
-  /* 부유 애니메이션 — 이미지가 살짝 위아래로 떠다님 */
-  animation:titleFloat 4s ease-in-out infinite;
-  /* 그림자 */
-  filter:drop-shadow(0 3px 6px rgba(0,0,0,0.50));
+  animation:titleFloat 4s ease-in-out infinite;  /* 기본: 부유만 */
+  filter:drop-shadow(0 3px 5px rgba(0,0,0,0.50));
 }
 
 /* 대형 텍스트 타이틀 */
@@ -498,14 +497,46 @@ body::after {
   display:flex; 
   flex-direction:column;
   align-items:center;
-  gap:2px;
+  gap:0px;
   margin-top:-32px;
 }
 
-/* 각 버튼별 대각선 효과 */
+/* 기본 상태: 대각선 배치 */
 .cat-btn:nth-child(1) { transform:translateX(-50px); }
-.cat-btn:nth-child(2) { transform:translateX(50px); }
+.cat-btn:nth-child(2) { transform:translateX(50px);  }
 .cat-btn:nth-child(3) { transform:translateX(-50px); }
+
+/* ── 등장 애니메이션: .landing-animate 클래스 부착 시 실행 ── */
+.landing-animate .cat-btn:nth-child(1) { animation:btnRise1 0.7s cubic-bezier(0.22,1,0.36,1) 0.85s both, btnPulse1 3.2s ease-in-out 2s infinite; }
+.landing-animate .cat-btn:nth-child(2) { animation:btnRise2 0.7s cubic-bezier(0.22,1,0.36,1) 1.05s both, btnPulse2 3.2s ease-in-out 2.6s infinite; }
+.landing-animate .cat-btn:nth-child(3) { animation:btnRise3 0.7s cubic-bezier(0.22,1,0.36,1) 1.25s both, btnPulse3 3.2s ease-in-out 3.2s infinite; }
+
+/* ── 버튼 상시 pulse (위상 다르게) ── */
+@keyframes btnPulse1 {
+  0%,100% { transform:translateX(-50px) translateY(0)    scale(1);    opacity:1; }
+  50%     { transform:translateX(-50px) translateY(-5px) scale(1.04); opacity:0.88; }
+}
+@keyframes btnPulse2 {
+  0%,100% { transform:translateX(50px)  translateY(0)    scale(1);    opacity:1; }
+  50%     { transform:translateX(50px)  translateY(-5px) scale(1.04); opacity:0.88; }
+}
+@keyframes btnPulse3 {
+  0%,100% { transform:translateX(-50px) translateY(0)    scale(1);    opacity:1; }
+  50%     { transform:translateX(-50px) translateY(-5px) scale(1.04); opacity:0.88; }
+}
+
+@keyframes btnRise1 {
+  from { opacity:0; transform:translateX(-50px) translateY(20px); }
+  to   { opacity:1; transform:translateX(-50px) translateY(0); }
+}
+@keyframes btnRise2 {
+  from { opacity:0; transform:translateX(50px) translateY(20px); }
+  to   { opacity:1; transform:translateX(50px) translateY(0); }
+}
+@keyframes btnRise3 {
+  from { opacity:0; transform:translateX(-50px) translateY(20px); }
+  to   { opacity:1; transform:translateX(-50px) translateY(0); }
+}
 
 /* ── 기본 버튼 (이미지 없을 때) ── */
 .cat-btn {
@@ -555,10 +586,11 @@ body::after {
   border-radius:var(--radius);
   overflow:visible;      /* 이미지가 overflow:hidden에 잘리지 않도록 */
 }
-/* has-img 버튼 hover — 확대만, 색상·그림자 변화 없음 */
-.cat-btn.has-img:hover .cat-btn-img {
-  transform:scale(1.06);
-}
+/* has-img 버튼 hover — translateX 유지하며 확대 */
+.cat-btn:nth-child(1).has-img:hover { transform:translateX(-50px) scale(1.06); }
+.cat-btn:nth-child(2).has-img:hover { transform:translateX(50px)  scale(1.06); }
+.cat-btn:nth-child(3).has-img:hover { transform:translateX(-50px) scale(1.06); }
+.cat-btn.has-img:hover .cat-btn-img { transform:scale(1.06); }
 /* has-img 버튼의 텍스트 span 완전히 숨김 */
 .cat-btn.has-img > span { display:none }
 
@@ -948,9 +980,35 @@ body::after {
 @keyframes fadeUp   { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
 @keyframes fadeIn   { from{opacity:0} to{opacity:1} }
 @keyframes scaleIn  { from{opacity:0;transform:scale(0.96)} to{opacity:1;transform:scale(1)} }
+/* 로고 부유 — 빠르고 진폭 작음 */
 @keyframes titleFloat {
   0%,100% { transform:translateY(0px) }
-  50%     { transform:translateY(-12px) }
+  50%     { transform:translateY(-10px) }
+}
+/* 오버레이 부유 — 느리고 진폭 큼, 반대 위상 */
+@keyframes overlayFloat {
+  0%,100% { transform:translateY(-8px) }
+  50%     { transform:translateY(8px) }
+}
+/* 랜딩 등장 — 배경 페이드인 */
+@keyframes landingBgIn {
+  from { opacity:0 }
+  to   { opacity:1 }
+}
+/* 랜딩 등장 — 로고 위에서 내려오며 페이드인 */
+@keyframes logoDropIn {
+  from { opacity:0; transform:translateY(-28px) }
+  to   { opacity:1; transform:translateY(0) }
+}
+/* 랜딩 등장 — 버튼 아래서 올라오며 페이드인 */
+@keyframes btnRiseIn {
+  from { opacity:0; transform:translateY(22px) }
+  to   { opacity:1; transform:translateY(0) }
+}
+/* 버튼 개별 stagger — translateX를 건드리지 않고 opacity+Y만 */
+@keyframes btnFadeRise {
+  from { opacity:0; transform:translateY(20px) }
+  to   { opacity:1; transform:translateY(0) }
 }
 
 /* =====================================================
@@ -1062,14 +1120,13 @@ body::after {
 /* ── 사이드바 항목 stagger ── */
 .nav-cat { transition:color var(--trans), border-color var(--trans), text-shadow var(--trans) }
 
-/* ── 랜딩 desc 텍스트 등장 지연 ── */
-.landing-desc {
-  animation:fadeUp 0.8s ease 0.4s both;
-}
-/* ── 카테고리 버튼 묶음 등장 지연 ── */
-.cat-buttons {
-  animation:fadeUp 0.8s ease 0.6s both;
-}
+/* ── 랜딩 등장 애니메이션: .landing-animate 부착 시 실행 ── */
+#landing.landing-animate #landing-bg          { animation:landingBgIn 1.0s ease both; }
+#landing.landing-animate #landing-overlay-img { animation:overlayFloat 6s ease-in-out 1.0s infinite, landingBgIn 1.0s ease both; }
+#landing.landing-animate #landing-title-img   { animation:logoDropIn 0.9s cubic-bezier(0.22,1,0.36,1) 0.2s both, titleFloat 4s ease-in-out 1.2s infinite; }
+#landing.landing-animate #landing-title-text  { animation:logoDropIn 0.9s cubic-bezier(0.22,1,0.36,1) 0.2s both; }
+#landing.landing-animate .landing-desc        { animation:fadeUp 0.8s ease 0.7s both; }
+/* ── 카테고리 버튼: 개별 stagger는 nth-child에서 처리 ── */
 
 /* =====================================================
   ■ 스크롤바 커스텀
@@ -1484,10 +1541,26 @@ document.addEventListener('keydown', e => {
     img.style.display = 'block';
   }
 })();
+/* =====================================================
+  ■ 랜딩 등장 애니메이션 트리거
+    .landing-animate 클래스를 제거→재추가해 애니메이션 리셋
+===================================================== */
+function triggerLandingAnim() {
+  const landing = document.getElementById('landing');
+  landing.classList.remove('landing-animate');
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      landing.classList.add('landing-animate');
+    });
+  });
+}
+
 function dismissIntro() {
   document.getElementById('intro').classList.add('hidden');
-  window.scrollTo({ top:0, behavior:'smooth' });  /* 스크롤 맨 위로 */
+  window.scrollTo({ top:0, behavior:'smooth' });
   setTimeout(() => { document.getElementById('intro').style.display = 'none'; }, 900);
+  /* 인트로 퇴장 직후 랜딩 등장 애니메이션 실행 */
+  setTimeout(triggerLandingAnim, 200);
 }
 
 /* =====================================================
@@ -1809,6 +1882,8 @@ function goLanding() {
   hideAll(); show('landing');
   currentCat = null;
   window.scrollTo({ top:0, behavior:'smooth' });
+  /* 랜딩으로 돌아올 때도 등장 애니메이션 재실행 */
+  triggerLandingAnim();
 }
 
 /* =====================================================
