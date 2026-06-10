@@ -513,16 +513,16 @@ body::after {
 
 /* ── 버튼 상시 pulse (위상 다르게) ── */
 @keyframes btnPulse1 {
-  0%,100% { transform:translateX(-50px) translateY(0)    scale(1);    opacity:1; }
-  50%     { transform:translateX(-50px) translateY(-5px) scale(1.04); opacity:0.88; }
+  0%,100% { transform:translateX(-50px) translateY(0)   scale(1);    opacity:1; }
+  50%     { transform:translateX(-50px) translateY(-3px) scale(1.02); opacity:0.93; }
 }
 @keyframes btnPulse2 {
-  0%,100% { transform:translateX(50px)  translateY(0)    scale(1);    opacity:1; }
-  50%     { transform:translateX(50px)  translateY(-5px) scale(1.04); opacity:0.88; }
+  0%,100% { transform:translateX(50px)  translateY(0)   scale(1);    opacity:1; }
+  50%     { transform:translateX(50px)  translateY(-3px) scale(1.02); opacity:0.93; }
 }
 @keyframes btnPulse3 {
-  0%,100% { transform:translateX(-50px) translateY(0)    scale(1);    opacity:1; }
-  50%     { transform:translateX(-50px) translateY(-5px) scale(1.04); opacity:0.88; }
+  0%,100% { transform:translateX(-50px) translateY(0)   scale(1);    opacity:1; }
+  50%     { transform:translateX(-50px) translateY(-3px) scale(1.02); opacity:0.93; }
 }
 
 @keyframes btnRise1 {
@@ -703,7 +703,9 @@ body::after {
 .viewer-topbar {
   display:flex; align-items:center; gap:10px;
   margin-bottom:32px; flex-wrap:wrap;
+  justify-content:flex-start;
 }
+.viewer-topbar .back-btn { flex-shrink:0; order:1; margin-left:auto; }
 .viewer-bc {
   font-family:'IBM Plex Mono',monospace; font-size:9px;
   letter-spacing:0.14em; text-transform:uppercase;
