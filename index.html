@@ -422,14 +422,15 @@ body::after {
 
 /* ─────────────────────────────────────────────
    랜딩 오버레이 이미지
-   배경과 같은 위치에서 타이틀 부유 애니메이션과 함께 떠다닙니다.
+   배경과 함께 겹쳐서 전체 화면의 뒤에 위치합니다.
+   타이틀 부유 애니메이션과 함께 떠다닙니다.
    #landing-overlay-img 의 src 에 URL을 넣으면 표시됩니다.
 ───────────────────────────────────────────── */
 #landing-overlay-img {
   display:none;                  /* JS가 src 감지 시 block으로 전환 */
   position:fixed;
   top:0; left:0; right:0; bottom:0;
-  z-index:0.5;                  /* 배경(0)과 컨텐츠(1) 사이 */
+  z-index:0;                    /* 배경과 같은 레벨 — 모든 것 뒤에 */
   width:100vw; height:100vh;
   object-fit:cover;
   object-position:center;
@@ -486,7 +487,7 @@ body::after {
 ───────────────────────────────────────────── */
 /* ─────────────────────────────────────────────
    카테고리 선택 버튼 3개
-   대각선 세로 배치로 배치됩니다.
+   대각선 세로 배치: Fiction(왼쪽) / Art(오른쪽) / Videos(왼쪽)
 ───────────────────────────────────────────── */
 .cat-buttons { 
   display:flex; 
@@ -497,9 +498,9 @@ body::after {
 }
 
 /* 각 버튼별 대각선 효과 */
-.cat-btn:nth-child(1) { transform:translateX(-60px); }  /* 첫 번째: 왼쪽 */
-.cat-btn:nth-child(2) { transform:translateX(0); }      /* 두 번째: 중앙 */
-.cat-btn:nth-child(3) { transform:translateX(60px); }   /* 세 번째: 오른쪽 */
+.cat-btn:nth-child(1) { transform:translateX(-80px); }  /* Fiction: 왼쪽 */
+.cat-btn:nth-child(2) { transform:translateX(80px); }   /* Art: 오른쪽 */
+.cat-btn:nth-child(3) { transform:translateX(-80px); }  /* Videos: 왼쪽 */
 
 /* ── 기본 버튼 (이미지 없을 때) ── */
 .cat-btn {
@@ -516,12 +517,11 @@ body::after {
   border-radius:var(--radius);
 }
 .cat-btn:hover {
-  color:var(--accent); border-color:var(--accent);
-  box-shadow:0 6px 24px rgba(176,32,32,0.20); transform:scale(1.06);
+  /* hover 효과 제거 */
 }
 .cat-btn span { position:relative; z-index:1; display:flex; align-items:center; gap:8px }
 .cat-btn-num  { font-size:11px; color:var(--text-dim) }
-.cat-btn:hover .cat-btn-num { color:var(--accent); opacity:0.7 }
+.cat-btn:hover .cat-btn-num { /* hover 시 색상 변화 없음 */ }
 
 /* 텍스트 버튼 hover — 색상만 변경 */
 .cat-btn:not(.has-img)::before {
@@ -552,16 +552,12 @@ body::after {
   border-radius:var(--radius);
   overflow:visible;      /* 이미지가 overflow:hidden에 잘리지 않도록 */
 }
-/* has-img 버튼 hover — 이미지를 직접 확대 */
+/* has-img 버튼 hover — 효과 없음 */
 .cat-btn.has-img:hover {
-  transform:none;        /* 버튼 자체 transform 제거 */
-  box-shadow:none;
-  border:none;
-  color:inherit;
+  /* hover 효과 제거 */
 }
 .cat-btn.has-img:hover .cat-btn-img {
-  transform:scale(1.06);
-  box-shadow:0 8px 32px rgba(176,32,32,0.28);
+  /* hover 효과 제거 */
 }
 /* has-img 버튼의 텍스트 span 완전히 숨김 */
 .cat-btn.has-img > span { display:none }
@@ -1190,8 +1186,7 @@ body::after {
       권장 크기: 폭 1000px 이상의 투명 PNG
       예) src="https://raw.githubusercontent.com/내이름/webzine/main/overlay.png"
     -->
-    <img id="landing-overlay-img" src="https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%ED%8C%8C%ED%8B%B0%ED%81%B4.png?raw=true
-" alt="">
+    <img id="landing-overlay-img" src="https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%ED%8C%8C%ED%8B%B0%ED%81%B4.png?raw=true" alt="">
 
     <!--
       ★★★ 링크 삽입 ★★★ 랜딩 타이틀 이미지 (크게 표시)
@@ -1226,8 +1221,7 @@ body::after {
       </button>
       <button class="cat-btn" onclick="goCategory('Art')">
         <!-- ★ Art 버튼 이미지 → src="" 안에 URL 입력 -->
-        <img class="cat-btn-img" src="https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EB%B2%84%ED%8A%BC-%EC%95%84%ED%8A%B8.png?raw=true
-" alt="Art">
+        <img class="cat-btn-img" src="https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EB%B2%84%ED%8A%BC-%EC%95%84%ED%8A%B8.png?raw=true" alt="Art">
         <span>
           <span class="cat-btn-text"><span class="cat-btn-num">02</span> Art</span>
         </span>
