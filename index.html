@@ -411,32 +411,31 @@ body::after {
 #landing-bg {
   position:fixed;
   top:0; left:0; right:0; bottom:0;
-  z-index:0;
+  z-index:-1;
   background-size:cover;
   background-position:center;
   background-repeat:no-repeat;
   background-attachment:fixed;
 }
-/* 배경 이미지 활성화 시 랜딩 컨텐츠를 z-index 위로 */
-#landing.has-bg > *:not(#landing-bg) { position:relative; z-index:1 }
+/* 배경 이미지 활성화 시 타이틀·버튼을 z-index:1 로 */
+#landing.has-bg > *:not(#landing-bg):not(#landing-overlay-img) { position:relative; z-index:1 }
 
 /* ─────────────────────────────────────────────
    랜딩 오버레이 이미지
-   배경 이미지와 완전히 겹쳐서 전체 화면을 차지합니다.
-   타이틀 부유 애니메이션과 함께 떠다닙니다.
-   다른 요소들과는 상호작용하지 않습니다.
+   배경(#landing-bg)과 완전히 겹쳐 전체 화면을 채웁니다.
+   z-index:0 → 랜딩 콘텐츠(z:1) 뒤에 위치, 버튼·로고 아래
+   pointer-events:none → 클릭 완전 통과
 ───────────────────────────────────────────── */
 #landing-overlay-img {
   display:none;                  /* JS가 src 감지 시 block으로 전환 */
   position:fixed;
   top:0; left:0; right:0; bottom:0;
-  z-index:0;                    /* 배경과 같은 레벨 */
+  z-index:0;                     /* 배경과 같은 레벨 — 콘텐츠(z:1) 뒤 */
   width:100%;
   height:100%;
   object-fit:cover;
   object-position:center;
-  pointer-events:none;           /* 클릭/호버 통과 */
-  /* 타이틀 이미지와 같은 부유 애니메이션 */
+  pointer-events:none;
   animation:titleFloat 4s ease-in-out infinite;
 }
 
@@ -448,14 +447,17 @@ body::after {
 ───────────────────────────────────────────── */
 #landing-title-img {
   display:none;                  /* JS가 src 감지 시 block으로 전환 */
-  max-width:min(1200px, 96vw);   /* 더 크게 */
-  width:96vw;                    /* 화면 폭의 96% 기본값 */
+  max-width:min(1200px, 96vw);
+  width:96vw;
   height:auto;
   max-height:450px;
   object-fit:contain;
-  margin-bottom:28px;
+  margin-top:60px;               /* 타이틀 로고 위치 아래로 */
+  margin-bottom:12px;
   /* 부유 애니메이션 — 이미지가 살짝 위아래로 떠다님 */
   animation:titleFloat 4s ease-in-out infinite;
+  /* 그림자 */
+  filter:drop-shadow(0 3px 6px rgba(0,0,0,0.50));
 }
 
 /* 대형 텍스트 타이틀 */
@@ -493,10 +495,10 @@ body::after {
 ───────────────────────────────────────────── */
 .cat-buttons { 
   display:flex; 
-  flex-direction:column;      /* 세로 배치 */
+  flex-direction:column;
   align-items:center;
-  gap:32px;                   /* 상하 간격 — 48px에서 줄임 */
-  margin-top:20px;
+  gap:6px;                    /* 상하 간격 대폭 축소 */
+  margin-top:-20px;           /* 버튼 위로 */
 }
 
 /* 각 버튼별 대각선 효과 */
@@ -514,23 +516,19 @@ body::after {
   font-family:'IBM Plex Mono',monospace;
   font-size:13px; letter-spacing:0.18em; text-transform:uppercase;
   color:var(--text-mid);
-  transition:transform var(--trans), box-shadow var(--trans), border-color var(--trans), color var(--trans);
+  transition:transform var(--trans), box-shadow var(--trans);
   box-shadow:var(--shadow);
   border-radius:var(--radius);
 }
 .cat-btn:hover {
-  box-shadow:0 6px 24px rgba(176,32,32,0.20);
+  box-shadow:var(--shadow);
   transform:scale(1.06);
-  /* 색상 변화는 없음 */
 }
 .cat-btn span { position:relative; z-index:1; display:flex; align-items:center; gap:8px }
 .cat-btn-num  { font-size:11px; color:var(--text-dim) }
-.cat-btn:hover .cat-btn-num { /* hover 시 색상 변화 없음 */ }
 
-/* 텍스트 버튼 hover — 색상만 변경 */
-.cat-btn:not(.has-img)::before {
-  display:none;          /* shimmer 효과 제거 */
-}
+/* 텍스트 버튼 hover — shimmer 없음 */
+.cat-btn:not(.has-img)::before { display:none }
 .cat-btn:not(.has-img):hover::before { display:none }
 
 /* ── 이미지 버튼 (이미지 있을 때) ──
@@ -542,7 +540,7 @@ body::after {
   width:160px;           /* 가로 — 직사각형 */
   height:120px;          /* 세로 */
   object-fit:contain;    /* 투명부분 제외 */
-  transition:transform var(--trans), box-shadow var(--trans);
+  transition:transform var(--trans);
   cursor:pointer;
   pointer-events:none;   /* 클릭은 부모 button 에서 처리 */
 }
@@ -556,13 +554,9 @@ body::after {
   border-radius:var(--radius);
   overflow:visible;      /* 이미지가 overflow:hidden에 잘리지 않도록 */
 }
-/* has-img 버튼 hover — 확대/그림자 효과만 */
-.cat-btn.has-img:hover {
-  /* 색상 변화 없음 */
-}
+/* has-img 버튼 hover — 확대만, 색상·그림자 변화 없음 */
 .cat-btn.has-img:hover .cat-btn-img {
   transform:scale(1.06);
-  box-shadow:0 8px 32px rgba(176,32,32,0.28);
 }
 /* has-img 버튼의 텍스트 span 완전히 숨김 */
 .cat-btn.has-img > span { display:none }
@@ -1131,17 +1125,8 @@ body::after {
 <header id="header">
   <div class="logo" onclick="goLanding()">
     <!--
-      ★★★ 링크 삽입 ★★★ 헤더 로고 이미지
-      src="" 따옴표 안에 이미지 URL을 넣으면 텍스트 로고 대신 이미지 로고가 표시됩니다.
-      비워두면 아래 텍스트 로고(愛情反正日誌)가 그대로 보입니다.
-      예) src="https://raw.githubusercontent.com/내이름/webzine/main/logo.png"
-    -->
-    <img id="logo-img" src=""
-      alt="愛情反正日誌"
-      style="height:36px;display:none;object-fit:contain;vertical-align:middle;">
-    <!--
-      ▼ 텍스트 로고 (이미지 로고 없을 때 표시)
-        이미지를 넣으면 이 텍스트는 자동으로 숨겨집니다.
+      헤더 로고: 텍스트 로고만 표시합니다.
+      웹진 로고 이미지는 랜딩 타이틀에 표시됩니다.
     -->
     <span id="logo-text-fallback">
       <span class="logo-hanja">愛情反正日誌</span>
@@ -1185,14 +1170,14 @@ body::after {
 
     <!--
       ★★★ 링크 삽입 ★★★ 랜딩 오버레이 이미지
-      src="" 따옴표 안에 이미지 URL을 넣으면
-      배경 위에 겹쳐서 타이틀 부유 애니메이션과 함께 떠다닙니다.
-      배경과 같은 위치에 고정됩니다.
+      배경 이미지와 완전히 겹쳐 전체 화면을 채웁니다.
+      position:fixed + z-index로 타이틀·버튼 뒤에 고정됩니다.
+      pointer-events:none → 클릭 완전 통과
       권장 크기: 폭 1000px 이상의 투명 PNG
-      예) src="https://raw.githubusercontent.com/내이름/webzine/main/overlay.png"
     -->
-    <img id="landing-overlay-img" src="https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%ED%8C%8C%ED%8B%B0%ED%81%B4.png?raw=true
-" alt="">
+    <img id="landing-overlay-img"
+      src="https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%ED%8C%8C%ED%8B%B0%ED%81%B4.png?raw=true"
+      alt="">
 
     <!--
       ★★★ 링크 삽입 ★★★ 랜딩 타이틀 이미지 (크게 표시)
@@ -1226,16 +1211,14 @@ body::after {
       </button>
       <button class="cat-btn" onclick="goCategory('Art')">
         <!-- ★ Art 버튼 이미지 → src="" 안에 URL 입력 -->
-        <img class="cat-btn-img" src="https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EB%B2%84%ED%8A%BC-%EC%95%84%ED%8A%B8.png?raw=true
-" alt="Art">
+        <img class="cat-btn-img" src="https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EB%B2%84%ED%8A%BC-%EC%95%84%ED%8A%B8.png?raw=true" alt="Art">
         <span>
           <span class="cat-btn-text"><span class="cat-btn-num">02</span> Art</span>
         </span>
       </button>
       <button class="cat-btn" onclick="goCategory('Videos')">
         <!-- ★ Videos 버튼 이미지 → src="" 안에 URL 입력 -->
-        <img class="cat-btn-img" src="https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EB%B2%84%ED%8A%BC-%EB%B9%84%EB%94%94%EC%98%A4.png?raw=true
-" alt="Videos">
+        <img class="cat-btn-img" src="https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EB%B2%84%ED%8A%BC-%EB%B9%84%EB%94%94%EC%98%A4.png?raw=true" alt="Videos">
         <span>
           <span class="cat-btn-text"><span class="cat-btn-num">03</span> Videos</span>
         </span>
@@ -1502,6 +1485,7 @@ document.addEventListener('keydown', e => {
 })();
 function dismissIntro() {
   document.getElementById('intro').classList.add('hidden');
+  window.scrollTo({ top:0, behavior:'smooth' });  /* 스크롤 맨 위로 */
   setTimeout(() => { document.getElementById('intro').style.display = 'none'; }, 900);
 }
 
@@ -1522,8 +1506,7 @@ function dismissIntro() {
   };
 ===================================================== */
 const NAV_IMAGES = {
-  'Fiction': 'https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EB%B2%84%ED%8A%BC-%EC%95%84%ED%8A%B8.png?raw=true
-',   /* ← Fiction 목차 이미지 URL */
+  'Fiction': '',   /* ← Fiction 목차 이미지 URL */
   'Art':     '',   /* ← Art 목차 이미지 URL */
   'Videos':  ''    /* ← Videos 목차 이미지 URL */
 };
@@ -1587,8 +1570,7 @@ buildHeaderIcons();
     → 배경 이미지가 있으면 자동으로 어두운 오버레이가 깔립니다.
     예) const LANDING_BG_URL = 'https://raw.githubusercontent.com/내이름/webzine/main/bg.jpg';
 ===================================================== */
-const LANDING_BG_URL = 'https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%ED%83%80%EC%9D%B4%ED%8B%80.png?raw=true
-';   /* ← 여기에 배경 이미지 URL 입력 */
+const LANDING_BG_URL = 'https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%ED%83%80%EC%9D%B4%ED%8B%80.png?raw=true';
 
 /* =====================================================
   ■ 랜딩 배경 이미지 자동 적용
@@ -1632,18 +1614,9 @@ const LANDING_BG_URL = 'https://github.com/htopwebzine/htopwebzine/blob/main/%EC
 })();
 
 /* =====================================================
-  ■ 로고 이미지 자동 처리
-    logo-img src가 있으면 이미지를 보여주고
-    텍스트 로고를 숨깁니다.
+  ■ 헤더 로고: 텍스트 로고 고정 표시
+    웹진 로고 이미지는 랜딩 타이틀(landing-title-img)에 표시됩니다.
 ===================================================== */
-(function() {
-  const img = document.getElementById('logo-img');
-  const txt = document.getElementById('logo-text-fallback');
-  if (img && img.src && img.src !== window.location.href) {
-    img.style.display = 'inline-block';
-    if (txt) txt.style.display = 'none';
-  }
-})();
 
 /* =====================================================
   ■ 카테고리 버튼 이미지 자동 처리
