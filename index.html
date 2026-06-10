@@ -427,16 +427,17 @@ body::after {
    pointer-events:none → 클릭 완전 통과
 ───────────────────────────────────────────── */
 #landing-overlay-img {
-  display:none;                  /* JS가 src 감지 시 block으로 전환 */
+  display:none;
   position:fixed;
   top:0; left:0; right:0; bottom:0;
-  z-index:0;                     /* 배경과 같은 레벨 — 콘텐츠(z:1) 뒤 */
+  z-index:0;
   width:100%;
   height:100%;
   object-fit:cover;
   object-position:center;
   pointer-events:none;
   animation:titleFloat 4s ease-in-out infinite;
+  filter:drop-shadow(0 6px 10px rgba(0,0,0,0.50));
 }
 
 /* ─────────────────────────────────────────────
@@ -497,14 +498,14 @@ body::after {
   display:flex; 
   flex-direction:column;
   align-items:center;
-  gap:6px;                    /* 상하 간격 대폭 축소 */
-  margin-top:-20px;           /* 버튼 위로 */
+  gap:2px;
+  margin-top:-32px;
 }
 
 /* 각 버튼별 대각선 효과 */
-.cat-btn:nth-child(1) { transform:translateX(-80px); }  /* Fiction: 왼쪽 */
-.cat-btn:nth-child(2) { transform:translateX(80px); }   /* Art: 오른쪽 */
-.cat-btn:nth-child(3) { transform:translateX(-80px); }  /* Videos: 왼쪽 */
+.cat-btn:nth-child(1) { transform:translateX(-50px); }
+.cat-btn:nth-child(2) { transform:translateX(50px); }
+.cat-btn:nth-child(3) { transform:translateX(-50px); }
 
 /* ── 기본 버튼 (이미지 없을 때) ── */
 .cat-btn {
@@ -536,13 +537,13 @@ body::after {
    정사각형 틀이 아니라 이미지의 실제 영역을 사용합니다.
    투명부분을 제외한 이미지 크기대로 표시됩니다. */
 .cat-btn-img {
-  display:none;          /* JS 처리 전 숨김 */
-  width:160px;           /* 가로 — 직사각형 */
-  height:120px;          /* 세로 */
-  object-fit:contain;    /* 투명부분 제외 */
+  display:none;
+  width:160px;
+  height:120px;
+  object-fit:contain;
   transition:transform var(--trans);
   cursor:pointer;
-  pointer-events:none;   /* 클릭은 부모 button 에서 처리 */
+  pointer-events:none;
 }
 
 /* has-img: 버튼 껍데기를 완전히 비움 */
@@ -1193,7 +1194,7 @@ body::after {
     -->
     <h1 class="landing-title" id="landing-title-text">愛情反正日誌</h1>
 
-    <p class="landing-desc">단편 픽션, 아트, 영상을 담은 웹진.<br>한 편씩, 천천히.</p>
+    <p class="landing-desc">단편 픽션, 아트, 영상을 담은 독립 웹진.<br>한 편씩, 천천히.</p>
 
     <!--
       ★★★ 링크 삽입 ★★★ 메인 카테고리 버튼 이미지
