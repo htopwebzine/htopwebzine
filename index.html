@@ -340,35 +340,17 @@ body::after {
 .nav-content-item.active { color:var(--accent) }
 .nav-lock-icon { font-size:9px; opacity:0.6 }
 
-/* ─────────────────────────────────────────────
-  사이드바 목차 이미지 슬롯
-  각 대메뉴(nav-sublist) 맨 아래에 이미지가
-  목차와 함께 슬라이드 다운됩니다.
-
-  사용법:
-  JS의 NAV_IMAGES 객체에
-  대메뉴명을 키로, 이미지 URL을 값으로 넣으세요.
-  예) Fiction: "https://raw.githubusercontent.com/.../fiction-banner.png"
-───────────────────────────────────────────── */
-.nav-cat-img-wrap {
-  overflow:hidden;
-  max-height:0;
-  transition:max-height 0.4s cubic-bezier(0.4,0,0.2,1);
+/* 사이드바 최하단 이미지 (목차 열렸을 때만 보임) */
+.sidebar-bottom-img-wrap {
+  margin-top:auto;
+  pointer-events:none;
+  line-height:0;
 }
-.nav-cat-img-wrap.open {
-  max-height:300px;
-}
-.nav-cat-img {
+.sidebar-bottom-img-wrap img {
   width:100%;
   display:block;
-  object-fit:cover;
-  opacity:0;
-  transform:translateY(-8px);
-  transition:opacity 0.4s ease 0.2s, transform 0.4s ease 0.2s;
-}
-.nav-cat-img-wrap.open .nav-cat-img {
-  opacity:1;
-  transform:translateY(0);
+  object-fit:contain;
+  object-position:left bottom;
 }
 
 .sidebar-divider { height:1px; background:var(--border); margin:4px 0 }
@@ -1213,6 +1195,9 @@ body::after {
     <button class="sidebar-close" id="closeBtn">✕</button>
   </div>
   <div class="nav-section" id="navMenu"></div>
+  <div class="sidebar-bottom-img-wrap">
+    <img src="https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%ED%8E%98%EB%9F%BF.png?raw=true" alt="">
+  </div>
 </nav>
 
 <!-- =====================================================
@@ -1555,27 +1540,7 @@ function dismissIntro() {
   setTimeout(triggerLandingAnim, 200);
 }
 
-/* =====================================================
-  ■ 사이드바 목차 이미지 설정
-  ─────────────────────────────────────────────────────
-  NAV_IMAGES : 각 대메뉴(Fiction/Art/Videos)가 열릴 때
-  목차 하단에 표시될 이미지의 URL을 설정합니다.
-  
-  모바일 기준으로 이미지를 최적화하세요.
-  권장 크기: 폭 320px 이상, 높이 자동
-  
-  예시:
-  const NAV_IMAGES = {
-    'Fiction': 'https://raw.githubusercontent.com/.../fiction-banner.png',
-    'Art':     'https://raw.githubusercontent.com/.../art-banner.png',
-    'Videos':  'https://raw.githubusercontent.com/.../videos-banner.png'
-  };
-===================================================== */
-const NAV_IMAGES = {
-  'Fiction': '',   /* ← Fiction 목차 이미지 URL */
-  'Art':     '',   /* ← Art 목차 이미지 URL */
-  'Videos':  ''    /* ← Videos 목차 이미지 URL */
-};
+
 
 /* =====================================================
   ■ 헤더 아이콘 링크 설정 (★ 여기서 관리 ★)
@@ -1752,39 +1717,20 @@ function buildNav() {
     }
   }
 
-  /* 전체 목차 클릭: 펼치기/닫기 + 이미지 표시 */
+  /* 전체 목차 클릭: 펼치기/닫기 */
   allCatEl.addEventListener('click', () => {
     const open = allListEl.classList.contains('open');
-    /* 다른 메뉴 모두 닫기 + 이미지 wrap 모두 닫기 */
     document.querySelectorAll('.nav-cat').forEach(el => el.classList.remove('open','active'));
     document.querySelectorAll('#navMenu > .nav-sublist').forEach(el => el.classList.remove('open'));
-    document.querySelectorAll('.nav-cat-img-wrap').forEach(el => el.classList.remove('open'));
     if (!open) { 
       allCatEl.classList.add('open','active'); 
       allListEl.classList.add('open'); 
-      /* "전체 목차" 이미지 wrap 열기 */
-      const allImgWrap = allCatEl.nextElementSibling?.nextElementSibling;
-      if (allImgWrap && allImgWrap.classList.contains('nav-cat-img-wrap')) {
-        allImgWrap.classList.add('open');
-      }
     }
   });
 
   container.appendChild(allCatEl);
   container.appendChild(allListEl);
 
-  /* 이미지 슬롯 — "전체 목차"용 (첫 번째 NAV_IMAGES 사용) */
-  const allImgWrap = document.createElement('div');
-  allImgWrap.className = 'nav-cat-img-wrap';
-  const allNavImgUrl = NAV_IMAGES['Fiction'] || '';  /* Fiction 이미지 사용 */
-  if (allNavImgUrl) {
-    const allNavImg = document.createElement('img');
-    allNavImg.className = 'nav-cat-img';
-    allNavImg.src = allNavImgUrl;
-    allNavImg.alt = 'Category Image';
-    allImgWrap.appendChild(allNavImg);
-    container.appendChild(allImgWrap);
-  }
 
   const hrAll = document.createElement('div');
   hrAll.className = 'sidebar-divider';
