@@ -992,11 +992,13 @@ body::after {
   from { opacity:0; transform:translateY(-28px) }
   to   { opacity:1; transform:translateY(0) }
 }
-/* 랜딩 로고 — 자연스러운 등장: 작게 시작해 부드럽게 확대 */
+/* 랜딩 로고 — 화려한 등장: 회전하며 확대 + 붉은 글로우 펄스 */
 @keyframes logoGrandEntrance {
-  0%   { opacity:0; transform:scale(0.55); }
-  60%  { opacity:1; transform:scale(1.06); }
-  100% { opacity:1; transform:scale(1); }
+  0%   { opacity:0; transform:scale(0.3) rotate(-25deg); filter:drop-shadow(0 3px 5px rgba(0,0,0,0.50)) drop-shadow(0 0 0px rgba(192,57,43,0)); }
+  40%  { opacity:1; transform:scale(1.15) rotate(8deg); filter:drop-shadow(0 8px 14px rgba(0,0,0,0.35)) drop-shadow(0 0 60px rgba(192,57,43,1)); }
+  60%  { transform:scale(0.96) rotate(-3deg); filter:drop-shadow(0 6px 10px rgba(0,0,0,0.40)) drop-shadow(0 0 45px rgba(224,90,60,0.85)); }
+  80%  { transform:scale(1.04) rotate(1deg); filter:drop-shadow(0 4px 8px rgba(0,0,0,0.45)) drop-shadow(0 0 28px rgba(192,57,43,0.55)); }
+  100% { opacity:1; transform:scale(1) rotate(0deg); filter:drop-shadow(0 3px 5px rgba(0,0,0,0.50)) drop-shadow(0 0 16px rgba(192,57,43,0.3)); }
 }
 /* 랜딩 등장 — 버튼 아래서 올라오며 페이드인 */
 @keyframes btnRiseIn {
@@ -1128,7 +1130,7 @@ body::after {
 /* ── 랜딩 등장 애니메이션: .landing-animate 부착 시 실행 ── */
 #landing.landing-animate #landing-bg          { animation:landingBgIn 1.0s ease both; }
 #landing.landing-animate #landing-overlay-img { animation:overlayFloat 6s ease-in-out 1.0s infinite, landingBgIn 1.0s ease both; }
-#landing.landing-animate #landing-title-img   { animation:logoGrandEntrance 1.4s cubic-bezier(0.22,1,0.36,1) 0.2s both, titleFloat 4s ease-in-out 1.6s infinite; }
+#landing.landing-animate #landing-title-img   { animation:logoGrandEntrance 1.8s cubic-bezier(0.22,1,0.36,1) 0.2s both, titleFloat 4s ease-in-out 2s infinite; }
 #landing.landing-animate #landing-title-text  { animation:titleGrandEntrance 1.3s cubic-bezier(.22,1,.36,1) 0.2s both, titleFloat 4s ease-in-out 1.5s infinite; }
 #landing.landing-animate .landing-desc        { animation:fadeUp 0.8s ease 0.7s both; }
 /* ── 카테고리 버튼: 개별 stagger는 nth-child에서 처리 ── */
