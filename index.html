@@ -689,7 +689,7 @@ body::after {
 }
 .viewer-topbar .back-btn { flex-shrink:0; order:1; margin-left:auto; }
 .viewer-bc {
-  font-family:'IBM Plex Mono',monospace; font-size:9px;
+  font-family:'IBM Plex Mono',monospace; font-size:12px;
   letter-spacing:0.14em; text-transform:uppercase;
   color:var(--text-muted); flex:1;
   display:flex; align-items:center; gap:6px; flex-wrap:wrap;
@@ -719,7 +719,7 @@ body::after {
 /* 작가명 (뷰어용) */
 .viewer-author {
   font-family:'Noto Serif KR',serif;
-  font-size:15px; color:var(--text-mid); font-style:italic;
+  font-size:15px; color:var(--text-mid); font-style:normal;
 }
 .viewer-author::before {
   content:'by ';
@@ -1470,7 +1470,7 @@ let adultUnlocked = false;
 
 /* 현재 뷰어 글씨 크기 (기본 15.5px) */
 let currentFontSize = 15.5;
-const FONT_MIN = 13, FONT_MAX = 22, FONT_STEP = 1;
+const FONT_MIN = 13, FONT_MAX = 22, FONT_STEP = 0.5;
 
 function buildFlatList() {
   flatList = [];
@@ -2118,8 +2118,8 @@ async function renderBody(item) {
     /* Windows CRLF(\r\n) → LF(\n) 정규화 */
     const normalizedText = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
 
-    const ps = normalizedText.trim().split(/\n\n+/).map((para) => {
-      /* 단락 내 줄들 처리 */
+    const ps = normalizedText.split('\n\n').map((para) => {
+      /* 단락 내 줄들 처리 — 빈 줄도 그대로 유지 */
       const lines = para.split('\n');
       const processed = lines.map((line, lIdx) => {
         const trimmed = line.trimStart();
