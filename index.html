@@ -639,6 +639,10 @@ body::after {
   color:var(--text-muted);
   margin-bottom:6px;
 }
+.card-meta-sub {
+  font-size:11px; font-weight:400; letter-spacing:0.15em;
+  color:var(--text-muted);
+}
 /* 게시글 제목 (Hahmlet 폰트) */
 .card-title  {
   font-family:'Hahmlet',serif;
@@ -656,7 +660,7 @@ body::after {
   font-size:8px; letter-spacing:0.12em; color:var(--text-dim); margin-right:2px;
 }
 .card-lock  { font-size:13px; color:var(--text-dim); flex-shrink:0 }
-.card-arrow { font-size:14px; color:var(--text-dim); transition:transform var(--trans),color var(--trans); flex-shrink:0 }
+.card-arrow { font-size:20px; color:var(--text-dim); transition:transform var(--trans),color var(--trans); flex-shrink:0 }
 .content-card:hover .card-arrow { transform:translateX(4px); color:var(--accent) }
 
 /* 전체 탭에서 소목차 구분 헤더
@@ -757,7 +761,7 @@ body::after {
   font-size:15.5px; line-height:1.95;   /* 줄간격 살짝 줄임 */
   color:var(--text); font-weight:300;
   letter-spacing:0.01em; max-width:640px;
-  padding:20px 0;   /* 글 위아래 공백 */
+  padding:40px 0;   /* 글 위아래 공백 */
 }
 .fiction-body p {
   margin-bottom:2.2em;   /* 문단 사이 거리 늘림 */
@@ -988,6 +992,12 @@ body::after {
   from { opacity:0; transform:translateY(-28px) }
   to   { opacity:1; transform:translateY(0) }
 }
+/* 랜딩 로고 — 화려한 등장: 확대+블러+골드 글로우에서 안착 */
+@keyframes logoGrandEntrance {
+  0%   { opacity:0; transform:translateY(-40px) scale(0.85); filter:blur(10px) drop-shadow(0 3px 5px rgba(0,0,0,0.50)) drop-shadow(0 0 0px rgba(200,168,106,0)); }
+  55%  { opacity:1; transform:translateY(6px) scale(1.06); filter:blur(0px) drop-shadow(0 3px 5px rgba(0,0,0,0.50)) drop-shadow(0 0 30px rgba(200,168,106,0.7)); }
+  100% { opacity:1; transform:translateY(0) scale(1); filter:blur(0px) drop-shadow(0 3px 5px rgba(0,0,0,0.50)) drop-shadow(0 0 14px rgba(200,168,106,0.3)); }
+}
 /* 랜딩 등장 — 버튼 아래서 올라오며 페이드인 */
 @keyframes btnRiseIn {
   from { opacity:0; transform:translateY(22px) }
@@ -1118,7 +1128,7 @@ body::after {
 /* ── 랜딩 등장 애니메이션: .landing-animate 부착 시 실행 ── */
 #landing.landing-animate #landing-bg          { animation:landingBgIn 1.0s ease both; }
 #landing.landing-animate #landing-overlay-img { animation:overlayFloat 6s ease-in-out 1.0s infinite, landingBgIn 1.0s ease both; }
-#landing.landing-animate #landing-title-img   { animation:logoDropIn 0.9s cubic-bezier(0.22,1,0.36,1) 0.2s both, titleFloat 4s ease-in-out 1.2s infinite; }
+#landing.landing-animate #landing-title-img   { animation:logoGrandEntrance 1.2s cubic-bezier(0.22,1,0.36,1) 0.2s both, titleFloat 4s ease-in-out 1.4s infinite; }
 #landing.landing-animate #landing-title-text  { animation:titleGrandEntrance 1.3s cubic-bezier(.22,1,.36,1) 0.2s both, titleFloat 4s ease-in-out 1.5s infinite; }
 #landing.landing-animate .landing-desc        { animation:fadeUp 0.8s ease 0.7s both; }
 /* ── 카테고리 버튼: 개별 stagger는 nth-child에서 처리 ── */
@@ -1892,7 +1902,7 @@ function makeCard(item, cat, sub, idx) {
   card.innerHTML = `
     <div class="card-info">
       <div class="card-meta">
-        ${escH(cat)} &nbsp;·&nbsp; ${escH(sub)}
+        ${escH(cat)}&nbsp;·&nbsp;<span class="card-meta-sub">${escH(sub)}</span>
         ${item.adult ? '<span style="color:var(--accent)">· 성인</span>' : ''}
       </div>
       <div class="card-title">${escH(item.title)}</div>
