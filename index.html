@@ -754,14 +754,18 @@ body::after {
 ===================================================== */
 .fiction-body {
   font-family:'Noto Serif KR',serif;
-  font-size:15.5px; line-height:1.95;   /* 줄간격 살짝 줄임 */
+  font-size:15.5px; line-height:1.95;
   color:var(--text); font-weight:300;
   letter-spacing:0.01em; max-width:640px;
-  padding:20px 0;   /* 글 위아래 공백 */
+  padding:20px 0;
+  
+  /* 핵심: 원본 파일의 엔터와 연속된 공백(스페이스바)을 그대로 유지하며 화면 너비에 맞게 자동 줄바꿈 처리 */
+  white-space: pre-wrap; 
 }
 .fiction-body p {
-  margin-bottom:2.2em;   /* 문단 사이 거리 늘림 */
-  text-indent:1.4em;     /* 들여쓰기 줄임 */
+  /* 엔터가 많이 쳐진 부분을 그대로 띄우기 위해, p 태그 자체에 붙어있던 강제 문단 하단 여백과 들여쓰기를 제거(초기화)합니다. */
+  margin-bottom: 0;
+  text-indent: 0;
 }
 /* 무더기 엔터 → 추가 여백으로 표시 */
 .fiction-body p.empty-line {
