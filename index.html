@@ -642,6 +642,7 @@ body::after {
   font-size:8px; letter-spacing:0.12em; color:var(--text-dim); margin-right:2px;
 }
 .card-lock  { font-size:13px; color:var(--text-dim); flex-shrink:0 }
+.card-lock img { width:18px; height:18px; object-fit:contain; display:block }
 .card-arrow { font-size:20px; color:var(--text-dim); transition:transform var(--trans),color var(--trans); flex-shrink:0 }
 .content-card:hover .card-arrow { transform:translateX(4px); color:var(--accent) }
 
@@ -1895,7 +1896,7 @@ function makeCard(item, cat, sub, idx) {
       <div class="card-title">${escH(item.title)}</div>
       <div class="card-author">${escH(item.author || 'Anonymous')}</div>
     </div>
-    ${item.adult ? '<div class="card-lock">🔒</div>' : ''}
+    ${item.adult ? '<div class="card-lock"><img src="https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EC%9E%90%EB%AC%BC%EC%87%A0.png?raw=true" alt="잠금"></div>' : ''}
     <div class="card-arrow">→</div>
   `;
   card.addEventListener('click', () => attemptLoad(cat, sub, idx));
