@@ -992,12 +992,12 @@ body::after {
   from { opacity:0; transform:translateY(-28px) }
   to   { opacity:1; transform:translateY(0) }
 }
-/* 랜딩 로고 — 화려한 등장: 회전하며 확대 + 붉은 글로우 펄스 */
+/* 랜딩 로고 — 화려한 등장: 회전하며 확대, 글로우는 일정 */
 @keyframes logoGrandEntrance {
-  0%   { opacity:0; transform:scale(0.3) rotate(-25deg); filter:drop-shadow(0 3px 5px rgba(0,0,0,0.50)) drop-shadow(0 0 0px rgba(192,57,43,0)); }
-  40%  { opacity:1; transform:scale(1.15) rotate(8deg); filter:drop-shadow(0 8px 14px rgba(0,0,0,0.35)) drop-shadow(0 0 60px rgba(192,57,43,1)); }
-  60%  { transform:scale(0.96) rotate(-3deg); filter:drop-shadow(0 6px 10px rgba(0,0,0,0.40)) drop-shadow(0 0 45px rgba(224,90,60,0.85)); }
-  80%  { transform:scale(1.04) rotate(1deg); filter:drop-shadow(0 4px 8px rgba(0,0,0,0.45)) drop-shadow(0 0 28px rgba(192,57,43,0.55)); }
+  0%   { opacity:0; transform:scale(0.3) rotate(-25deg); filter:drop-shadow(0 3px 5px rgba(0,0,0,0.50)) drop-shadow(0 0 16px rgba(192,57,43,0.3)); }
+  40%  { opacity:1; transform:scale(1.15) rotate(8deg); filter:drop-shadow(0 8px 14px rgba(0,0,0,0.35)) drop-shadow(0 0 16px rgba(192,57,43,0.3)); }
+  60%  { transform:scale(0.96) rotate(-3deg); filter:drop-shadow(0 6px 10px rgba(0,0,0,0.40)) drop-shadow(0 0 16px rgba(192,57,43,0.3)); }
+  80%  { transform:scale(1.04) rotate(1deg); filter:drop-shadow(0 4px 8px rgba(0,0,0,0.45)) drop-shadow(0 0 16px rgba(192,57,43,0.3)); }
   100% { opacity:1; transform:scale(1) rotate(0deg); filter:drop-shadow(0 3px 5px rgba(0,0,0,0.50)) drop-shadow(0 0 16px rgba(192,57,43,0.3)); }
 }
 /* 랜딩 등장 — 버튼 아래서 올라오며 페이드인 */
