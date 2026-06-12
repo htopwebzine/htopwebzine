@@ -992,15 +992,13 @@ body::after {
   from { opacity:0; transform:translateY(-28px) }
   to   { opacity:1; transform:translateY(0) }
 }
-/* 랜딩 로고 — 화려한 등장(회전+확대) 후 부유로 이어지는 단일 애니메이션 */
+/* 랜딩 로고 — 화려한 등장(회전+확대), 1회만 실행 */
 @keyframes logoGrandEntrance {
-  0%   { opacity:0; transform:translateY(0) scale(0.3) rotate(-25deg); filter:drop-shadow(0 3px 5px rgba(0,0,0,0.50)) drop-shadow(0 0 16px rgba(192,57,43,0.3)); }
-  22%  { opacity:1; transform:translateY(0) scale(1.15) rotate(8deg); filter:drop-shadow(0 8px 14px rgba(0,0,0,0.35)) drop-shadow(0 0 16px rgba(192,57,43,0.3)); }
-  33%  { transform:translateY(0) scale(0.96) rotate(-3deg); filter:drop-shadow(0 6px 10px rgba(0,0,0,0.40)) drop-shadow(0 0 16px rgba(192,57,43,0.3)); }
-  44%  { transform:translateY(0) scale(1.04) rotate(1deg); filter:drop-shadow(0 4px 8px rgba(0,0,0,0.45)) drop-shadow(0 0 16px rgba(192,57,43,0.3)); }
-  56%  { opacity:1; transform:translateY(0) scale(1) rotate(0deg); filter:drop-shadow(0 3px 5px rgba(0,0,0,0.50)) drop-shadow(0 0 16px rgba(192,57,43,0.3)); }
-  78%  { transform:translateY(-10px) scale(1) rotate(0deg); }
-  100% { transform:translateY(0) scale(1) rotate(0deg); }
+  0%   { opacity:0; transform:scale(0.3) rotate(-25deg); filter:drop-shadow(0 3px 5px rgba(0,0,0,0.50)) drop-shadow(0 0 16px rgba(192,57,43,0.3)); }
+  40%  { opacity:1; transform:scale(1.15) rotate(8deg); filter:drop-shadow(0 8px 14px rgba(0,0,0,0.35)) drop-shadow(0 0 16px rgba(192,57,43,0.3)); }
+  60%  { transform:scale(0.96) rotate(-3deg); filter:drop-shadow(0 6px 10px rgba(0,0,0,0.40)) drop-shadow(0 0 16px rgba(192,57,43,0.3)); }
+  80%  { transform:scale(1.04) rotate(1deg); filter:drop-shadow(0 4px 8px rgba(0,0,0,0.45)) drop-shadow(0 0 16px rgba(192,57,43,0.3)); }
+  100% { opacity:1; transform:scale(1) rotate(0deg); filter:drop-shadow(0 3px 5px rgba(0,0,0,0.50)) drop-shadow(0 0 16px rgba(192,57,43,0.3)); }
 }
 /* 랜딩 등장 — 버튼 아래서 올라오며 페이드인 */
 @keyframes btnRiseIn {
@@ -1132,7 +1130,8 @@ body::after {
 /* ── 랜딩 등장 애니메이션: .landing-animate 부착 시 실행 ── */
 #landing.landing-animate #landing-bg          { animation:landingBgIn 1.0s ease both; }
 #landing.landing-animate #landing-overlay-img { animation:overlayFloat 6s ease-in-out 1.0s infinite, landingBgIn 1.0s ease both; }
-#landing.landing-animate #landing-title-img   { animation:logoGrandEntrance 4.5s cubic-bezier(0.22,1,0.36,1) 0.2s infinite; }
+#landing.landing-animate #landing-title-img   { animation:logoGrandEntrance 1.8s cubic-bezier(0.22,1,0.36,1) 0.2s 1 both; }
+#landing.landing-animate .landing-title-img-wrap { animation:titleFloat 4s ease-in-out 2s infinite; }
 #landing.landing-animate #landing-title-text  { animation:titleGrandEntrance 1.3s cubic-bezier(.22,1,.36,1) 0.2s both, titleFloat 4s ease-in-out 1.5s infinite; }
 #landing.landing-animate .landing-desc        { animation:fadeUp 0.8s ease 0.7s both; }
 /* ── 카테고리 버튼: 개별 stagger는 nth-child에서 처리 ── */
@@ -1256,7 +1255,9 @@ body::after {
       권장 크기: 폭 800px 이상의 투명 PNG
       예) src="https://raw.githubusercontent.com/내이름/webzine/main/title-logo.png"
     -->
-    <img id="landing-title-img" src="https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EB%A1%9C%EA%B3%A0.png?raw=true" alt="愛情反正日誌">
+    <div class="landing-title-img-wrap">
+      <img id="landing-title-img" src="https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EB%A1%9C%EA%B3%A0.png?raw=true" alt="愛情反正日誌">
+    </div>
     <!--
       ▼ 텍스트 타이틀 (이미지 없을 때 표시)
         이미지를 넣으면 자동으로 숨겨집니다.
