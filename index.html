@@ -91,18 +91,6 @@ body::after {
   background-size:200px;
 }
 
-/* 화면 테두리 장식선 (데스크탑에서 보이는 얇은 액자선) */
-#main-deco {
-  position:fixed; top:var(--header-h); left:0; right:0; bottom:0;
-  pointer-events:none; z-index:0; overflow:hidden;
-}
-#main-deco::before {
-  content:''; position:absolute;
-  border:1px solid var(--border); opacity:0.4;
-  top:24px; left:calc(var(--sidebar-w) + 24px); right:24px; bottom:24px;
-  border-radius:2px;
-}
-
 /* =====================================================
   ■ 인트로 화면 (처음 켰을 때 나오는 전체화면)
     클릭하면 사라집니다.
@@ -452,12 +440,6 @@ body::after {
   color:var(--accent); display:block; font-style:normal; font-size:0.72em;
   background:linear-gradient(135deg,var(--accent),var(--gold));
   -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-}
-/* 타이틀 아래 장식선 */
-.landing-rule {
-  width:80px; height:1px;
-  background:linear-gradient(to right,transparent,var(--gold),transparent);
-  margin:20px auto;
 }
 .landing-desc {
   display:none;                  /* 문구 숨김 */
@@ -2224,9 +2206,6 @@ function openModal(title, bodyHTML, btns) {
 }
 function closeModal() {
   document.getElementById('modal-backdrop').classList.remove('visible');
-}
-function showModalAlert(msg) {
-  openModal('알림', `<div>${msg}</div>`, [{ label:'확인', cls:'primary', action:closeModal }]);
 }
 document.getElementById('modal-backdrop').addEventListener('click', e => {
   if (e.target === document.getElementById('modal-backdrop')) closeModal();
