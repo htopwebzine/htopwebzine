@@ -672,7 +672,7 @@ body::after {
   ■ 게시글 뷰어 (읽기 화면)
 ===================================================== */
 #viewer { display:none }
-#viewer.active { display:block; animation:fadeUp 0.5s ease both }
+#viewer.active { display:block; animation:fadeUp 0.5s ease both; background:#fff; position:relative; z-index:1; }
 
 /* 뷰어 상단 바 (뒤로가기 + 경로 표시) */
 .viewer-topbar {
@@ -865,7 +865,7 @@ body::after {
   padding:0 4px;
 }
 .fs-btn {
-  width:28px; height:28px; background:none;
+  width:28px; height:28px; background:var(--surface);
   border:1px solid var(--border); border-radius:var(--radius);
   cursor:pointer; font-family:'IBM Plex Mono',monospace;
   font-size:11px; color:var(--text-mid);
