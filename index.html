@@ -225,13 +225,15 @@ body::after {
 }
 /* 햄버거 메뉴 버튼 (모바일) */
 .burger {
-  width:34px; height:34px; background:none;
-  border:1px solid var(--border); border-radius:var(--radius);
+  width:34px; height:34px;
+  border:none; border-radius:0;
+  background-image:url("https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EB%B2%84%ED%8A%BC-%EC%A0%95%EC%82%AC%EA%B0%81%ED%98%95.png?raw=true");
+  background-size:100% 100%; background-repeat:no-repeat;
   cursor:pointer; display:flex; flex-direction:column;
   align-items:center; justify-content:center; gap:5px;
-  transition:border-color var(--trans);
+  transition:filter var(--trans);
 }
-.burger:hover { border-color:var(--accent) }
+.burger:hover { filter:brightness(0.92) }
 .burger span { display:block; width:16px; height:1px; background:var(--text-mid); transition:all var(--trans); transform-origin:center }
 /* 열렸을 때 X 모양으로 변환 */
 .burger.open span:nth-child(1) { transform:translateY(6px) rotate(45deg) }
@@ -878,14 +880,16 @@ body::after {
   padding:0 4px;
 }
 .fs-btn {
-  width:28px; height:28px; background:var(--surface);
-  border:1px solid var(--border); border-radius:var(--radius);
+  width:28px; height:28px;
+  border:none; border-radius:0;
+  background-image:url("https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EB%B2%84%ED%8A%BC-%EC%A0%95%EC%82%AC%EA%B0%81%ED%98%95.png?raw=true");
+  background-size:100% 100%; background-repeat:no-repeat;
   cursor:pointer; font-family:'IBM Plex Mono',monospace;
   font-size:11px; color:var(--text-mid);
   display:flex; align-items:center; justify-content:center;
-  transition:all var(--trans); line-height:1;
+  transition:filter var(--trans); line-height:1;
 }
-.fs-btn:hover { border-color:var(--accent); color:var(--accent) }
+.fs-btn:hover { filter:brightness(0.92) }
 
 /* =====================================================
   ■ 맨 위로 올라가기 버튼
@@ -895,15 +899,16 @@ body::after {
 #scrollTopBtn {
   position:fixed; bottom:32px; right:24px; z-index:300;
   width:40px; height:40px;
-  background:var(--surface);
-  border:1px solid var(--border);   /* --c-border2 → --border 로 변경 (다크모드 안전) */
-  border-radius:var(--radius); cursor:pointer;
+  border:none; border-radius:0;
+  background-image:url("https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EB%B2%84%ED%8A%BC-%EC%A0%95%EC%82%AC%EA%B0%81%ED%98%95.png?raw=true");
+  background-size:100% 100%; background-repeat:no-repeat;
+  cursor:pointer;
   font-family:'IBM Plex Mono',monospace; font-size:14px;
   color:var(--text-muted);
   display:none; align-items:center; justify-content:center;
-  box-shadow:var(--shadow-lg); transition:all var(--trans);
+  transition:all var(--trans);
 }
-#scrollTopBtn:hover { border-color:var(--accent); color:var(--accent); transform:translateY(-2px) }
+#scrollTopBtn:hover { color:var(--accent); transform:translateY(-2px) }
 #scrollTopBtn.visible { display:flex }
 
 
