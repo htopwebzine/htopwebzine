@@ -570,7 +570,7 @@ body::after {
 #catPage.active { display:block; animation:fadeUp 0.5s ease both }
 
 .catpage-head {
-  margin-bottom:32px; padding-bottom:20px;
+  margin-bottom:16px; padding-bottom:8px;
   border-bottom:2px solid var(--border);
   display:flex; align-items:center; justify-content:flex-start;
   flex-wrap:nowrap; gap:12px;
@@ -585,6 +585,7 @@ body::after {
   max-width:min(420px, 70vw);
   height:auto;
   display:block;
+  margin-left:-16px;
   animation:catLogoSlideIn 0.6s cubic-bezier(0.22,1,0.36,1) both;
 }
 @keyframes catLogoSlideIn {
