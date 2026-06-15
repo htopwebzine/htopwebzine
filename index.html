@@ -225,7 +225,7 @@ body::after {
 }
 /* 햄버거 메뉴 버튼 (모바일) */
 .burger {
-  width:34px; height:34px;
+  width:42px; height:42px;
   border:none; border-radius:0;
   background-image:url("https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EB%B2%84%ED%8A%BC-%EC%A0%95%EC%82%AC%EA%B0%81%ED%98%95.png?raw=true");
   background-size:100% 100%; background-repeat:no-repeat;
@@ -880,16 +880,14 @@ body::after {
   padding:0 4px;
 }
 .fs-btn {
-  width:28px; height:28px;
-  border:none; border-radius:0;
-  background-image:url("https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EB%B2%84%ED%8A%BC-%EC%A0%95%EC%82%AC%EA%B0%81%ED%98%95.png?raw=true");
-  background-size:100% 100%; background-repeat:no-repeat;
+  width:28px; height:28px; background:var(--surface);
+  border:1px solid var(--border); border-radius:var(--radius);
   cursor:pointer; font-family:'IBM Plex Mono',monospace;
   font-size:11px; color:var(--text-mid);
   display:flex; align-items:center; justify-content:center;
-  transition:filter var(--trans); line-height:1;
+  transition:all var(--trans); line-height:1;
 }
-.fs-btn:hover { filter:brightness(0.92) }
+.fs-btn:hover { border-color:var(--accent); color:var(--accent) }
 
 /* =====================================================
   ■ 맨 위로 올라가기 버튼
@@ -898,7 +896,7 @@ body::after {
 ===================================================== */
 #scrollTopBtn {
   position:fixed; bottom:32px; right:24px; z-index:300;
-  width:40px; height:40px;
+  width:48px; height:48px;
   border:none; border-radius:0;
   background-image:url("https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EB%B2%84%ED%8A%BC-%EC%A0%95%EC%82%AC%EA%B0%81%ED%98%95.png?raw=true");
   background-size:100% 100%; background-repeat:no-repeat;
