@@ -581,6 +581,11 @@ body::after {
   font-weight:600; color:var(--text); line-height:1;
 }
 .catpage-title em { color:var(--accent); font-style:normal }
+.catpage-title-img {
+  max-width:min(420px, 70vw);
+  height:auto;
+  display:block;
+}
 
 /* 뒤로가기 버튼 — 크기 키움 */
 .back-btn {
@@ -1850,8 +1855,12 @@ function goCategory(cat, defaultSub) {
   hideAll(); show('catPage');
   currentCat = cat; currentSub = null; currentIdx = null;
 
-  const icons = { Fiction:'✦', Art:'◈', Videos:'▷' };
-  document.getElementById('catPageTitle').innerHTML = `<em>${icons[cat]||'·'}</em> ${cat}`;
+  const logos = {
+    Fiction: 'https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EB%9E%9C%EC%84%AC%EB%85%B8%ED%8A%B8-%ED%94%BD%EC%85%98.png?raw=true',
+    Art: 'https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EB%9E%9C%EC%84%AC%EB%85%B8%ED%8A%B8-%EC%95%84%ED%8A%B8.png?raw=true',
+    Videos: 'https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EB%9E%9C%EC%84%AC%EB%85%B8%ED%8A%B8-%EB%B9%84%EB%94%94%EC%98%A4.png?raw=true'
+  };
+  document.getElementById('catPageTitle').innerHTML = `<img class="catpage-title-img" src="${logos[cat]||''}" alt="${cat}">`;
 
   const subs   = Object.keys(contentData[cat]);
   const tabsEl = document.getElementById('subTabs');
