@@ -153,10 +153,7 @@ body::after {
   100% { opacity:0; transform:scale(1.1); filter:blur(12px) }
 }
 
-/* 동적 오브젝트 캔버스 */
-#intro-canvas {
-  position:absolute; inset:0; z-index:2; pointer-events:none;
-}
+
 
 /* ── 수평 스캔라인 장식 ── */
 .intro-scanlines {
@@ -776,12 +773,14 @@ body::after {
   display:flex; align-items:center; justify-content:space-between; gap:16px;
   position:relative; overflow:hidden;
 }
-/* 마우스 올리면 왼쪽에 빨간 세로선 생김 */
+/* 마우스 올리면 왼쪽에 빨간 세로선 — 안쪽(오른쪽)에서 슬라이드 */
 .content-card::before {
-  content:''; position:absolute; left:0; top:0; bottom:0; width:0;
-  background:var(--accent); transition:width var(--trans);
+  content:''; position:absolute; left:0; top:0; bottom:0; width:3px;
+  background:var(--accent);
+  transform:scaleY(0); transform-origin:center;
+  transition:transform var(--trans);
 }
-.content-card:hover::before { width:3px }
+.content-card:hover::before { transform:scaleY(1); }
 .content-card:hover { padding-left:25px; background:var(--surface2) }
 
 .card-info   { flex:1 }
@@ -819,8 +818,8 @@ body::after {
 /* 전체 탭에서 소목차 구분 헤더
    — 다크모드에서도 CSS 변수가 제대로 적용되도록 인라인 스타일 대신 class 사용 */
 .sub-section-label {
-  padding:10px 4px 6px;
-  font-family:'IBM Plex Mono',monospace; font-size:9px;
+  padding:14px 4px 8px;
+  font-family:'IBM Plex Mono',monospace; font-size:12px;
   letter-spacing:0.2em; text-transform:uppercase;
   color:var(--text-muted);
   border-top:1px solid var(--border);
@@ -1314,7 +1313,6 @@ body::after {
   인트로 화면
 ===================================================== -->
 <div id="intro" onclick="dismissIntro()">
-  <canvas id="intro-canvas"></canvas>
   <!-- 배경 스캔라인 -->
   <div class="intro-scanlines"></div>
 
@@ -1423,7 +1421,7 @@ body::after {
     -->
     <h1 class="landing-title" id="landing-title-text">愛情反正日誌</h1>
 
-    <p class="landing-desc">단편 픽션, 아트, 영상을 담은 독립 웹진.<br>한 편씩, 천천히.</p>
+    <p class="landing-desc sr" data-sr-delay="80">단편 픽션, 아트, 영상을 담은 독립 웹진.<br>한 편씩, 천천히.</p>
 
     <!--
       ★★★ 링크 삽입 ★★★ 메인 카테고리 버튼 이미지
@@ -1431,7 +1429,7 @@ body::after {
       이미지는 정사각형(180×180px 내외) 권장. 비워두면 텍스트 버튼 그대로 표시됩니다.
       예) src="https://raw.githubusercontent.com/내이름/webzine/main/btn-fiction.jpg"
     -->
-    <div class="cat-buttons">
+    <div class="cat-buttons sr" data-sr-delay="160">
       <button class="cat-btn" onclick="goCategory('Fiction')">
         <!-- ★ Fiction 버튼 이미지 → src="" 안에 URL 입력 -->
         <img class="cat-btn-img" src="https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EB%B2%84%ED%8A%BC-%ED%94%BD%EC%85%98.png?raw=true" alt="Fiction">
@@ -1570,7 +1568,7 @@ const contentData = {
       {
         title: "마지막 열차", type: "fiction", author: "김도현",
         sub: "황밍", adult: false,
-        bodyURL: "https://raw.githubusercontent.com/htopwebzine/htopwebzine/refs/heads/main/%EA%B8%80/%EC%A3%BD%EC%9D%80_%EB%A1%9C%EB%B4%87%EC%9D%84_%EC%82%AC%EB%9E%91%ED%95%98%EA%B8%B0.md"
+        bodyURL: "https://raw.githubusercontent.com/htopwebzine/htopwebzine/refs/heads/main/%EC%A3%BD%EC%9D%80_%EB%A1%9C%EB%B4%87%EC%9D%84_%EC%82%AC%EB%9E%91%ED%95%98%EA%B8%B0.txt"
       }
     ],
     "황창": [
@@ -1718,170 +1716,125 @@ function triggerLandingAnim() {
 }
 
 /* =====================================================
-  ■ 인트로 캔버스 — 3D 공간감 파티클
+  ■ 스크롤 reveal 애니메이션
 ===================================================== */
 (function() {
-  const canvas = document.getElementById('intro-canvas');
-  const ctx    = canvas.getContext('2d');
-  let W, H, raf, startTime = null;
-
-  /* ── 3D 파티클 설정 ── */
-  const PARTICLE_COUNT = 55;
-  const FOV            = 400;   // 원근 거리
-  const DEPTH          = 600;   // z 범위
-  const particles      = [];
-
-  /* ── 느리게 흐르는 큰 광원 orb ── */
-  const orbs = [
-    { ox:0.28, oy:0.38, r:160, color:[180,60,30],  alpha:0.055, sx:0.00028, sy:0.00022, px:0,    py:1.1,  amp:38 },
-    { ox:0.72, oy:0.62, r:110, color:[200,140,50], alpha:0.045, sx:0.00034, sy:0.00030, px:2.1,  py:0.4,  amp:28 },
-    { ox:0.50, oy:0.20, r:90,  color:[140,30,20],  alpha:0.040, sx:0.00020, sy:0.00038, px:0.8,  py:3.0,  amp:22 },
-    { ox:0.15, oy:0.75, r:70,  color:[210,160,60], alpha:0.060, sx:0.00042, sy:0.00026, px:4.2,  py:1.7,  amp:18 },
-  ];
-
-  function rand(a, b) { return a + Math.random() * (b - a); }
-
-  function resize() {
-    W = canvas.width  = window.innerWidth;
-    H = canvas.height = window.innerHeight;
-  }
-
-  /* z값에 따라 원근 투영 */
-  function project(x, y, z) {
-    const scale = FOV / (FOV + z);
-    return {
-      sx: x * scale + W / 2,
-      sy: y * scale + H / 2,
-      scale,
-    };
-  }
-
-  function initParticles() {
-    particles.length = 0;
-    for (let i = 0; i < PARTICLE_COUNT; i++) {
-      const isFar  = i > PARTICLE_COUNT * 0.6;
-      particles.push({
-        x:  rand(-W * 0.55, W * 0.55),
-        y:  rand(-H * 0.55, H * 0.55),
-        z:  rand(0, DEPTH),
-        vx: rand(-0.12, 0.12),
-        vy: rand(-0.08, 0.06),
-        vz: rand(0.30, 1.10),   // 카메라 쪽으로 천천히 다가옴
-        r:  rand(1.2, isFar ? 2.0 : 3.8),
-        /* 색: 황금 계열 vs 붉은 계열 */
-        hue: Math.random() > 0.45
-          ? [rand(200,230), rand(155,185), rand(50,90)]   // 황금
-          : [rand(170,210), rand(45,80),  rand(20,45)],   // 붉은
-        alpha: rand(0.25, isFar ? 0.40 : 0.75),
-        twinklePhase: rand(0, Math.PI * 2),
-        twinkleSpeed: rand(0.0008, 0.0022),
-      });
+  /* ── CSS 주입 ── */
+  const style = document.createElement('style');
+  style.textContent = `
+    /* 스크롤 reveal 기본 상태 */
+    .sr {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.65s cubic-bezier(0.22,1,0.36,1),
+                  transform 0.65s cubic-bezier(0.22,1,0.36,1);
+      will-change: opacity, transform;
     }
-  }
+    .sr.sr-left  { transform: translateX(-32px); }
+    .sr.sr-right { transform: translateX(32px); }
+    .sr.sr-scale { transform: translateY(16px) scale(0.96); }
 
-  function drawOrb(o, t, ga) {
-    const bx = W * o.ox;
-    const by = H * o.oy;
-    const x  = bx + Math.sin(t * o.sx + o.px) * o.amp;
-    const y  = by + Math.cos(t * o.sy + o.py) * o.amp;
-    const g  = ctx.createRadialGradient(x, y, 0, x, y, o.r);
-    const [r, g2, b] = o.color;
-    g.addColorStop(0,   `rgba(${r},${g2},${b},${o.alpha * ga})`);
-    g.addColorStop(0.5, `rgba(${r},${g2},${b},${o.alpha * 0.35 * ga})`);
-    g.addColorStop(1,   `rgba(${r},${g2},${b},0)`);
-    ctx.beginPath();
-    ctx.arc(x, y, o.r, 0, Math.PI * 2);
-    ctx.fillStyle = g;
-    ctx.fill();
-  }
-
-  function drawParticle(p, t, ga) {
-    /* z축 이동 — 화면 앞으로 */
-    p.z -= p.vz;
-    if (p.z < 1) {
-      /* 멀리서 다시 시작 */
-      p.z  = DEPTH;
-      p.x  = rand(-W * 0.55, W * 0.55);
-      p.y  = rand(-H * 0.55, H * 0.55);
-    }
-    p.x += p.vx;
-    p.y += p.vy;
-
-    const { sx, sy, scale } = project(p.x, p.y, p.z);
-    if (sx < -20 || sx > W + 20 || sy < -20 || sy > H + 20) return;
-
-    /* 깜빡임 */
-    const twinkle = 0.75 + 0.25 * Math.sin(t * p.twinkleSpeed + p.twinklePhase);
-    /* 가까울수록 밝고 크게 */
-    const depthRatio = 1 - p.z / DEPTH;
-    const radius     = p.r * scale * (0.5 + depthRatio * 0.9);
-    const alpha      = p.alpha * ga * twinkle * (0.3 + depthRatio * 0.7);
-
-    const [r, g, b] = p.hue;
-
-    /* 가까운 파티클엔 halo */
-    if (depthRatio > 0.55 && radius > 2) {
-      const halo = ctx.createRadialGradient(sx, sy, 0, sx, sy, radius * 3.5);
-      halo.addColorStop(0,   `rgba(${r},${g},${b},${alpha * 0.35})`);
-      halo.addColorStop(1,   `rgba(${r},${g},${b},0)`);
-      ctx.beginPath();
-      ctx.arc(sx, sy, radius * 3.5, 0, Math.PI * 2);
-      ctx.fillStyle = halo;
-      ctx.fill();
+    /* 보이는 상태 */
+    .sr.visible {
+      opacity: 1;
+      transform: none;
     }
 
-    ctx.beginPath();
-    ctx.arc(sx, sy, Math.max(0.4, radius), 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(${r},${g},${b},${alpha})`;
-    ctx.fill();
-  }
-
-  function loop(ts) {
-    if (!startTime) startTime = ts;
-    const t  = ts - startTime;
-    /* 배경이 어두워지는 동안 서서히 나타남 */
-    const ga = Math.min(1, Math.max(0, (t - 900) / 1100));
-
-    ctx.clearRect(0, 0, W, H);
-
-    /* 깊이감 안개 — 멀리 있는 영역을 약하게 덮음 */
-    const fog = ctx.createRadialGradient(W/2, H/2, 0, W/2, H/2, Math.max(W,H) * 0.72);
-    fog.addColorStop(0,   `rgba(8,6,4,0)`);
-    fog.addColorStop(0.7, `rgba(8,6,4,${0.08 * ga})`);
-    fog.addColorStop(1,   `rgba(8,6,4,${0.22 * ga})`);
-
-    orbs.forEach(o => drawOrb(o, t, ga));
-
-    /* z 기준 정렬 — 먼 것부터 그려야 앞에 있는 게 위로 */
-    particles.sort((a, b) => b.z - a.z);
-    particles.forEach(p => drawParticle(p, t, ga));
-
-    ctx.fillStyle = fog;
-    ctx.fillRect(0, 0, W, H);
-
-    raf = requestAnimationFrame(loop);
-  }
-
-  function start() {
-    resize();
-    initParticles();
-    raf = requestAnimationFrame(loop);
-  }
-
-  window.addEventListener('resize', () => { resize(); initParticles(); });
-
-  const observer = new MutationObserver(() => {
-    const el = document.getElementById('intro');
-    if (el && (el.classList.contains('hidden') || el.style.display === 'none')) {
-      cancelAnimationFrame(raf);
-      observer.disconnect();
+    /* 카드 hover — 왼쪽 붉은 바 안쪽에서 등장 + 미세 이동 */
+    .content-card {
+      transition: transform 0.28s cubic-bezier(0.22,1,0.36,1),
+                  box-shadow 0.28s ease,
+                  background 0.2s ease;
     }
-  });
-  observer.observe(document.getElementById('intro'), { attributes:true, attributeFilter:['class','style'] });
+    .content-card:hover {
+      transform: translateX(4px);
+    }
 
-  document.readyState === 'loading'
-    ? document.addEventListener('DOMContentLoaded', start)
-    : start();
+    /* 카테고리 페이지 진입 */
+    #catPage.active .catpage-title-img {
+      animation: catTitleIn 0.7s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    @keyframes catTitleIn {
+      from { opacity:0; transform: translateY(-18px) scale(0.97); }
+      to   { opacity:1; transform: none; }
+    }
+    #catPage.active .sub-tabs {
+      animation: subTabsIn 0.5s cubic-bezier(0.22,1,0.36,1) 0.12s both;
+    }
+    @keyframes subTabsIn {
+      from { opacity:0; transform: translateX(-16px); }
+      to   { opacity:1; transform: none; }
+    }
+
+    /* 뷰어 본문 진입 */
+    #viewer.active .viewer-body {
+      animation: viewerBodyIn 0.6s cubic-bezier(0.22,1,0.36,1) 0.15s both;
+    }
+    @keyframes viewerBodyIn {
+      from { opacity:0; transform: translateY(22px); }
+      to   { opacity:1; transform: none; }
+    }
+
+    /* 사이드바 nav 항목 */
+    .nav-cat, .nav-sub {
+      transition: color 0.2s ease, transform 0.22s cubic-bezier(0.22,1,0.36,1),
+                  text-shadow 0.2s ease;
+    }
+    .nav-cat:hover  { transform: translateX(3px); }
+    .nav-sub:hover  { transform: translateX(5px); }
+
+    /* 위로가기 버튼 */
+    #scrollTopBtn {
+      transition: transform 0.25s cubic-bezier(0.22,1,0.36,1),
+                  opacity 0.25s ease,
+                  background 0.2s ease,
+                  box-shadow 0.2s ease;
+    }
+    #scrollTopBtn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+    }
+    #scrollTopBtn:active { transform: translateY(0) scale(0.94); }
+  `;
+  document.head.appendChild(style);
+
+  /* ── IntersectionObserver로 .sr 요소 감지 ── */
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const delay = e.target.dataset.srDelay || 0;
+        setTimeout(() => e.target.classList.add('visible'), +delay);
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  /* 초기 대상 등록 */
+  function registerSR() {
+    document.querySelectorAll('.sr:not(.visible)').forEach(el => io.observe(el));
+  }
+
+  /* catPage / viewer 전환 후 동적으로 생성되는 요소도 등록 */
+  const mo = new MutationObserver(() => registerSR());
+  mo.observe(document.body, { childList: true, subtree: true });
+
+  registerSR();
+
+  /* ── 헤더 스크롤 숨김/표시 ── */
+  const header = document.querySelector('header') || document.getElementById('header');
+  let lastY = 0;
+  if (header) {
+    header.style.transition = 'transform 0.35s cubic-bezier(0.4,0,0.2,1)';
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY;
+      if (y > 80) {
+        header.style.transform = y > lastY ? 'translateY(-100%)' : 'translateY(0)';
+      } else {
+        header.style.transform = 'translateY(0)';
+      }
+      lastY = y;
+    }, { passive: true });
+  }
 })();
 
 function dismissIntro() {
@@ -2233,7 +2186,8 @@ function goCategory(cat, defaultSub) {
 ===================================================== */
 function makeCard(item, cat, sub, idx) {
   const card = document.createElement('div');
-  card.className = 'content-card';
+  card.className = 'content-card sr';
+  card.dataset.srDelay = idx * 55;
   card.innerHTML = `
     <div class="card-info">
       <div class="card-meta">
