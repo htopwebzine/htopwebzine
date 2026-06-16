@@ -120,9 +120,12 @@ body::after {
   position:absolute; inset:0; z-index:1; pointer-events:none;
   background:
     radial-gradient(ellipse 55% 45% at 50% 48%,
-      rgba(180,80,30,0.07) 0%,
-      rgba(140,60,10,0.03) 40%,
-      transparent 70%);
+      rgba(180,80,30,0.13) 0%,
+      rgba(140,60,10,0.07) 40%,
+      transparent 70%),
+    radial-gradient(ellipse 30% 20% at 50% 48%,
+      rgba(220,160,60,0.08) 0%,
+      transparent 60%);
   animation:introGlowPulse 3.5s ease-in-out 1.4s infinite alternate;
 }
 
@@ -146,6 +149,19 @@ body::after {
   100% { opacity:0; transform:scale(1.1); filter:blur(12px); pointer-events:none }
 }
 
+/* ── 수평 스캔라인 장식 ── */
+.intro-scanlines {
+  position:absolute; inset:0; z-index:2; pointer-events:none;
+  background:repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 3px,
+    rgba(255,255,255,0.012) 3px,
+    rgba(255,255,255,0.012) 4px
+  );
+  animation:introFadeIn 2s ease 0.5s both;
+}
+
 /* ── 네 모서리 브라켓 장식 ── */
 .intro-corner {
   position:absolute; z-index:10; pointer-events:none;
@@ -167,6 +183,28 @@ body::after {
 @keyframes introCornerIn {
   from { opacity:0; transform:scale(0.6) }
   to   { opacity:1; transform:scale(1) }
+}
+
+/* ── 중앙 장식 수평선 ── */
+.intro-deco-line {
+  position:absolute; z-index:10; pointer-events:none;
+  left:50%; transform:translateX(-50%);
+  display:flex; align-items:center; gap:0;
+  opacity:0; animation:introFadeIn 0.8s ease 1.5s forwards;
+}
+.intro-deco-line.top    { top:clamp(16px,3vw,32px) }
+.intro-deco-line.bottom { bottom:clamp(16px,3vw,32px) }
+.intro-deco-line .dl-seg {
+  height:1px; background:rgba(200,160,80,0.3);
+  animation:decoLineGrow 1.0s cubic-bezier(0.4,0,0.2,1) 1.5s both;
+}
+.intro-deco-line .dl-dot {
+  width:3px; height:3px; border-radius:50%;
+  background:rgba(200,160,80,0.6); margin:0 6px; flex-shrink:0;
+}
+@keyframes decoLineGrow {
+  from { width:0; opacity:0 }
+  to   { width:clamp(60px,15vw,160px); opacity:1 }
 }
 
 /* ── 이미지 슬롯 ── */
@@ -219,8 +257,8 @@ body::after {
   animation:heartGlow 2.4s ease-in-out 2.0s infinite alternate;
 }
 @keyframes heartGlow {
-  from { filter:drop-shadow(0 0 6px rgba(180,30,30,0.45)) drop-shadow(0 0 14px rgba(180,30,30,0.15)) }
-  to   { filter:drop-shadow(0 0 12px rgba(210,50,30,0.65)) drop-shadow(0 0 24px rgba(200,40,20,0.22)) }
+  from { filter:drop-shadow(0 0 10px rgba(180,30,30,0.65)) drop-shadow(0 0 22px rgba(180,30,30,0.25)) }
+  to   { filter:drop-shadow(0 0 18px rgba(220,50,30,0.90)) drop-shadow(0 0 40px rgba(200,40,20,0.40)) }
 }
 
 /* 개별 글자 등장 */
@@ -244,8 +282,8 @@ body::after {
 }
 @keyframes charIn {
   0%   { opacity:0; transform:translateY(22px) scale(0.88); filter:blur(6px); text-shadow:0 0 0 rgba(220,180,100,0), 0 2px 8px rgba(0,0,0,0.6); }
-  45%  { opacity:1; transform:translateY(-3px) scale(1.06); filter:blur(0); text-shadow:0 0 18px rgba(220,180,100,0.45), 0 2px 16px rgba(0,0,0,0.4); }
-  70%  { transform:translateY(1px) scale(0.99); text-shadow:0 0 8px rgba(220,180,100,0.18), 0 2px 10px rgba(0,0,0,0.5); }
+  45%  { opacity:1; transform:translateY(-3px) scale(1.06); filter:blur(0); text-shadow:0 0 32px rgba(220,180,100,0.75), 0 2px 20px rgba(0,0,0,0.4); }
+  70%  { transform:translateY(1px) scale(0.99); text-shadow:0 0 14px rgba(220,180,100,0.35), 0 2px 10px rgba(0,0,0,0.5); }
   100% { opacity:1; transform:translateY(0) scale(1); filter:blur(0); text-shadow:0 0 0 rgba(220,180,100,0), 0 2px 8px rgba(0,0,0,0.6); }
 }
 
@@ -255,7 +293,24 @@ body::after {
 }
 @keyframes charGlow {
   from { text-shadow:0 0 0 rgba(220,180,100,0), 0 2px 8px rgba(0,0,0,0.55) }
-  to   { text-shadow:0 0 10px rgba(220,180,100,0.10), 0 2px 12px rgba(0,0,0,0.45) }
+  to   { text-shadow:0 0 20px rgba(220,180,100,0.18), 0 2px 14px rgba(0,0,0,0.45) }
+}
+
+/* ── 구분선 ── */
+.intro-rule {
+  position:relative; z-index:10;
+  display:flex; align-items:center; justify-content:center; gap:0;
+  width:100%; margin:clamp(10px,2.5vw,22px) 0 clamp(8px,2vw,18px);
+}
+.intro-rule .line {
+  height:1px; background:linear-gradient(to right, transparent, rgba(200,160,70,0.5), transparent);
+  opacity:0;
+  animation:ruleGrow 1.0s cubic-bezier(0.4,0,0.2,1) 1.6s forwards;
+}
+.intro-rule .l,.intro-rule .r { width:clamp(40px,12vw,120px) }
+@keyframes ruleGrow {
+  from { opacity:0; width:0 }
+  to   { opacity:1 }
 }
 
 /* ── 부제목 ── */
@@ -263,7 +318,7 @@ body::after {
   font-family:'IBM Plex Mono',monospace;
   font-size:clamp(9px,1.3vw,13px);
   letter-spacing:0.22em; text-transform:uppercase;
-  color:rgba(220,200,160,0.72);
+  color:rgba(240,225,190,0.92);
   position:relative; z-index:10;
   text-align:center;
   opacity:0; animation:introFadeIn 0.8s ease 1.8s forwards;
@@ -274,7 +329,7 @@ body::after {
   font-family:'IBM Plex Mono',monospace;
   font-size:clamp(8px,1.1vw,11px);
   letter-spacing:0.28em; text-transform:uppercase;
-  color:rgba(180,150,100,0.65);
+  color:rgba(230,200,140,0.90);
   position:relative; z-index:10;
   text-align:center;
   margin-top:clamp(10px,2vw,18px);
@@ -550,24 +605,15 @@ body::after {
 ───────────────────────────────────────────── */
 #landing-title-img {
   display:none;
-  max-width:min(1320px, 98vw);
-  width:98vw;
+  max-width:min(1440px, 100vw);
+  width:100vw;
   height:auto;
-  max-height:570px;
+  max-height:680px;
   object-fit:contain;
   margin-top:60px;
   margin-bottom:12px;
-  animation:titleFloat 4s ease-in-out infinite;  /* 기본: 부유만 */
+  animation:titleFloat 4s ease-in-out infinite;
   filter:drop-shadow(0 3px 5px rgba(0,0,0,0.50)) drop-shadow(0 0 16px rgba(192,57,43,0.3));
-}
-/* 모바일: 랜딩 로고 더 크게 */
-@media(max-width:600px) {
-  #landing-title-img {
-    width:100vw;
-    max-width:100vw;
-    max-height:none;
-    margin-top:32px;
-  }
 }
 
 /* 대형 텍스트 타이틀 */
@@ -702,18 +748,7 @@ body::after {
   ■ 카테고리 목록 페이지
 ===================================================== */
 #catPage { display:none }
-#catPage.active { display:block; animation:pageSlideIn 0.55s cubic-bezier(0.22,1,0.36,1) both; }
-@keyframes pageSlideIn {
-  from { opacity:0; transform:translateY(28px) scale(0.985); filter:blur(3px); }
-  to   { opacity:1; transform:translateY(0)    scale(1);     filter:blur(0); }
-}
-#catPage.exit {
-  animation:pageSlideOut 0.35s cubic-bezier(0.4,0,1,1) both;
-}
-@keyframes pageSlideOut {
-  from { opacity:1; transform:translateY(0)     scale(1);     filter:blur(0); }
-  to   { opacity:0; transform:translateY(-20px) scale(0.97);  filter:blur(4px); }
-}
+#catPage.active { display:block; animation:fadeUp 0.5s ease both }
 
 .catpage-head {
   margin-bottom:16px; padding-bottom:8px;
@@ -751,6 +786,14 @@ body::after {
 
 /* 소목차 탭 버튼들 — 크기 키움 */
 .sub-tabs { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:24px }
+.sub-tab {
+  padding:8px 20px; background:var(--surface);    /* 6px 16px → 8px 20px */
+  border:1px solid var(--border); border-radius:2px;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11px; letter-spacing:0.12em; text-transform:uppercase;   /* 9px → 11px */
+  color:var(--text-muted); cursor:pointer; transition:all var(--trans);
+}
+.sub-tab:hover, .sub-tab.active { background:var(--text); border-color:var(--text); color:var(--bg) }
 
 /* 게시글 카드 목록 */
 .content-grid { display:flex; flex-direction:column; gap:2px }
@@ -760,38 +803,8 @@ body::after {
   transition:all var(--trans);
   display:flex; align-items:center; justify-content:space-between; gap:16px;
   position:relative; overflow:hidden;
-  /* 카드 등장 기본값 */
-  opacity:0;
-  transform:translateY(14px);
-  animation:cardReveal 0.45s cubic-bezier(0.22,1,0.36,1) forwards;
 }
-@keyframes cardReveal {
-  to { opacity:1; transform:translateY(0); }
-}
-/* 탭 전환 시 그리드 페이드 */
-.content-grid.tab-switching .content-card {
-  animation:none;
-  opacity:0;
-  animation:cardReveal 0.38s cubic-bezier(0.22,1,0.36,1) forwards;
-}
-/* sub-tab 클릭 리플 */
-.sub-tab {
-  padding:8px 20px; background:var(--surface);
-  border:1px solid var(--border); border-radius:2px;
-  font-family:'IBM Plex Mono',monospace;
-  font-size:11px; letter-spacing:0.12em; text-transform:uppercase;
-  color:var(--text-muted); cursor:pointer; transition:all var(--trans);
-  position:relative; overflow:hidden;
-}
-.sub-tab::after {
-  content:''; position:absolute; inset:0;
-  background:var(--text); opacity:0;
-  transform:scaleX(0); transform-origin:left;
-  transition:transform 0.3s cubic-bezier(0.4,0,0.2,1), opacity 0.3s;
-}
-.sub-tab:hover::after, .sub-tab.active::after { transform:scaleX(1); opacity:1; }
-.sub-tab span, .sub-tab { isolation:isolate; }
-.sub-tab:hover, .sub-tab.active { background:var(--text); border-color:var(--text); color:var(--bg) }
+/* 마우스 올리면 왼쪽에 빨간 세로선 생김 */
 .content-card::before {
   content:''; position:absolute; left:0; top:0; bottom:0; width:0;
   background:var(--accent); transition:width var(--trans);
@@ -853,18 +866,7 @@ body::after {
 #viewer { display:none }
 #main:has(#viewer.active)::before { display:none; }
 #main:has(#viewer.active) { background:#faf6ee; }
-#viewer.active { display:block; animation:viewerSlideIn 0.6s cubic-bezier(0.22,1,0.36,1) both; }
-@keyframes viewerSlideIn {
-  from { opacity:0; transform:translateX(40px) scale(0.98); filter:blur(4px); }
-  to   { opacity:1; transform:translateX(0)    scale(1);    filter:blur(0); }
-}
-#viewer.exit {
-  animation:viewerSlideOut 0.3s cubic-bezier(0.4,0,1,1) both;
-}
-@keyframes viewerSlideOut {
-  from { opacity:1; transform:translateX(0)     scale(1); }
-  to   { opacity:0; transform:translateX(-30px) scale(0.97); }
-}
+#viewer.active { display:block; animation:fadeUp 0.5s ease both; }
 
 /* 뷰어 상단 바 (뒤로가기 + 경로 표시) */
 .viewer-topbar {
@@ -885,11 +887,6 @@ body::after {
 .viewer-header {
   margin-bottom:28px; padding-bottom:22px;
   border-bottom:2px solid var(--border); position:relative;
-  animation:viewerHeaderIn 0.7s cubic-bezier(0.22,1,0.36,1) 0.1s both;
-}
-@keyframes viewerHeaderIn {
-  from { opacity:0; transform:translateY(18px); }
-  to   { opacity:1; transform:translateY(0); }
 }
 /* 제목 아래 짧은 빨간 선 */
 .viewer-header::before {
@@ -944,20 +941,14 @@ body::after {
 ===================================================== */
 .fiction-body {
   font-family:'Noto Serif KR',serif;
-  font-size:15.5px; line-height:1.95;
+  font-size:15.5px; line-height:1.95;   /* 줄간격 살짝 줄임 */
   color:var(--text); font-weight:300;
   letter-spacing:0.01em; max-width:640px;
-  padding:40px 0;
+  padding:40px 0;   /* 글 위아래 공백 */
 }
 .fiction-body p {
-  margin-bottom:2.2em;
-  text-indent:1.4em;
-  opacity:0;
-  animation:paraReveal 0.6s cubic-bezier(0.22,1,0.36,1) forwards;
-}
-@keyframes paraReveal {
-  from { opacity:0; transform:translateY(10px); }
-  to   { opacity:1; transform:translateY(0); }
+  margin-bottom:2.2em;   /* 문단 사이 거리 늘림 */
+  text-indent:1.4em;     /* 들여쓰기 줄임 */
 }
 /* 무더기 엔터 → 추가 여백으로 표시 */
 .fiction-body p.empty-line {
@@ -1084,11 +1075,11 @@ body::after {
 ===================================================== */
 #scrollTopBtn {
   position:fixed; bottom:32px; right:24px; z-index:300;
-  width:36px; height:36px;
+  width:48px; height:48px;
   background:var(--surface);
   border:1px solid var(--border);
   border-radius:var(--radius); cursor:pointer;
-  font-family:'IBM Plex Mono',monospace; font-size:12px;
+  font-family:'IBM Plex Mono',monospace; font-size:14px;
   color:var(--text-muted);
   display:none; align-items:center; justify-content:center;
   box-shadow:var(--shadow-lg); transition:all var(--trans);
@@ -1351,11 +1342,21 @@ body::after {
   인트로 화면
 ===================================================== -->
 <div id="intro" onclick="dismissIntro()">
+  <!-- 배경 스캔라인 -->
+  <div class="intro-scanlines"></div>
+
   <!-- 네 모서리 브라켓 -->
   <div class="intro-corner tl"></div>
   <div class="intro-corner tr"></div>
   <div class="intro-corner bl"></div>
   <div class="intro-corner br"></div>
+
+  <!-- 상단 수평 장식선 -->
+  <div class="intro-deco-line top">
+    <span class="dl-seg"></span>
+    <span class="dl-dot"></span>
+    <span class="dl-seg"></span>
+  </div>
 
   <!--
     ★★★ 링크 삽입 ★★★ 인트로 화면 이미지
@@ -1373,8 +1374,17 @@ body::after {
     <span class="ch-row"><span class="ch" style="animation-delay:0.98s">日</span><span class="ch" style="animation-delay:1.10s">誌</span></span>
   </h1>
 
+  <div class="intro-rule"><span class="line l"></span><span class="line r"></span></div>
+
   <p class="intro-sub">애정반정일지 &nbsp;·&nbsp; 황왼 웹진</p>
   <p class="intro-click">— 클릭하여 입장 —</p>
+
+  <!-- 하단 수평 장식선 -->
+  <div class="intro-deco-line bottom">
+    <span class="dl-seg"></span>
+    <span class="dl-dot"></span>
+    <span class="dl-seg"></span>
+  </div>
 </div>
 
 <div id="overlay"></div>
@@ -2028,51 +2038,24 @@ buildNav();
 /* =====================================================
   ■ 화면 전환
 ===================================================== */
-/* =====================================================
-  ■ 화면 전환 헬퍼
-===================================================== */
-const PAGE_IDS = ['landing','catPage','viewer'];
-
 function hideAll() {
-  PAGE_IDS.forEach(id => {
+  ['landing','catPage','viewer'].forEach(id => {
     const el = document.getElementById(id);
     el.classList.remove('active');
     el.style.display = 'none';
   });
 }
-
-/* 전환: 현재 화면 퇴장 → 콜백에서 다음 화면 등장 */
-function transitionTo(nextId, callback) {
-  const current = PAGE_IDS.map(id => document.getElementById(id)).find(el => el.classList.contains('active'));
-  if (!current || current.id === nextId) {
-    hideAll();
-    callback();
-    return;
-  }
-  current.classList.add('exit');
-  const done = () => {
-    current.removeEventListener('animationend', done);
-    hideAll();
-    callback();
-  };
-  current.addEventListener('animationend', done, { once:true });
-  /* 안전망: 애니메이션이 없거나 지연될 경우 */
-  setTimeout(done, 400);
-}
-
 function show(id) {
   const el = document.getElementById(id);
   el.style.display = id === 'landing' ? 'flex' : 'block';
-  void el.offsetWidth; /* reflow — animation restart */
   el.classList.add('active');
 }
 function goLanding() {
-  transitionTo('landing', () => {
-    show('landing');
-    currentCat = null;
-    window.scrollTo({ top:0, behavior:'smooth' });
-    triggerLandingAnim();
-  });
+  hideAll(); show('landing');
+  currentCat = null;
+  window.scrollTo({ top:0, behavior:'smooth' });
+  /* 랜딩으로 돌아올 때도 등장 애니메이션 재실행 */
+  triggerLandingAnim();
 }
 
 /* =====================================================
@@ -2081,49 +2064,50 @@ function goLanding() {
     해당 소목차 탭을 자동 선택합니다.
 ===================================================== */
 function goCategory(cat, defaultSub) {
-  transitionTo('catPage', () => {
-    show('catPage');
-    currentCat = cat; currentSub = null; currentIdx = null;
+  hideAll(); show('catPage');
+  currentCat = cat; currentSub = null; currentIdx = null;
 
-    const logos = {
-      Fiction: 'https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EB%9E%9C%EC%84%AC%EB%85%B8%ED%8A%B8-%ED%94%BD%EC%85%98.png?raw=true',
-      Art: 'https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EB%9E%9C%EC%84%AC%EB%85%B8%ED%8A%B8-%EC%95%84%ED%8A%B8.png?raw=true',
-      Videos: 'https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EB%9E%9C%EC%84%AC%EB%85%B8%ED%8A%B8-%EB%B9%84%EB%94%94%EC%98%A4.png?raw=true'
-    };
-    document.getElementById('catPageTitle').innerHTML = `<img class="catpage-title-img" src="${logos[cat]||''}" alt="${cat}">`;
+  const logos = {
+    Fiction: 'https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EB%9E%9C%EC%84%AC%EB%85%B8%ED%8A%B8-%ED%94%BD%EC%85%98.png?raw=true',
+    Art: 'https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EB%9E%9C%EC%84%AC%EB%85%B8%ED%8A%B8-%EC%95%84%ED%8A%B8.png?raw=true',
+    Videos: 'https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EB%9E%9C%EC%84%AC%EB%85%B8%ED%8A%B8-%EB%B9%84%EB%94%94%EC%98%A4.png?raw=true'
+  };
+  document.getElementById('catPageTitle').innerHTML = `<img class="catpage-title-img" src="${logos[cat]||''}" alt="${cat}">`;
 
-    const subs   = Object.keys(contentData[cat]);
-    const tabsEl = document.getElementById('subTabs');
-    tabsEl.innerHTML = '';
+  const subs   = Object.keys(contentData[cat]);
+  const tabsEl = document.getElementById('subTabs');
+  tabsEl.innerHTML = '';
 
-    const allBtn = document.createElement('button');
-    allBtn.className = 'sub-tab' + (!defaultSub ? ' active' : '');
-    allBtn.textContent = '전체';
-    allBtn.addEventListener('click', () => {
-      document.querySelectorAll('.sub-tab').forEach(b => b.classList.remove('active'));
-      allBtn.classList.add('active');
-      renderGridAnimated(cat, null);
-    });
-    tabsEl.appendChild(allBtn);
-
-    subs.forEach(sub => {
-      const btn = document.createElement('button');
-      btn.className = 'sub-tab' + (sub === defaultSub ? ' active' : '');
-      btn.textContent = sub;
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.sub-tab').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        renderGridAnimated(cat, sub);
-      });
-      tabsEl.appendChild(btn);
-    });
-
-    if (defaultSub) renderGridAnimated(cat, defaultSub);
-    else            renderGridAnimated(cat, null);
-
-    window.scrollTo({ top:0, behavior:'smooth' });
-    navHighlight(cat, null, null);
+  /* 전체 탭 */
+  const allBtn = document.createElement('button');
+  allBtn.className = 'sub-tab' + (!defaultSub ? ' active' : '');
+  allBtn.textContent = '전체';
+  allBtn.addEventListener('click', () => {
+    document.querySelectorAll('.sub-tab').forEach(b => b.classList.remove('active'));
+    allBtn.classList.add('active');
+    renderGridAll(cat);
   });
+  tabsEl.appendChild(allBtn);
+
+  /* 소목차별 탭 */
+  subs.forEach(sub => {
+    const btn = document.createElement('button');
+    btn.className = 'sub-tab' + (sub === defaultSub ? ' active' : '');
+    btn.textContent = sub;
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.sub-tab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderGrid(cat, sub);
+    });
+    tabsEl.appendChild(btn);
+  });
+
+  /* 사이드바 소목차 클릭 시 → 해당 소목차 탭 선택 상태로 시작 */
+  if (defaultSub) renderGrid(cat, defaultSub);
+  else            renderGridAll(cat);
+
+  window.scrollTo({ top:0, behavior:'smooth' });
+  navHighlight(cat, null, null);
 }
 
 /* =====================================================
@@ -2148,55 +2132,28 @@ function makeCard(item, cat, sub, idx) {
   return card;
 }
 
-/* 카드 stagger 딜레이 적용 헬퍼 */
-function applyCardStagger(grid) {
-  const cards = grid.querySelectorAll('.content-card');
-  cards.forEach((card, i) => {
-    card.style.animationDelay = `${i * 48}ms`;
+/* 전체 탭 렌더링 */
+function renderGridAll(cat) {
+  currentSub = null;
+  const grid = document.getElementById('contentGrid');
+  grid.innerHTML = '';
+  Object.entries(contentData[cat]).forEach(([sub, items]) => {
+    const hdr = document.createElement('div');
+    hdr.className = 'sub-section-label';
+    hdr.textContent = sub;
+    grid.appendChild(hdr);
+    items.forEach((item, idx) => grid.appendChild(makeCard(item, cat, sub, idx)));
   });
 }
 
-/* 탭 전환 시 그리드 페이드아웃 → 새 카드 등장 */
-function renderGridAnimated(cat, sub) {
-  const grid = document.getElementById('contentGrid');
-  /* 퇴장 */
-  grid.style.transition = 'opacity 0.18s ease, transform 0.18s ease';
-  grid.style.opacity = '0';
-  grid.style.transform = 'translateY(8px)';
-  setTimeout(() => {
-    grid.innerHTML = '';
-    grid.style.transition = '';
-    grid.style.opacity = '';
-    grid.style.transform = '';
-    if (!sub) {
-      /* 전체 탭 */
-      currentSub = null;
-      Object.entries(contentData[cat]).forEach(([s, items]) => {
-        const hdr = document.createElement('div');
-        hdr.className = 'sub-section-label';
-        hdr.textContent = s;
-        grid.appendChild(hdr);
-        items.forEach((item, idx) => grid.appendChild(makeCard(item, cat, s, idx)));
-      });
-    } else {
-      /* 소목차 탭 */
-      currentSub = sub;
-      (contentData[cat][sub] || []).forEach((item, idx) =>
-        grid.appendChild(makeCard(item, cat, sub, idx))
-      );
-    }
-    applyCardStagger(grid);
-  }, 180);
-}
-
-/* 전체 탭 렌더링 (기존 호환용) */
-function renderGridAll(cat) {
-  renderGridAnimated(cat, null);
-}
-
-/* 소목차 탭 렌더링 (기존 호환용) */
+/* 소목차 탭 렌더링 */
 function renderGrid(cat, sub) {
-  renderGridAnimated(cat, sub);
+  currentSub = sub;
+  const grid = document.getElementById('contentGrid');
+  grid.innerHTML = '';
+  (contentData[cat][sub] || []).forEach((item, idx) =>
+    grid.appendChild(makeCard(item, cat, sub, idx))
+  );
 }
 
 /* =====================================================
@@ -2242,8 +2199,7 @@ function attemptLoad(cat, sub, idx) {
   ■ 게시글 뷰어 로딩
 ===================================================== */
 async function loadContent(cat, sub, idx) {
-  transitionTo('viewer', async () => {
-  show('viewer');
+  hideAll(); show('viewer');
   currentCat = cat; currentSub = sub; currentIdx = idx;
 
   const item = contentData[cat][sub][idx];
@@ -2298,12 +2254,6 @@ async function loadContent(cat, sub, idx) {
   applyFontSize();
   navHighlight(cat, sub, idx);
   window.scrollTo({ top:0, behavior:'smooth' });
-
-  /* 본문 단락 stagger */
-  const paras = document.querySelectorAll('#contentBody .fiction-body p');
-  paras.forEach((p, i) => { p.style.animationDelay = `${0.05 + i * 0.06}s`; });
-
-  }); // transitionTo end
 }
 
 /* =====================================================
