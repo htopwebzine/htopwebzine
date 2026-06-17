@@ -584,6 +584,16 @@ body::after {
   animation:titleFloat 4s ease-in-out infinite;
   filter:drop-shadow(0 3px 5px rgba(0,0,0,0.50)) drop-shadow(0 0 16px rgba(192,57,43,0.3));
 }
+/* 모바일: 랜딩 로고 더 크게 */
+@media(max-width:600px) {
+  #landing-title-img {
+    width:130vw;
+    max-width:130vw;
+    max-height:none;
+    margin-top:24px;
+    margin-left:-15vw;
+  }
+}
 
 /* 대형 텍스트 타이틀 */
 .landing-title {
@@ -688,8 +698,9 @@ body::after {
    투명부분을 제외한 이미지 크기대로 표시됩니다. */
 .cat-btn-img {
   display:none;
-  width:160px;
-  height:120px;
+  width:200px;
+  height:auto;
+  aspect-ratio:710 / 440;
   object-fit:contain;
   transition:transform var(--trans);
   cursor:pointer;
