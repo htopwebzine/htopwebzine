@@ -765,23 +765,29 @@ body::after {
 .sub-tab:hover, .sub-tab.active { background:var(--text); border-color:var(--text); color:var(--bg) }
 
 /* 게시글 카드 목록 */
-.content-grid { display:flex; flex-direction:column; gap:2px }
+.content-grid { display:flex; flex-direction:column; gap:10px }
 .content-card {
-  background:var(--surface); border:1px solid var(--border);
-  padding:20px 22px; cursor:pointer;
-  transition:all var(--trans);
-  display:flex; align-items:center; justify-content:space-between; gap:16px;
-  position:relative; overflow:hidden;
+  background: transparent;
+  border: none;
+  /* 9-slice: 이미지 테두리가 카드 크기에 맞춰 자유 변형 */
+  border-image-source: url('https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EB%B8%94%EB%A1%9D-%EA%B2%8C%EC%8B%9C%EA%B8%80.png?raw=true');
+  border-image-slice: 40 40 40 40 fill;
+  border-image-width: 20px;
+  border-image-repeat: stretch;
+  padding: 24px 28px;
+  cursor: pointer;
+  transition: transform 0.28s cubic-bezier(0.22,1,0.36,1), filter 0.28s ease;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  position: relative; overflow: visible;
 }
-/* 마우스 올리면 왼쪽에 빨간 세로선 — 안쪽(오른쪽)에서 슬라이드 */
-.content-card::before {
-  content:''; position:absolute; left:0; top:0; bottom:0; width:3px;
-  background:var(--accent);
-  transform:scaleY(0); transform-origin:center;
-  transition:transform var(--trans);
+/* 호버: 빨간선 대신 프레임 전체가 살짝 밝아지며 올라옴 */
+.content-card::before { display: none; }
+.content-card:hover {
+  transform: translateY(-2px) translateX(2px);
+  filter: brightness(1.08);
+  background: transparent;
+  padding-left: 28px;
 }
-.content-card:hover::before { transform:scaleY(1); }
-.content-card:hover { padding-left:25px; background:var(--surface2) }
 
 .card-info   { flex:1 }
 .card-meta   {
@@ -1568,7 +1574,7 @@ const contentData = {
       {
         title: "마지막 열차", type: "fiction", author: "김도현",
         sub: "황밍", adult: false,
-        bodyURL: "https://raw.githubusercontent.com/htopwebzine/htopwebzine/refs/heads/main/%EC%A3%BD%EC%9D%80_%EB%A1%9C%EB%B4%87%EC%9D%84_%EC%82%AC%EB%9E%91%ED%95%98%EA%B8%B0.txt"
+        bodyURL: "https://raw.githubusercontent.com/htopwebzine/htopwebzine/refs/heads/main/%EA%B8%80/%EC%A3%BD%EC%9D%80_%EB%A1%9C%EB%B4%87%EC%9D%84_%EC%82%AC%EB%9E%91%ED%95%98%EA%B8%B0.md"
       }
     ],
     "황창": [
@@ -1740,14 +1746,10 @@ function triggerLandingAnim() {
       transform: none;
     }
 
-    /* 카드 hover — 왼쪽 붉은 바 안쪽에서 등장 + 미세 이동 */
+    /* 카드 hover — 프레임 이미지 방식으로 변경됨, JS에서 별도 처리 없음 */
     .content-card {
       transition: transform 0.28s cubic-bezier(0.22,1,0.36,1),
-                  box-shadow 0.28s ease,
-                  background 0.2s ease;
-    }
-    .content-card:hover {
-      transform: translateX(4px);
+                  filter 0.28s ease;
     }
 
     /* 카테고리 페이지 진입 */
