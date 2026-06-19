@@ -14,7 +14,7 @@
   - Hahmlet           : 게시글 제목 전용 폰트
 ===================================================== -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@300;400;500&family=Noto+Serif+KR:wght@300;400;500;600&family=Noto+Serif+SC:wght@300;400;600&family=Hahmlet:wght@300;400;500;600&family=Nanum+Myeongjo:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@300;400;500&family=Noto+Serif+KR:wght@300;400;500;600&family=Noto+Serif+SC:wght@300;400;600&family=Hahmlet:wght@300;400;500;600&family=Nanum+Myeongjo:wght@400;700&family=Ma+Shan+Zheng&family=ZCOOL+QingKe+HuangYou&family=Noto+Sans+SC:wght@700&display=swap" rel="stylesheet">
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css" />
 
 <style>
@@ -287,6 +287,14 @@ body::after {
 }
 .ch-row { display:block; position:relative; line-height:1.0; }
 
+/* 한자 6글자 — 명조 계열 안에서 굵기/스타일 대비로 차이를 줌 */
+.hanja-1 { font-family:'Noto Serif SC',serif; font-weight:600; }      /* 愛 — 굵은 세리프 */
+.hanja-2 { font-family:'Nanum Myeongjo',serif; font-weight:400; }     /* 情 — 전통 명조 */
+.hanja-3 { font-family:'Noto Serif KR',serif; font-weight:300; }      /* 反 — 가는 명조 */
+.hanja-4 { font-family:'Hahmlet',serif; font-weight:600; }            /* 正 — 굵은 함렛 */
+.hanja-5 { font-family:'Nanum Myeongjo',serif; font-weight:700; }     /* 日 — 명조 볼드 */
+.hanja-6 { font-family:'Noto Serif SC',serif; font-weight:300; }      /* 誌 — 가는 세리프 */
+
 .ae-heart-wrap {
   display:inline-block;
   position:relative;
@@ -377,7 +385,8 @@ body::after {
   margin-top:clamp(20px,4vh,40px);
 }
 .intro-sub::before, .intro-sub::after {
-  content:'※'; color:rgba(200,100,60,0.6); font-size:0.85em; margin:0 8px;
+  content:'※'; color:rgba(200,100,60,0.7); font-size:1.6em; margin:0 8px;
+  display:inline-block; vertical-align:middle; line-height:0;
 }
 
 /* ── 클릭 유도 텍스트 — 점멸 네온 사인 느낌 ── */
@@ -1489,9 +1498,9 @@ body::after {
   </div>
 
   <h1 class="intro-title">
-    <span class="ch-row"><span class="ae-heart-wrap"><svg class="heart-svg" viewBox="0 0 100 90" xmlns="http://www.w3.org/2000/svg"><path d="M50 86 C50 86 6 56 6 28 C6 10 20 0 35 0 C45 0 50 8 50 20 C50 8 55 0 65 0 C80 0 94 10 94 28 C94 56 50 86 50 86 Z"/></svg><span class="ch ch-ae" style="animation-delay:0.5s">愛</span></span><span class="ch" style="animation-delay:0.62s">情</span></span>
-    <span class="ch-row"><span class="ch accent" style="animation-delay:0.74s">反</span><span class="ch accent" style="animation-delay:0.86s">正</span></span>
-    <span class="ch-row"><span class="ch" style="animation-delay:0.98s">日</span><span class="ch" style="animation-delay:1.10s">誌</span></span>
+    <span class="ch-row"><span class="ae-heart-wrap"><svg class="heart-svg" viewBox="0 0 100 90" xmlns="http://www.w3.org/2000/svg"><path d="M50 86 C50 86 6 56 6 28 C6 10 20 0 35 0 C45 0 50 8 50 20 C50 8 55 0 65 0 C80 0 94 10 94 28 C94 56 50 86 50 86 Z"/></svg><span class="ch ch-ae hanja-1" style="animation-delay:0.5s">愛</span></span><span class="ch hanja-2" style="animation-delay:0.62s">情</span></span>
+    <span class="ch-row"><span class="ch accent hanja-3" style="animation-delay:0.74s">反</span><span class="ch accent hanja-4" style="animation-delay:0.86s">正</span></span>
+    <span class="ch-row"><span class="ch hanja-5" style="animation-delay:0.98s">日</span><span class="ch hanja-6" style="animation-delay:1.10s">誌</span></span>
   </h1>
 
   <p class="intro-sub">애정반정일지 &nbsp;·&nbsp; 황왼 웹진</p>
