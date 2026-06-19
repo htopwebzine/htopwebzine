@@ -2041,8 +2041,14 @@ function dismissIntro() {
   window.scrollTo({ top:0, behavior:'smooth' });
   setTimeout(() => { document.getElementById('intro').style.display = 'none'; }, 900);
   if (window.__stopIntroTimecode) window.__stopIntroTimecode();
-  /* 인트로 퇴장 직후 랜딩 등장 애니메이션 실행 */
-  setTimeout(triggerLandingAnim, 200);
+  /* 인트로 퇴장 직후 — URL 해시가 있으면 해당 페이지로, 없으면 랜딩 */
+  setTimeout(() => {
+    if (location.hash && location.hash !== '#') {
+      routeHash(location.hash, false);
+    } else {
+      triggerLandingAnim();
+    }
+  }, 200);
 }
 
 
@@ -2307,6 +2313,51 @@ function buildNav() {
 buildNav();
 
 /* =====================================================
+  ■ URL 해시 라우터
+  ─────────────────────────────────────────────────────
+  해시 형식:
+    #                              → 랜딩
+    #Fiction                       → 카테고리 (전체 탭)
+    #Fiction/황현진                 → 카테고리 (소목차 탭)
+    #Fiction/황현진/0               → 뷰어 (게시글)
+===================================================== */
+function routeHash(hash, pushState) {
+  /* '#' 제거 후 슬래시로 분리 */
+  const raw = (hash || '').replace(/^#/, '');
+  if (!raw) { goLanding(pushState); return; }
+
+  const parts = raw.split('/').map(decodeURIComponent);
+  const cat   = parts[0];
+  const sub   = parts[1] || null;
+  const idx   = parts[2] !== undefined ? Number(parts[2]) : null;
+
+  /* cat이 contentData에 없으면 랜딩으로 */
+  if (!contentData[cat]) { goLanding(pushState); return; }
+
+  if (idx !== null && sub && contentData[cat][sub] && contentData[cat][sub][idx]) {
+    /* 뷰어 */
+    const item = contentData[cat][sub][idx];
+    if (item.adult && !adultUnlocked) {
+      /* 성인 콘텐츠는 카테고리로 fallback */
+      goCategory(cat, sub, pushState);
+    } else {
+      loadContent(cat, sub, idx, pushState);
+    }
+  } else if (sub && contentData[cat][sub]) {
+    /* 카테고리 + 소목차 탭 */
+    goCategory(cat, sub, pushState);
+  } else {
+    /* 카테고리 전체 탭 */
+    goCategory(cat, null, pushState);
+  }
+}
+
+/* 뒤로/앞으로 버튼 */
+window.addEventListener('popstate', (e) => {
+  routeHash(location.hash, false);
+});
+
+/* =====================================================
   ■ 화면 전환
 ===================================================== */
 function hideAll() {
@@ -2321,12 +2372,14 @@ function show(id) {
   el.style.display = id === 'landing' ? 'flex' : 'block';
   el.classList.add('active');
 }
-function goLanding() {
+function goLanding(pushState = true) {
   hideAll(); show('landing');
   currentCat = null;
   window.scrollTo({ top:0, behavior:'smooth' });
   /* 랜딩으로 돌아올 때도 등장 애니메이션 재실행 */
   triggerLandingAnim();
+  /* ── URL 해시 업데이트 ── */
+  if (pushState) history.pushState({ page:'landing' }, '', '#');
 }
 
 /* =====================================================
@@ -2334,9 +2387,16 @@ function goLanding() {
     defaultSub: 사이드바 소목차를 클릭했을 때
     해당 소목차 탭을 자동 선택합니다.
 ===================================================== */
-function goCategory(cat, defaultSub) {
+function goCategory(cat, defaultSub, pushState = true) {
   hideAll(); show('catPage');
   currentCat = cat; currentSub = null; currentIdx = null;
+  /* ── URL 해시 업데이트 ── */
+  if (pushState) {
+    const hash = defaultSub
+      ? `#${encodeURIComponent(cat)}/${encodeURIComponent(defaultSub)}`
+      : `#${encodeURIComponent(cat)}`;
+    history.pushState({ page:'cat', cat, sub: defaultSub || null }, '', hash);
+  }
 
   const logos = {
     Fiction: 'https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EB%9E%9C%EC%84%AC%EB%85%B8%ED%8A%B8-%ED%94%BD%EC%85%98.png?raw=true',
@@ -2470,9 +2530,14 @@ function attemptLoad(cat, sub, idx) {
 /* =====================================================
   ■ 게시글 뷰어 로딩
 ===================================================== */
-async function loadContent(cat, sub, idx) {
+async function loadContent(cat, sub, idx, pushState = true) {
   hideAll(); show('viewer');
   currentCat = cat; currentSub = sub; currentIdx = idx;
+  /* ── URL 해시 업데이트 ── */
+  if (pushState) {
+    const hash = `#${encodeURIComponent(cat)}/${encodeURIComponent(sub)}/${idx}`;
+    history.pushState({ page:'viewer', cat, sub, idx }, '', hash);
+  }
 
   const item = contentData[cat][sub][idx];
 
