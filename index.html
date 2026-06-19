@@ -533,17 +533,18 @@ body::after {
 /* 대메뉴 (Fiction / Art / Videos) — 글씨 더 크고 선명하게 */
 .nav-section  { padding:8px 0 }
 .nav-cat {
-  display:flex; align-items:center; justify-content:space-between;
+  display:flex; align-items:center; justify-content:center; position:relative;
   padding:13px 20px; cursor:pointer;
   font-family:'Pretendard',sans-serif;
-  font-size:11px; font-weight:500; letter-spacing:0.18em; text-transform:uppercase;
+  font-size:11px; font-weight:400; letter-spacing:0.18em; text-transform:uppercase;
   color:var(--text-mid);   /* 기존 text-muted → text-mid 로 더 진하게 */
   transition:all var(--trans); user-select:none;
   border-left:3px solid transparent;   /* 기존 2px → 3px */
+  text-align:center;
 }
+.nav-cat-arrow { position:absolute; right:20px; font-size:8px; transition:transform var(--trans); color:var(--text-muted) }
 .nav-cat:hover, .nav-cat.active { color:var(--text); border-left-color:var(--accent) }
 .nav-cat.active { color:var(--accent) }
-.nav-cat-arrow { font-size:8px; transition:transform var(--trans); color:var(--text-muted) }
 .nav-cat.open .nav-cat-arrow { transform:rotate(90deg) }
 
 /* 접혔다 펼쳐지는 서브메뉴 컨테이너 */
@@ -554,13 +555,14 @@ body::after {
 /* 소목차 — 클릭 시 카테고리 페이지로 바로 이동하므로 더 눈에 띄게 */
 .nav-sub {
   padding:11px 20px 11px 28px; cursor:pointer;
-  font-size:12.5px; font-weight:700;
+  font-size:12.5px; font-weight:400;
   color:var(--text-mid);
   letter-spacing:0.03em;
   transition:color var(--trans), background var(--trans);
   border-left:3px solid transparent;
   border-bottom:1px solid var(--border);
   font-family:'Pretendard',sans-serif;
+  text-align:center;
 }
 .nav-sub:hover { color:var(--text); background:var(--surface); border-left-color:var(--gold) }
 .nav-sub.active { color:var(--accent); border-left-color:var(--accent) }
