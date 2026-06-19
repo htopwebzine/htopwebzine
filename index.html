@@ -2358,6 +2358,19 @@ window.addEventListener('popstate', (e) => {
 });
 
 /* =====================================================
+  ■ 딥링크 진입 시 인트로 건너뛰기
+    URL 해시가 있으면 인트로를 즉시 숨기고 해당 페이지로 바로 이동합니다.
+===================================================== */
+(function() {
+  if (location.hash && location.hash !== '#') {
+    const intro = document.getElementById('intro');
+    if (intro) intro.style.display = 'none';
+    if (window.__stopIntroTimecode) window.__stopIntroTimecode();
+    routeHash(location.hash, false);
+  }
+})();
+
+/* =====================================================
   ■ 화면 전환
 ===================================================== */
 function hideAll() {
