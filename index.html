@@ -844,17 +844,20 @@ body::after {
   to   { opacity:1; transform:translateX(0); }
 }
 
-/* 뒤로가기 버튼 — 프레임 이미지 적용 */
+/* 뒤로가기 버튼 — 프레임 이미지 원본 비율(356:132) 유지 */
 .back-btn {
   background: transparent;
   border: none;
-  border-image-source: url('https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EB%B2%84%ED%8A%BC-%EB%B0%B1.png?raw=true');
-  border-image-slice: 28 28 28 28 fill;
-  border-image-width: 14px;
-  border-image-repeat: stretch;
-  padding:9px 20px;
-  font-family:'Pretendard',sans-serif; font-size:11px;
-  letter-spacing:0.12em; text-transform:uppercase;
+  background-image: url('https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EB%B2%84%ED%8A%BC-%EB%B0%B1.png?raw=true');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  width: 96px;
+  aspect-ratio: 356 / 132;
+  padding:0;
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Pretendard',sans-serif; font-size:10px;
+  letter-spacing:0.04em; text-transform:uppercase;
+  white-space:nowrap;
   color:var(--text-muted); cursor:pointer;
   transition:transform var(--trans), filter var(--trans);
 }
