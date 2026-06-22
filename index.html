@@ -111,6 +111,26 @@ body::after {
   100% { background:#1a0f08 }
 }
 
+/* ── 인트로 배경 사진 — 레트로 필터 + 느린 드리프트 ── */
+.intro-bg-photo {
+  position:absolute; inset:-6%; z-index:-1; pointer-events:none;
+  background-image:url('https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EB%B6%89%EC%9D%80-%EB%A0%88%ED%8A%B8%EB%A1%9C-%EC%A0%84%ED%99%94%EA%B8%B0--%ED%8E%B8%EC%A7%80--%EA%BD%83.png?raw=true');
+  background-size:cover; background-position:center;
+  filter:sepia(0.55) saturate(1.35) contrast(1.15) brightness(0.82) hue-rotate(-6deg);
+  opacity:0; 
+  animation:
+    introPhotoDrift 22s ease-in-out infinite alternate,
+    introPhotoFadeIn 1.6s ease 0.1s forwards;
+}
+@keyframes introPhotoDrift {
+  0%   { transform:scale(1.0)  translate(0,0); }
+  100% { transform:scale(1.09) translate(-1.6%,-1.1%); }
+}
+@keyframes introPhotoFadeIn {
+  0%   { opacity:0; }
+  100% { opacity:0.8; }
+}
+
 /* 배경 — 세피아 톤 + 비네트 */
 #intro::before {
   content:'';
@@ -1502,6 +1522,8 @@ body::after {
   인트로 화면
 ===================================================== -->
 <div id="intro" onclick="dismissIntro()">
+  <!-- 배경 사진 (레트로 필터) -->
+  <div class="intro-bg-photo"></div>
   <!-- 배경 스캔라인 + 그레인 + 비네트 -->
   <div class="intro-scanlines"></div>
   <div class="intro-scanroll"></div>
@@ -1765,58 +1787,6 @@ const contentData = {
         title: "마지막 열차", type: "fiction", author: "김도현",
         sub: "황밍", adult: false,
         bodyURL: "https://raw.githubusercontent.com/htopwebzine/htopwebzine/refs/heads/main/%EA%B8%80/%EC%A3%BD%EC%9D%80_%EB%A1%9C%EB%B4%87%EC%9D%84_%EC%82%AC%EB%9E%91%ED%95%98%EA%B8%B0.md"
-      },
-      {
-        title: "봄날의 편지", type: "fiction", author: "이수연",
-        sub: "황캥", adult: false,
-        body: `봄이 왔다. 창밖으로 벚꽃이 흩날리는 날, 그는 오래된 서랍을 열었다.
-
-노란 봉투 하나. 우표도 없고, 주소도 없는. 그저 '당신에게'라고만 쓰인.
-
-편지를 펼치는 손이 미세하게 떨렸다. 잉크 냄새가 났다. 아주 오래된 잉크의 냄새.
-
-'이 편지를 읽을 때쯤이면, 나는 이미 먼 곳에 있겠지. 그래도 괜찮아. 봄은 매년 오니까.'
-
-그는 편지를 덮었다. 창밖의 꽃잎이 한 장, 천천히 내려앉았다.`
-      },
-      {
-        title: "봄날의 편지", type: "fiction", author: "이수연",
-        sub: "황캥", adult: false,
-        body: `봄이 왔다. 창밖으로 벚꽃이 흩날리는 날, 그는 오래된 서랍을 열었다.
-
-노란 봉투 하나. 우표도 없고, 주소도 없는. 그저 '당신에게'라고만 쓰인.
-
-편지를 펼치는 손이 미세하게 떨렸다. 잉크 냄새가 났다. 아주 오래된 잉크의 냄새.
-
-'이 편지를 읽을 때쯤이면, 나는 이미 먼 곳에 있겠지. 그래도 괜찮아. 봄은 매년 오니까.'
-
-그는 편지를 덮었다. 창밖의 꽃잎이 한 장, 천천히 내려앉았다.`
-      },
-      {
-        title: "봄날의 편지", type: "fiction", author: "이수연",
-        sub: "황캥", adult: false,
-        body: `봄이 왔다. 창밖으로 벚꽃이 흩날리는 날, 그는 오래된 서랍을 열었다.
-
-노란 봉투 하나. 우표도 없고, 주소도 없는. 그저 '당신에게'라고만 쓰인.
-
-편지를 펼치는 손이 미세하게 떨렸다. 잉크 냄새가 났다. 아주 오래된 잉크의 냄새.
-
-'이 편지를 읽을 때쯤이면, 나는 이미 먼 곳에 있겠지. 그래도 괜찮아. 봄은 매년 오니까.'
-
-그는 편지를 덮었다. 창밖의 꽃잎이 한 장, 천천히 내려앉았다.`
-      },
-      {
-        title: "봄날의 편지", type: "fiction", author: "이수연",
-        sub: "황캥", adult: false,
-        body: `봄이 왔다. 창밖으로 벚꽃이 흩날리는 날, 그는 오래된 서랍을 열었다.
-
-노란 봉투 하나. 우표도 없고, 주소도 없는. 그저 '당신에게'라고만 쓰인.
-
-편지를 펼치는 손이 미세하게 떨렸다. 잉크 냄새가 났다. 아주 오래된 잉크의 냄새.
-
-'이 편지를 읽을 때쯤이면, 나는 이미 먼 곳에 있겠지. 그래도 괜찮아. 봄은 매년 오니까.'
-
-그는 편지를 덮었다. 창밖의 꽃잎이 한 장, 천천히 내려앉았다.`
       }
     ],
     "황창": [
