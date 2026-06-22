@@ -128,7 +128,7 @@ body::after {
 }
 @keyframes introPhotoFadeIn {
   0%   { opacity:0; }
-  100% { opacity:0.8; }
+  100% { opacity:0.88; }
 }
 
 /* 배경 — 세피아 톤 + 비네트 */
@@ -137,13 +137,14 @@ body::after {
   position:absolute; inset:0; z-index:0;
   background:
     radial-gradient(ellipse 90% 75% at 50% 45%, #2a1810 0%, #170d07 65%, #0c0603 100%);
+  mix-blend-mode:multiply;
   opacity:0;
   animation:introBgOverlay 2.0s cubic-bezier(0.6,0,0.4,1) forwards;
 }
 @keyframes introBgOverlay {
   0%   { opacity:0 }
   55%  { opacity:0 }
-  100% { opacity:1 }
+  100% { opacity:0.62 }
 }
 
 /* 네온 글로우 펄스 — 청록 + 적색 듀오톤 (레트로 VHS 색수차 느낌) */
@@ -674,6 +675,35 @@ body::after {
 }
 /* 배경 이미지 활성화 시 타이틀·버튼을 z-index:1 로 */
 #landing.has-bg > *:not(#landing-bg):not(#landing-overlay-img) { position:relative; z-index:1 }
+
+/* ── 랜딩 화면 레트로 효과 (인트로와 톤을 맞춘 스캔라인·비네트·그레인·듀오톤 글로우) ── */
+.landing-retro-scanlines {
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  background:repeating-linear-gradient(
+    0deg, transparent, transparent 2px,
+    rgba(0,0,0,0.10) 2px, rgba(0,0,0,0.10) 3px
+  );
+  mix-blend-mode:multiply;
+}
+.landing-retro-vignette {
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  background:radial-gradient(ellipse 75% 70% at 50% 45%, transparent 50%, rgba(20,10,5,0.40) 100%);
+}
+.landing-retro-grain {
+  position:fixed; inset:-20%; z-index:0; pointer-events:none;
+  opacity:0.10; mix-blend-mode:overlay;
+  background-image:
+    repeating-radial-gradient(circle at 0 0, transparent 0, rgba(255,255,255,0.5) 1px, transparent 1.6px);
+  background-size:3px 3px;
+  animation:grainShift 0.5s steps(4) infinite;
+}
+.landing-retro-glow {
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  background:
+    radial-gradient(ellipse 50% 40% at 32% 38%, rgba(225,75,42,0.10) 0%, transparent 65%),
+    radial-gradient(ellipse 50% 40% at 68% 60%, rgba(40,180,195,0.08) 0%, transparent 65%);
+  animation:introGlowPulse 5s ease-in-out infinite alternate;
+}
 
 /* ─────────────────────────────────────────────
    랜딩 오버레이 이미지
@@ -1622,6 +1652,12 @@ body::after {
     <img id="landing-overlay-img"
       src="https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%ED%8C%8C%ED%8B%B0%ED%81%B4.png?raw=true"
       alt="">
+
+    <!-- 랜딩 화면 레트로 효과 레이어 -->
+    <div class="landing-retro-glow"></div>
+    <div class="landing-retro-grain"></div>
+    <div class="landing-retro-vignette"></div>
+    <div class="landing-retro-scanlines"></div>
 
     <!--
       ★★★ 링크 삽입 ★★★ 랜딩 타이틀 이미지 (크게 표시)
