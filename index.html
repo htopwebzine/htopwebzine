@@ -1209,6 +1209,19 @@ body::after {
   margin: 0 -22px;
   padding-left: 22px;
   padding-right: 22px;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+#contentBody.content-dark {
+  --bg:        #1c140d;
+  --surface:   #241a10;
+  --text:      #ece2d0;
+  --text-mid:  #cdbd9c;
+  --text-muted:#9c8a6a;
+  --text-dim:  #6e5f48;
+  --border:    #3a2c1c;
+  --accent:    #d6604a;
+  background: var(--bg);
+  color: var(--text);
 }
 
 .viewer-pager {
@@ -1238,9 +1251,12 @@ body::after {
   ■ 글씨 크기 조절 컨트롤
     뷰어 상단에 표시되는 A- / A+ 버튼
 ===================================================== */
+.viewer-controls-right {
+  display:flex; align-items:center; gap:8px;
+  margin-left:auto; flex-wrap:wrap;
+}
 .font-controls-group {
   display:flex; align-items:center; gap:4px;
-  margin-left:auto;
 }
 .font-size-ctrl {
   display:flex; align-items:center; gap:4px;
@@ -1259,6 +1275,17 @@ body::after {
   transition:all var(--trans); line-height:1;
 }
 .fs-btn:hover { border-color:var(--accent); color:var(--accent) }
+
+/* 본문 다크모드 토글 버튼 */
+.dark-toggle-btn {
+  height:28px; padding:0 10px; background:var(--surface);
+  border:1px solid var(--border); border-radius:var(--radius);
+  cursor:pointer; font-family:'Pretendard',sans-serif;
+  font-size:11px; color:var(--text-mid); letter-spacing:0.04em;
+  display:flex; align-items:center; gap:4px; line-height:1;
+  transition:all var(--trans);
+}
+.dark-toggle-btn:hover { border-color:var(--accent); color:var(--accent) }
 
 /* 폰트 선택 — 단일 버튼 + 드롭다운, 글씨 크기 조절 바로 왼쪽 */
 .font-family-dropdown {
@@ -1927,6 +1954,9 @@ const FONT_MIN = 13, FONT_MAX = 22, FONT_STEP = 0.5;
 
 /* 현재 뷰어 본문 폰트 ('default' = 기존 명조체 / 'pretendard') */
 let currentFontFamily = 'default';
+
+/* 본문 미색 영역 다크모드 켜짐/꺼짐 */
+let contentDarkMode = false;
 
 function buildFlatList() {
   flatList = [];
@@ -2693,23 +2723,28 @@ async function loadContent(cat, sub, idx, pushState = true) {
       <div class="viewer-info-row">
         <span class="viewer-author">${escH(item.author || 'Anonymous')}</span>
         <span class="type-badge ${item.type}" style="display:none;">${item.type.toUpperCase()}</span>
-        ${item.type === 'fiction' ? `
-          <div class="font-controls-group">
-            <div class="font-family-dropdown" id="fontFamilyDropdown">
-              <button class="ff-toggle-btn" onclick="toggleFontFamilyMenu(event)">
-                ${currentFontFamily === 'pretendard' ? 'Pretendard' : '명조'} <span class="ff-caret">▾</span>
-              </button>
-              <div class="ff-menu" id="ffMenu">
-                <button class="ff-option ${currentFontFamily === 'default' ? 'active' : ''}" data-ff="default" onclick="changeFontFamily('default')">명조</button>
-                <button class="ff-option ${currentFontFamily === 'pretendard' ? 'active' : ''}" data-ff="pretendard" onclick="changeFontFamily('pretendard')">Pretendard</button>
+        <div class="viewer-controls-right">
+          ${item.type === 'fiction' ? `
+            <div class="font-controls-group">
+              <div class="font-family-dropdown" id="fontFamilyDropdown">
+                <button class="ff-toggle-btn" onclick="toggleFontFamilyMenu(event)">
+                  ${currentFontFamily === 'pretendard' ? 'Pretendard' : '명조'} <span class="ff-caret">▾</span>
+                </button>
+                <div class="ff-menu" id="ffMenu">
+                  <button class="ff-option ${currentFontFamily === 'default' ? 'active' : ''}" data-ff="default" onclick="changeFontFamily('default')">명조</button>
+                  <button class="ff-option ${currentFontFamily === 'pretendard' ? 'active' : ''}" data-ff="pretendard" onclick="changeFontFamily('pretendard')">Pretendard</button>
+                </div>
               </div>
-            </div>
-            <div class="font-size-ctrl" title="글씨 크기 조절">
-              <button class="fs-btn" onclick="changeFontSize(-1)">A−</button>
-              <span id="fsSizeLabel">${currentFontSize}px</span>
-              <button class="fs-btn" onclick="changeFontSize(1)">A+</button>
-            </div>
-          </div>` : ''}
+              <div class="font-size-ctrl" title="글씨 크기 조절">
+                <button class="fs-btn" onclick="changeFontSize(-1)">A−</button>
+                <span id="fsSizeLabel">${currentFontSize}px</span>
+                <button class="fs-btn" onclick="changeFontSize(1)">A+</button>
+              </div>
+            </div>` : ''}
+          <button class="dark-toggle-btn" id="darkToggleBtn" onclick="toggleContentDark()" title="본문 다크모드">
+            ${contentDarkMode ? '☀ <span class="dark-toggle-label">라이트</span>' : '☾ <span class="dark-toggle-label">다크</span>'}
+          </button>
+        </div>
       </div>
     </div>
     <div id="contentBody" style="padding-top:24px; padding-bottom:32px">${await renderBody(item)}</div>
@@ -2719,6 +2754,7 @@ async function loadContent(cat, sub, idx, pushState = true) {
   /* 글씨 크기 현재 설정값 적용 */
   applyFontSize();
   applyFontFamily();
+  applyContentDark();
   navHighlight(cat, sub, idx);
   window.scrollTo({ top:0, behavior:'smooth' });
 }
@@ -2758,6 +2794,20 @@ function applyFontFamily() {
   if (toggleBtn) {
     toggleBtn.innerHTML = (currentFontFamily === 'pretendard' ? 'Pretendard' : '명조') + ' <span class="ff-caret">▾</span>';
   }
+}
+
+/* 본문 미색 영역 다크모드 토글 */
+function toggleContentDark() {
+  contentDarkMode = !contentDarkMode;
+  applyContentDark();
+}
+function applyContentDark() {
+  const body = document.getElementById('contentBody');
+  if (body) body.classList.toggle('content-dark', contentDarkMode);
+  const btn = document.getElementById('darkToggleBtn');
+  if (btn) btn.innerHTML = contentDarkMode
+    ? '☀ <span class="dark-toggle-label">라이트</span>'
+    : '☾ <span class="dark-toggle-label">다크</span>';
 }
 function toggleFontFamilyMenu(e) {
   e.stopPropagation();
