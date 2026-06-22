@@ -931,6 +931,7 @@ body::after {
   display:block;
   margin-left:-16px;
   animation:catLogoSlideIn 0.6s cubic-bezier(0.22,1,0.36,1) both;
+  filter:brightness(1.08);
 }
 @keyframes catLogoSlideIn {
   from { opacity:0; transform:translateX(-40px); }
@@ -984,12 +985,12 @@ body::after {
   transition: transform 0.28s cubic-bezier(0.22,1,0.36,1), filter 0.28s ease;
   display: flex; align-items: center; justify-content: center; gap: 14px;
   position: relative; overflow: visible;
+  filter: brightness(1.08);
 }
-/* 호버: 빨간선 대신 프레임 전체가 살짝 밝아지며 올라옴 */
+/* 호버: 프레임 전체가 살짝 위로 올라옴 (밝기는 상시 적용) */
 .content-card::before { display: none; }
 .content-card:hover {
   transform: translateY(-2px) translateX(2px);
-  filter: brightness(1.08);
   background: transparent;
   padding-left: 24px;
 }
@@ -1060,16 +1061,6 @@ body::after {
   display:flex; align-items:center; gap:10px;
   margin-bottom:32px; flex-wrap:wrap;
   justify-content:flex-start;
-  position:relative;
-}
-.viewer-topbar::after {
-  content:'';
-  position:absolute; inset:-16px -16px -8px -16px; z-index:-1; pointer-events:none;
-  background:repeating-linear-gradient(
-    0deg, transparent, transparent 2px,
-    rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 3px
-  );
-  mix-blend-mode:multiply;
 }
 .viewer-topbar .back-btn { flex-shrink:0; order:1; margin-left:auto; }
 .viewer-bc {
@@ -1084,15 +1075,6 @@ body::after {
 .viewer-header {
   margin-bottom:24px; padding-bottom:18px;
   border-bottom:2px solid var(--border); position:relative;
-  overflow:hidden;
-}
-.viewer-header::after {
-  content:'';
-  position:absolute; inset:0; z-index:-1; pointer-events:none;
-  background:
-    radial-gradient(ellipse 100% 100% at 50% 20%, transparent 45%, rgba(20,10,5,0.16) 100%),
-    repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.07) 2px, rgba(0,0,0,0.07) 3px);
-  mix-blend-mode:multiply;
 }
 /* 게시글 제목 (Hahmlet 폰트) */
 .viewer-title {
@@ -1224,6 +1206,9 @@ body::after {
 #contentBody {
   background: var(--bg);
   position: relative;
+  margin: 0 -22px;
+  padding-left: 22px;
+  padding-right: 22px;
 }
 
 .viewer-pager {
@@ -2727,7 +2712,7 @@ async function loadContent(cat, sub, idx, pushState = true) {
           </div>` : ''}
       </div>
     </div>
-    <div id="contentBody" style="padding:24px 0 32px">${await renderBody(item)}</div>
+    <div id="contentBody" style="padding-top:24px; padding-bottom:32px">${await renderBody(item)}</div>
     ${pagerHTML}
   `;
 
