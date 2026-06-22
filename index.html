@@ -896,7 +896,7 @@ body::after {
 .sub-tab:hover, .sub-tab.active { background:var(--text); border-color:var(--text); color:var(--bg) }
 
 /* 게시글 카드 목록 */
-.content-grid { display:flex; flex-direction:column; align-items:center; gap:8px }
+.content-grid { display:flex; flex-direction:column; align-items:center; gap:16px }
 .content-card {
   width: 100%;
   max-width: 560px;
@@ -905,7 +905,7 @@ body::after {
   /* 9-slice: 이미지 테두리가 카드 크기에 맞춰 자유 변형 */
   border-image-source: url('https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EB%B8%94%EB%A1%9D-%EA%B2%8C%EC%8B%9C%EA%B8%80.png?raw=true');
   border-image-slice: 40 40 40 40 fill;
-  border-image-width: 14px;
+  border-image-width: 20px;
   border-image-repeat: stretch;
   padding: 16px 20px;
   cursor: pointer;
@@ -1761,97 +1761,6 @@ const contentData = {
         title: "마지막 열차", type: "fiction", author: "김도현",
         sub: "황밍", adult: false,
         bodyURL: "https://raw.githubusercontent.com/htopwebzine/htopwebzine/refs/heads/main/%EA%B8%80/%EC%A3%BD%EC%9D%80_%EB%A1%9C%EB%B4%87%EC%9D%84_%EC%82%AC%EB%9E%91%ED%95%98%EA%B8%B0.md"
-      },
-      {
-        title: "봄날의 편지", type: "fiction", author: "이수연",
-        sub: "황캥", adult: false,
-        body: `봄이 왔다. 창밖으로 벚꽃이 흩날리는 날, 그는 오래된 서랍을 열었다.
-
-노란 봉투 하나. 우표도 없고, 주소도 없는. 그저 '당신에게'라고만 쓰인.
-
-편지를 펼치는 손이 미세하게 떨렸다. 잉크 냄새가 났다. 아주 오래된 잉크의 냄새.
-
-'이 편지를 읽을 때쯤이면, 나는 이미 먼 곳에 있겠지. 그래도 괜찮아. 봄은 매년 오니까.'
-
-그는 편지를 덮었다. 창밖의 꽃잎이 한 장, 천천히 내려앉았다.`
-      },
-      {
-        title: "봄날의 편지", type: "fiction", author: "이수연",
-        sub: "황캥", adult: false,
-        body: `봄이 왔다. 창밖으로 벚꽃이 흩날리는 날, 그는 오래된 서랍을 열었다.
-
-노란 봉투 하나. 우표도 없고, 주소도 없는. 그저 '당신에게'라고만 쓰인.
-
-편지를 펼치는 손이 미세하게 떨렸다. 잉크 냄새가 났다. 아주 오래된 잉크의 냄새.
-
-'이 편지를 읽을 때쯤이면, 나는 이미 먼 곳에 있겠지. 그래도 괜찮아. 봄은 매년 오니까.'
-
-그는 편지를 덮었다. 창밖의 꽃잎이 한 장, 천천히 내려앉았다.`
-      },
-      {
-        title: "봄날의 편지", type: "fiction", author: "이수연",
-        sub: "황캥", adult: false,
-        body: `봄이 왔다. 창밖으로 벚꽃이 흩날리는 날, 그는 오래된 서랍을 열었다.
-
-노란 봉투 하나. 우표도 없고, 주소도 없는. 그저 '당신에게'라고만 쓰인.
-
-편지를 펼치는 손이 미세하게 떨렸다. 잉크 냄새가 났다. 아주 오래된 잉크의 냄새.
-
-'이 편지를 읽을 때쯤이면, 나는 이미 먼 곳에 있겠지. 그래도 괜찮아. 봄은 매년 오니까.'
-
-그는 편지를 덮었다. 창밖의 꽃잎이 한 장, 천천히 내려앉았다.`
-      },
-      {
-        title: "봄날의 편지", type: "fiction", author: "이수연",
-        sub: "황캥", adult: false,
-        body: `봄이 왔다. 창밖으로 벚꽃이 흩날리는 날, 그는 오래된 서랍을 열었다.
-
-노란 봉투 하나. 우표도 없고, 주소도 없는. 그저 '당신에게'라고만 쓰인.
-
-편지를 펼치는 손이 미세하게 떨렸다. 잉크 냄새가 났다. 아주 오래된 잉크의 냄새.
-
-'이 편지를 읽을 때쯤이면, 나는 이미 먼 곳에 있겠지. 그래도 괜찮아. 봄은 매년 오니까.'
-
-그는 편지를 덮었다. 창밖의 꽃잎이 한 장, 천천히 내려앉았다.`
-      },
-      {
-        title: "봄날의 편지", type: "fiction", author: "이수연",
-        sub: "황캥", adult: false,
-        body: `봄이 왔다. 창밖으로 벚꽃이 흩날리는 날, 그는 오래된 서랍을 열었다.
-
-노란 봉투 하나. 우표도 없고, 주소도 없는. 그저 '당신에게'라고만 쓰인.
-
-편지를 펼치는 손이 미세하게 떨렸다. 잉크 냄새가 났다. 아주 오래된 잉크의 냄새.
-
-'이 편지를 읽을 때쯤이면, 나는 이미 먼 곳에 있겠지. 그래도 괜찮아. 봄은 매년 오니까.'
-
-그는 편지를 덮었다. 창밖의 꽃잎이 한 장, 천천히 내려앉았다.`
-      },
-      {
-        title: "봄날의 편지", type: "fiction", author: "이수연",
-        sub: "황캥", adult: false,
-        body: `봄이 왔다. 창밖으로 벚꽃이 흩날리는 날, 그는 오래된 서랍을 열었다.
-
-노란 봉투 하나. 우표도 없고, 주소도 없는. 그저 '당신에게'라고만 쓰인.
-
-편지를 펼치는 손이 미세하게 떨렸다. 잉크 냄새가 났다. 아주 오래된 잉크의 냄새.
-
-'이 편지를 읽을 때쯤이면, 나는 이미 먼 곳에 있겠지. 그래도 괜찮아. 봄은 매년 오니까.'
-
-그는 편지를 덮었다. 창밖의 꽃잎이 한 장, 천천히 내려앉았다.`
-      },
-      {
-        title: "봄날의 편지", type: "fiction", author: "이수연",
-        sub: "황캥", adult: false,
-        body: `봄이 왔다. 창밖으로 벚꽃이 흩날리는 날, 그는 오래된 서랍을 열었다.
-
-노란 봉투 하나. 우표도 없고, 주소도 없는. 그저 '당신에게'라고만 쓰인.
-
-편지를 펼치는 손이 미세하게 떨렸다. 잉크 냄새가 났다. 아주 오래된 잉크의 냄새.
-
-'이 편지를 읽을 때쯤이면, 나는 이미 먼 곳에 있겠지. 그래도 괜찮아. 봄은 매년 오니까.'
-
-그는 편지를 덮었다. 창밖의 꽃잎이 한 장, 천천히 내려앉았다.`
       }
     ],
     "황창": [
