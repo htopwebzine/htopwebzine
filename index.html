@@ -673,25 +673,25 @@ body::after {
   background-position:center;
   background-repeat:no-repeat;
 }
-/* 배경 이미지 활성화 시 타이틀·버튼을 z-index:1 로 */
-#landing.has-bg > *:not(#landing-bg):not(#landing-overlay-img) { position:relative; z-index:1 }
+/* 배경 이미지 활성화 시 타이틀·버튼을 z-index:1 로 (레트로 효과 레이어는 제외) */
+#landing.has-bg > *:not(#landing-bg):not(#landing-overlay-img):not(.landing-retro-scanlines):not(.landing-retro-vignette):not(.landing-retro-grain):not(.landing-retro-glow) { position:relative; z-index:1 }
 
 /* ── 랜딩 화면 레트로 효과 (인트로와 톤을 맞춘 스캔라인·비네트·그레인·듀오톤 글로우) ── */
 .landing-retro-scanlines {
   position:fixed; inset:0; z-index:0; pointer-events:none;
   background:repeating-linear-gradient(
     0deg, transparent, transparent 2px,
-    rgba(0,0,0,0.10) 2px, rgba(0,0,0,0.10) 3px
+    rgba(0,0,0,0.13) 2px, rgba(0,0,0,0.13) 3px
   );
   mix-blend-mode:multiply;
 }
 .landing-retro-vignette {
   position:fixed; inset:0; z-index:0; pointer-events:none;
-  background:radial-gradient(ellipse 75% 70% at 50% 45%, transparent 50%, rgba(20,10,5,0.40) 100%);
+  background:radial-gradient(ellipse 75% 70% at 50% 45%, transparent 48%, rgba(20,10,5,0.46) 100%);
 }
 .landing-retro-grain {
   position:fixed; inset:-20%; z-index:0; pointer-events:none;
-  opacity:0.10; mix-blend-mode:overlay;
+  opacity:0.13; mix-blend-mode:overlay;
   background-image:
     repeating-radial-gradient(circle at 0 0, transparent 0, rgba(255,255,255,0.5) 1px, transparent 1.6px);
   background-size:3px 3px;
@@ -949,7 +949,7 @@ body::after {
 .content-grid { display:flex; flex-direction:column; align-items:center; gap:16px }
 .content-card {
   width: 100%;
-  max-width: 440px;
+  max-width: 380px;
   background: transparent;
   border: none;
   /* 9-slice: 이미지 테두리가 카드 크기에 맞춰 자유 변형 */
@@ -957,7 +957,7 @@ body::after {
   border-image-slice: 40 40 40 40 fill;
   border-image-width: 20px;
   border-image-repeat: stretch;
-  padding: 16px 20px;
+  padding: 20px 20px;
   cursor: pointer;
   transition: transform 0.28s cubic-bezier(0.22,1,0.36,1), filter 0.28s ease;
   display: flex; align-items: center; justify-content: center; gap: 14px;
@@ -977,19 +977,23 @@ body::after {
   font-family:'Pretendard',sans-serif; font-size:10px; font-weight:600;
   letter-spacing:0.15em; text-transform:uppercase;
   color:var(--text-mid);
-  margin-bottom:5px;
+  margin-bottom:10px;
 }
 .card-meta-cat {
+  position:relative;
   color:var(--accent); font-weight:700;
+  padding-bottom:6px;
+}
+.card-meta-cat::after {
+  content:'';
+  position:absolute; left:50%; bottom:0;
+  width:60px; height:0;
+  transform:translateX(-50%);
+  border-top:1px dotted var(--accent);
 }
 .card-meta-sub {
   font-size:10px; font-weight:500; letter-spacing:0.15em;
   color:var(--text-mid);
-}
-.card-divider {
-  width: 48px; height: 0;
-  margin: 8px auto 10px;
-  border-top: 1px dotted var(--accent);
 }
 /* 게시글 제목 (가독성 높인 명조 계열 폰트) */
 .card-title  {
@@ -2559,7 +2563,6 @@ function makeCard(item, cat, sub, idx) {
         <span class="card-meta-cat">${escH(cat)}</span>&nbsp;·&nbsp;<span class="card-meta-sub">${escH(sub)}</span>
         ${item.adult ? '<span style="color:var(--accent)">· 성인</span>' : ''}
       </div>
-      <div class="card-divider"></div>
       <div class="card-title">${escH(item.title)}</div>
       <div class="card-author">${escH(item.author || 'Anonymous')}</div>
     </div>
