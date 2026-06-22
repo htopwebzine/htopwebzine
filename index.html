@@ -1214,12 +1214,12 @@ body::after {
 #contentBody.content-dark {
   --bg:        #1c140d;
   --surface:   #241a10;
-  --text:      #ece2d0;
-  --text-mid:  #cdbd9c;
-  --text-muted:#9c8a6a;
-  --text-dim:  #6e5f48;
+  --text:      #f7efe0;
+  --text-mid:  #e3d4b8;
+  --text-muted:#b8a888;
+  --text-dim:  #8a7a5e;
   --border:    #3a2c1c;
-  --accent:    #d6604a;
+  --accent:    #e0735e;
   background: var(--bg);
   color: var(--text);
 }
@@ -1278,11 +1278,10 @@ body::after {
 
 /* 본문 다크모드 토글 버튼 */
 .dark-toggle-btn {
-  height:28px; padding:0 10px; background:var(--surface);
+  width:28px; height:28px; padding:0; background:var(--surface);
   border:1px solid var(--border); border-radius:var(--radius);
-  cursor:pointer; font-family:'Pretendard',sans-serif;
-  font-size:11px; color:var(--text-mid); letter-spacing:0.04em;
-  display:flex; align-items:center; gap:4px; line-height:1;
+  cursor:pointer; font-size:13px; color:var(--text-mid);
+  display:flex; align-items:center; justify-content:center; line-height:1;
   transition:all var(--trans);
 }
 .dark-toggle-btn:hover { border-color:var(--accent); color:var(--accent) }
@@ -2742,7 +2741,7 @@ async function loadContent(cat, sub, idx, pushState = true) {
               </div>
             </div>` : ''}
           <button class="dark-toggle-btn" id="darkToggleBtn" onclick="toggleContentDark()" title="본문 다크모드">
-            ${contentDarkMode ? '☀ <span class="dark-toggle-label">라이트</span>' : '☾ <span class="dark-toggle-label">다크</span>'}
+            ${contentDarkMode ? '☀' : '☾'}
           </button>
         </div>
       </div>
@@ -2805,9 +2804,7 @@ function applyContentDark() {
   const body = document.getElementById('contentBody');
   if (body) body.classList.toggle('content-dark', contentDarkMode);
   const btn = document.getElementById('darkToggleBtn');
-  if (btn) btn.innerHTML = contentDarkMode
-    ? '☀ <span class="dark-toggle-label">라이트</span>'
-    : '☾ <span class="dark-toggle-label">다크</span>';
+  if (btn) btn.innerHTML = contentDarkMode ? '☀' : '☾';
 }
 function toggleFontFamilyMenu(e) {
   e.stopPropagation();
