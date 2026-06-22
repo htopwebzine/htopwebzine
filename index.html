@@ -764,7 +764,7 @@ body::after {
   height:auto;
   max-height:680px;
   object-fit:contain;
-  margin-top:60px;
+  margin-top:36px;
   margin-bottom:12px;
   animation:titleFloat 4s ease-in-out infinite;
   filter:drop-shadow(0 3px 5px rgba(0,0,0,0.50)) drop-shadow(0 0 16px rgba(192,57,43,0.3));
@@ -775,7 +775,7 @@ body::after {
     width:112vw;
     max-width:112vw;
     max-height:none;
-    margin-top:24px;
+    margin-top:0px;
     margin-left:-2vw;
   }
 }
@@ -811,14 +811,14 @@ body::after {
   display:flex; 
   flex-direction:column;
   align-items:center;
-  gap:0px;
+  gap:12px;
   margin-top:-52px;
 }
 
 /* 기본 상태: 대각선 배치 */
 .cat-btn:nth-child(1) { transform:translateX(-50px); }
 .cat-btn:nth-child(2) { transform:translateX(50px);  }
-.cat-btn:nth-child(3) { transform:translateX(-50px); }
+.cat-btn:nth-child(3) { transform:translateX(-50px); margin-top:24px; }
 
 /* ── 등장 애니메이션: .landing-animate 클래스 부착 시 실행 ── */
 .landing-animate .cat-btn:nth-child(1) { animation:btnRise1 0.7s cubic-bezier(0.22,1,0.36,1) 0.85s both, btnPulse1 3.2s ease-in-out 2s infinite; }
@@ -974,7 +974,7 @@ body::after {
 .content-grid { display:flex; flex-direction:column; align-items:center; gap:16px }
 .content-card {
   width: 100%;
-  max-width: 340px;
+  max-width: 310px;
   background: transparent;
   border: none;
   /* 9-slice: 이미지 테두리가 카드 크기에 맞춰 자유 변형 */
@@ -1002,19 +1002,10 @@ body::after {
   font-family:'Pretendard',sans-serif; font-size:10px; font-weight:600;
   letter-spacing:0.15em; text-transform:uppercase;
   color:var(--text-mid);
-  margin-bottom:10px;
+  margin-bottom:6px;
 }
 .card-meta-cat {
-  position:relative;
   color:var(--accent); font-weight:700;
-  padding-bottom:6px;
-}
-.card-meta-cat::after {
-  content:'';
-  position:absolute; left:50%; bottom:0;
-  width:60px; height:0;
-  transform:translateX(-50%);
-  border-top:1px dotted var(--accent);
 }
 .card-meta-sub {
   font-size:10px; font-weight:500; letter-spacing:0.15em;
@@ -1047,7 +1038,7 @@ body::after {
 /* 전체 탭에서 소목차 구분 헤더
    — 다크모드에서도 CSS 변수가 제대로 적용되도록 인라인 스타일 대신 class 사용 */
 .sub-section-label {
-  width:100%; max-width:340px;
+  width:100%; max-width:310px;
   padding:14px 4px 8px;
   font-family:'Pretendard',sans-serif; font-size:12px;
   letter-spacing:0.2em; text-transform:uppercase;
@@ -1074,6 +1065,16 @@ body::after {
   display:flex; align-items:center; gap:10px;
   margin-bottom:32px; flex-wrap:wrap;
   justify-content:flex-start;
+  position:relative;
+}
+.viewer-topbar::after {
+  content:'';
+  position:absolute; inset:-16px -16px -8px -16px; z-index:-1; pointer-events:none;
+  background:repeating-linear-gradient(
+    0deg, transparent, transparent 2px,
+    rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 3px
+  );
+  mix-blend-mode:multiply;
 }
 .viewer-topbar .back-btn { flex-shrink:0; order:1; margin-left:auto; }
 .viewer-bc {
@@ -1088,11 +1089,15 @@ body::after {
 .viewer-header {
   margin-bottom:24px; padding-bottom:18px;
   border-bottom:2px solid var(--border); position:relative;
+  overflow:hidden;
 }
-/* 제목 아래 짧은 빨간 선 */
-.viewer-header::before {
-  content:''; position:absolute; bottom:-4px; left:0; width:60px; height:1px;
-  background:var(--accent);
+.viewer-header::after {
+  content:'';
+  position:absolute; inset:0; z-index:-1; pointer-events:none;
+  background:
+    radial-gradient(ellipse 100% 100% at 50% 20%, transparent 45%, rgba(20,10,5,0.16) 100%),
+    repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.07) 2px, rgba(0,0,0,0.07) 3px);
+  mix-blend-mode:multiply;
 }
 /* 게시글 제목 (Hahmlet 폰트) */
 .viewer-title {
@@ -1484,16 +1489,6 @@ body::after {
 .content-card:nth-child(6)  { animation-delay:0.24s }
 .content-card:nth-child(7)  { animation-delay:0.28s }
 .content-card:nth-child(8)  { animation-delay:0.32s }
-
-/* ── 뷰어 타이틀 shimmer 장식선 ──
-   제목 아래 짧은 빨간 선이 로딩될 때 왼쪽에서 늘어납니다. */
-.viewer-header::before {
-  animation:lineGrow 0.6s cubic-bezier(0.4,0,0.2,1) both;
-}
-@keyframes lineGrow {
-  from { width:0; opacity:0 }
-  to   { width:60px; opacity:1 }
-}
 
 /* ── 네비게이션 항목 hover glow ──
    사이드바 소목차에 마우스 올리면 글씨에 은은한 광채 */
