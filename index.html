@@ -120,7 +120,8 @@ body::after {
   opacity:0; 
   animation:
     introPhotoDrift 22s ease-in-out infinite alternate,
-    introPhotoFadeIn 1.6s ease 0.1s forwards;
+    introPhotoFadeIn 1.6s ease 0.1s forwards,
+    introPhotoGlitch 6.5s steps(1) infinite;
 }
 @keyframes introPhotoDrift {
   0%   { transform:scale(1.0)  translate(0,0); }
@@ -129,6 +130,25 @@ body::after {
 @keyframes introPhotoFadeIn {
   0%   { opacity:0; }
   100% { opacity:0.88; }
+}
+/* VHS 트래킹 에러처럼 가끔씩 지직거리는 색수차·위치 글리치 */
+@keyframes introPhotoGlitch {
+  0%, 92%, 100% {
+    filter:sepia(0.55) saturate(1.35) contrast(1.15) brightness(0.82) hue-rotate(-6deg);
+    background-position:center;
+  }
+  92.5% {
+    filter:sepia(0.3) saturate(1.7) contrast(1.4) brightness(1.08) hue-rotate(12deg);
+    background-position:calc(50% + 6px) calc(50% - 2px);
+  }
+  93% {
+    filter:sepia(0.7) saturate(1.1) contrast(0.95) brightness(0.65) hue-rotate(-18deg);
+    background-position:calc(50% - 4px) center;
+  }
+  93.5% {
+    filter:sepia(0.5) saturate(1.5) contrast(1.25) brightness(0.95) hue-rotate(6deg);
+    background-position:center;
+  }
 }
 
 /* 배경 — 세피아 톤 + 비네트 */
@@ -1073,16 +1093,13 @@ body::after {
 
 /* 게시글 제목 영역 */
 .viewer-header {
-  margin-bottom:24px; padding:20px 18px 18px;
+  margin: 0 -22px 24px -22px; padding:20px 22px 18px;
   border-bottom:2px solid var(--border); position:relative;
-  border-radius:var(--radius); overflow:hidden;
 }
 .viewer-header::before {
   content:'';
   position:absolute; inset:0; z-index:-1;
-  background-image:
-    linear-gradient(180deg, rgba(250,246,238,0.55) 0%, rgba(250,246,238,0.80) 100%),
-    url('https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/whdddl.png?raw=true');
+  background-image: url('https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/whdddl.png?raw=true');
   background-size:cover;
   background-position:center;
 }
@@ -1192,7 +1209,7 @@ body::after {
 .art-caption {
   margin-top:16px; font-size:12px;
   color:var(--text-muted); text-align:center;
-  font-style:italic; line-height:1.6;
+  line-height:1.6;
 }
 
 /* =====================================================
