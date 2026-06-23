@@ -913,10 +913,12 @@ body::after {
 #catPage.active { display:block; animation:fadeUp 0.5s ease both }
 
 .catpage-head {
-  margin-bottom:16px; padding-bottom:8px;
+  margin-bottom:16px; padding-bottom:8px; padding-top:14px;
   border-bottom:2px solid var(--border);
   display:flex; align-items:center; justify-content:flex-start;
   flex-wrap:nowrap; gap:12px;
+  background: linear-gradient(180deg, rgba(250,246,238,0) 0%, var(--bg) 85%);
+  position:relative;
 }
 .catpage-head .back-btn { margin-left:auto; flex-shrink:0; }
 .catpage-title {
@@ -957,8 +959,11 @@ body::after {
 }
 .back-btn:hover { transform:translateY(-1px); filter:brightness(1.08); }
 
-/* 소목차 탭 버튼들 — 크기 키움 */
-.sub-tabs { display:flex; gap:7px; flex-wrap:wrap; margin-bottom:20px }
+/* 소목차 탭 버튼들 — 헤더 그라디언트 위로 살짝 겹치게 배치 */
+.sub-tabs {
+  display:flex; gap:7px; flex-wrap:wrap; margin-bottom:20px;
+  margin-top:-22px; position:relative; z-index:2;
+}
 .sub-tab {
   padding:7px 17px; background:var(--surface);
   border:1px solid var(--border); border-radius:2px;
@@ -1059,8 +1064,9 @@ body::after {
 /* 뷰어 상단 바 (뒤로가기 + 경로 표시) */
 .viewer-topbar {
   display:flex; align-items:center; gap:10px;
-  margin-bottom:32px; flex-wrap:wrap;
+  margin-bottom:-46px; flex-wrap:wrap;
   justify-content:flex-start;
+  position:relative; z-index:2;
 }
 .viewer-topbar .back-btn { flex-shrink:0; order:1; margin-left:auto; }
 .viewer-bc {
@@ -1068,20 +1074,22 @@ body::after {
   letter-spacing:0.14em; text-transform:uppercase;
   color:var(--text-muted); flex:1;
   display:flex; align-items:center; gap:6px; flex-wrap:wrap;
-  margin-left:10px;
+  margin-left:28px;
+  text-shadow:0 1px 4px rgba(0,0,0,0.65), 0 0 10px rgba(0,0,0,0.4);
 }
 .viewer-bc span { color:var(--text-dim) }
 
-/* 게시글 제목 영역 */
+/* 게시글 제목 영역 — 그라디언트가 본문 색까지 자연스럽게 이어짐 */
 .viewer-header {
-  margin-bottom:24px; padding-bottom:18px;
+  margin-bottom:24px; padding-bottom:18px; padding-top:14px;
   border-bottom:2px solid var(--border); position:relative;
+  background: linear-gradient(180deg, rgba(250,246,238,0) 0%, var(--bg) 85%);
 }
 
 /* 헤더 이미지 배너 (제목 위) */
 .viewer-banner {
   position: relative;
-  margin: 0 -30px 24px -30px;
+  margin: 0 -40px 0 -40px;
   overflow: hidden;
 }
 .viewer-banner img {
