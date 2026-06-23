@@ -1068,6 +1068,7 @@ body::after {
   letter-spacing:0.14em; text-transform:uppercase;
   color:var(--text-muted); flex:1;
   display:flex; align-items:center; gap:6px; flex-wrap:wrap;
+  margin-left:10px;
 }
 .viewer-bc span { color:var(--text-dim) }
 
@@ -1077,24 +1078,16 @@ body::after {
   border-bottom:2px solid var(--border); position:relative;
 }
 
-/* 구분선 아래 큰 이미지 배너 — 본문 영역과 그라디언트로 겹침 */
+/* 헤더 이미지 배너 (제목 위) */
 .viewer-banner {
   position: relative;
-  margin: 0 -22px -40px -22px;
+  margin: 0 -30px 24px -30px;
   overflow: hidden;
 }
 .viewer-banner img {
   width: 100%;
   height: auto;
   display: block;
-  position: relative;
-  z-index: 1;
-}
-.viewer-banner-fade {
-  position: absolute; left:0; right:0; bottom:0; height:28%;
-  background: linear-gradient(180deg, rgba(250,246,238,0) 0%, var(--bg) 100%);
-  pointer-events: none;
-  z-index: 2;
 }
 /* 게시글 제목 (Hahmlet 폰트) */
 .viewer-title {
@@ -1772,13 +1765,12 @@ body::after {
 
   <!-- 카테고리 목록 페이지 -->
   <section id="catPage">
+    <div class="viewer-banner">
+      <img src="https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%ED%97%A4%EB%8D%94.png?raw=true" alt="">
+    </div>
     <div class="catpage-head">
       <h2 class="catpage-title" id="catPageTitle"></h2>
       <button class="back-btn" onclick="goLanding()">← Back</button>
-    </div>
-    <div class="viewer-banner">
-      <img src="https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%ED%97%A4%EB%8D%94.png?raw=true" alt="">
-      <div class="viewer-banner-fade"></div>
     </div>
     <div class="sub-tabs" id="subTabs"></div>
     <div class="content-grid" id="contentGrid"></div>
@@ -2741,6 +2733,9 @@ async function loadContent(cat, sub, idx, pushState = true) {
   `;
 
   document.getElementById('viewerInner').innerHTML = `
+    <div class="viewer-banner">
+      <img src="https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%ED%97%A4%EB%8D%94.png?raw=true" alt="">
+    </div>
     <div class="viewer-header">
       <h1 class="viewer-title">${escH(item.title)}</h1>
       <div class="viewer-info-row">
@@ -2769,10 +2764,6 @@ async function loadContent(cat, sub, idx, pushState = true) {
             </button>` : ''}
         </div>
       </div>
-    </div>
-    <div class="viewer-banner">
-      <img src="https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%ED%97%A4%EB%8D%94.png?raw=true" alt="">
-      <div class="viewer-banner-fade"></div>
     </div>
     <div id="contentBody" style="padding-top:24px; padding-bottom:32px">${await renderBody(item)}</div>
     ${pagerHTML}
