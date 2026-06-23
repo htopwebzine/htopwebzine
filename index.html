@@ -919,12 +919,6 @@ body::after {
   flex-wrap:nowrap; gap:12px;
   position:relative;
 }
-.catpage-head::before {
-  content:'';
-  position:absolute; top:-30px; left:-20px; right:-20px; bottom:-90px;
-  z-index:-1;
-  background: linear-gradient(180deg, var(--surface) 0%, var(--bg) 100%);
-}
 .catpage-head .back-btn { margin-left:auto; flex-shrink:0; }
 .catpage-title {
   font-family:'Noto Serif SC','Noto Serif KR',serif;
@@ -1091,7 +1085,7 @@ body::after {
 }
 .viewer-header::before {
   content:'';
-  position:absolute; top:-30px; left:-20px; right:-20px; bottom:-90px;
+  position:absolute; top:-30px; left:-20px; right:-20px; bottom:-120px;
   z-index:-1;
   background: linear-gradient(180deg, var(--surface) 0%, var(--bg) 100%);
 }
@@ -1235,9 +1229,9 @@ body::after {
 ===================================================== */
 /* 본문 영역 — 두 구분선(제목 아래 / 페이저 위) 사이는 미색 배경으로 깨끗하게 */
 #contentBody {
-  background: var(--bg);
+  background: linear-gradient(180deg, var(--surface) 0%, var(--bg) 220px, var(--bg) 100%);
   position: relative;
-  margin: 0 -22px;
+  margin: 28px -22px 0;
   padding-left: 22px;
   padding-right: 22px;
   transition: background 0.3s ease, color 0.3s ease;
