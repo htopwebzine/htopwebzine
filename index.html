@@ -913,11 +913,17 @@ body::after {
 #catPage.active { display:block; animation:fadeUp 0.5s ease both }
 
 .catpage-head {
-  margin: 0 -62px -28px -62px; padding:14px 62px 8px;
+  margin: 0 -62px 0 -62px; padding:14px 62px 32px;
   border-bottom:2px solid var(--border);
   display:flex; align-items:center; justify-content:flex-start;
   flex-wrap:nowrap; gap:12px;
   position:relative;
+}
+.catpage-head::before {
+  content:'';
+  position:absolute; top:-30px; left:-20px; right:-20px; bottom:0;
+  z-index:-1;
+  background: var(--surface);
 }
 .catpage-head .back-btn { margin-left:auto; flex-shrink:0; }
 .catpage-title {
@@ -962,7 +968,7 @@ body::after {
 /* 소목차 탭 버튼들 — 헤더 그라디언트 위로 살짝 겹치게 배치 */
 .sub-tabs {
   display:flex; gap:7px; flex-wrap:wrap; margin-bottom:20px;
-  margin-top:-22px; position:relative; z-index:2;
+  margin-top:0; position:relative; z-index:2;
 }
 .sub-tab {
   padding:7px 17px; background:var(--surface);
@@ -1080,7 +1086,7 @@ body::after {
 
 /* 게시글 제목 영역 — 그라디언트가 본문 색까지 자연스럽게 이어짐 */
 .viewer-header {
-  margin: 0 -62px 0 -62px; padding:14px 62px 18px;
+  margin: 0 -62px 0 -62px; padding:14px 62px 32px;
   border-bottom:2px solid var(--border); position:relative;
 }
 .viewer-header::before {
