@@ -962,7 +962,7 @@ body::after {
 /* 소목차 탭 버튼들 — 헤더 그라디언트 위로 살짝 겹치게 배치 */
 .sub-tabs {
   display:flex; gap:7px; flex-wrap:wrap; margin-bottom:20px;
-  margin-top:0; position:relative; z-index:2;
+  margin-top:20px; position:relative; z-index:2;
 }
 .sub-tab {
   padding:7px 17px; background:var(--surface);
@@ -1068,7 +1068,7 @@ body::after {
   justify-content:flex-start;
   position:relative; z-index:2;
 }
-.viewer-topbar .back-btn { flex-shrink:0; order:1; margin-left:auto; }
+.viewer-topbar .back-btn { flex-shrink:0; order:1; margin-left:auto; transform:translateY(-6px); }
 .viewer-bc {
   font-family:'Pretendard',sans-serif; font-size:12px;
   letter-spacing:0.14em; text-transform:uppercase;
@@ -1080,14 +1080,14 @@ body::after {
 
 /* 게시글 제목 영역 — 그라디언트가 본문 색까지 자연스럽게 이어짐 */
 .viewer-header {
-  margin: 0 -62px 0 -62px; padding:14px 62px 32px;
+  margin: 0 -62px 0 -62px; padding:14px 62px 42px;
   border-bottom:2px solid var(--border); position:relative;
 }
 .viewer-header::before {
   content:'';
   position:absolute; top:-30px; left:-20px; right:-20px; bottom:0;
   z-index:-1;
-  background: linear-gradient(180deg, var(--surface) 0%, var(--bg) 100%);
+  background: var(--surface);
 }
 
 /* 헤더 이미지 배너 (제목 위) */
@@ -1104,12 +1104,13 @@ body::after {
 /* 게시글 제목 (Hahmlet 폰트) */
 .viewer-title {
   font-family:'Hahmlet',serif;
-  font-size:clamp(22px,5.4vw,36px);
+  font-size:clamp(26px,6.4vw,42px);
   font-weight:500; line-height:1.2;
   color:var(--text); margin-bottom:12px;
 }
 .viewer-info-row {
   display:flex; align-items:center; gap:16px; flex-wrap:wrap;
+  margin-top:6px;
 }
 /* 작가명 (뷰어용) */
 .viewer-author {
