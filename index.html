@@ -919,6 +919,12 @@ body::after {
   flex-wrap:nowrap; gap:12px;
   position:relative;
 }
+.catpage-head::before {
+  content:'';
+  position:absolute; top:-30px; left:-20px; right:-20px; bottom:-90px;
+  z-index:-1;
+  background: linear-gradient(180deg, var(--surface) 0%, var(--bg) 100%);
+}
 .catpage-head .back-btn { margin-left:auto; flex-shrink:0; }
 .catpage-title {
   font-family:'Noto Serif SC','Noto Serif KR',serif;
@@ -1085,7 +1091,7 @@ body::after {
 }
 .viewer-header::before {
   content:'';
-  position:absolute; top:0; left:-20px; right:-20px; bottom:-90px;
+  position:absolute; top:-30px; left:-20px; right:-20px; bottom:-90px;
   z-index:-1;
   background: linear-gradient(180deg, var(--surface) 0%, var(--bg) 100%);
 }
