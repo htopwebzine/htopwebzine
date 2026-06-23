@@ -1087,11 +1087,14 @@ body::after {
   width: 100%;
   height: auto;
   display: block;
+  position: relative;
+  z-index: 1;
 }
 .viewer-banner-fade {
-  position: absolute; left:0; right:0; bottom:0; height:65%;
-  background: linear-gradient(180deg, rgba(250,246,238,0) 0%, var(--bg) 92%);
+  position: absolute; left:0; right:0; bottom:0; height:28%;
+  background: linear-gradient(180deg, rgba(250,246,238,0) 0%, var(--bg) 100%);
   pointer-events: none;
+  z-index: 2;
 }
 /* 게시글 제목 (Hahmlet 폰트) */
 .viewer-title {
@@ -1772,6 +1775,10 @@ body::after {
     <div class="catpage-head">
       <h2 class="catpage-title" id="catPageTitle"></h2>
       <button class="back-btn" onclick="goLanding()">← Back</button>
+    </div>
+    <div class="viewer-banner">
+      <img src="https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%ED%97%A4%EB%8D%94.png?raw=true" alt="">
+      <div class="viewer-banner-fade"></div>
     </div>
     <div class="sub-tabs" id="subTabs"></div>
     <div class="content-grid" id="contentGrid"></div>
