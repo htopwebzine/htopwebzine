@@ -917,7 +917,7 @@ body::after {
   border-bottom:2px solid var(--border);
   display:flex; align-items:center; justify-content:flex-start;
   flex-wrap:nowrap; gap:12px;
-  background: linear-gradient(180deg, rgba(250,246,238,0) 0%, var(--bg) 85%);
+  background: linear-gradient(180deg, var(--surface) 0%, var(--bg) 100%);
   position:relative;
 }
 .catpage-head .back-btn { margin-left:auto; flex-shrink:0; }
@@ -956,8 +956,9 @@ body::after {
   white-space:nowrap;
   color:var(--text-muted); cursor:pointer;
   transition:transform var(--trans), filter var(--trans);
+  filter:drop-shadow(0 2px 4px rgba(0,0,0,0.3));
 }
-.back-btn:hover { transform:translateY(-1px); filter:brightness(1.08); }
+.back-btn:hover { transform:translateY(-1px); filter:brightness(1.08) drop-shadow(0 2px 4px rgba(0,0,0,0.3)); }
 
 /* 소목차 탭 버튼들 — 헤더 그라디언트 위로 살짝 겹치게 배치 */
 .sub-tabs {
@@ -1075,7 +1076,6 @@ body::after {
   color:var(--text-muted); flex:1;
   display:flex; align-items:center; gap:6px; flex-wrap:wrap;
   margin-left:28px;
-  text-shadow:0 1px 4px rgba(0,0,0,0.65), 0 0 10px rgba(0,0,0,0.4);
 }
 .viewer-bc span { color:var(--text-dim) }
 
@@ -1083,13 +1083,13 @@ body::after {
 .viewer-header {
   margin-bottom:24px; padding-bottom:18px; padding-top:14px;
   border-bottom:2px solid var(--border); position:relative;
-  background: linear-gradient(180deg, rgba(250,246,238,0) 0%, var(--bg) 85%);
+  background: linear-gradient(180deg, var(--surface) 0%, var(--bg) 100%);
 }
 
 /* 헤더 이미지 배너 (제목 위) */
 .viewer-banner {
   position: relative;
-  margin: 0 -40px 0 -40px;
+  margin: 0 -38px 0 -54px;
   overflow: hidden;
 }
 .viewer-banner img {
