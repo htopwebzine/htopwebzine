@@ -1059,7 +1059,7 @@ body::after {
   ■ 게시글 뷰어 (읽기 화면)
 ===================================================== */
 #viewer { display:none }
-#viewer.active { display:block; animation:fadeUp 0.5s ease both; }
+#viewer.active { display:block; animation:fadeUp 0.5s ease both; padding-top:18px; }
 
 /* 뷰어 상단 바 (뒤로가기 + 경로 표시) */
 .viewer-topbar {
@@ -1068,7 +1068,7 @@ body::after {
   justify-content:flex-start;
   position:relative; z-index:2;
 }
-.viewer-topbar .back-btn { flex-shrink:0; order:1; margin-left:auto; transform:translateY(-38px); }
+.viewer-topbar .back-btn { flex-shrink:0; order:1; margin-left:auto; transform:translateY(-48px); }
 .viewer-bc {
   font-family:'Pretendard',sans-serif; font-size:12px;
   letter-spacing:0.14em; text-transform:uppercase;
@@ -1093,7 +1093,7 @@ body::after {
 /* 헤더 이미지 배너 (제목 위) */
 .viewer-banner {
   position: relative;
-  margin: 0 -54px 0 -70px;
+  margin: 0 -64px 0 -80px;
   overflow: hidden;
 }
 .viewer-banner img {
