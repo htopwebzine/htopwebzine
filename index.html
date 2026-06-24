@@ -1068,7 +1068,7 @@ body::after {
   justify-content:flex-start;
   position:relative; z-index:2;
 }
-.viewer-topbar .back-btn { flex-shrink:0; order:1; margin-left:auto; transform:translateY(-26px); }
+.viewer-topbar .back-btn { flex-shrink:0; order:1; margin-left:auto; transform:translateY(-38px); }
 .viewer-bc {
   font-family:'Pretendard',sans-serif; font-size:12px;
   letter-spacing:0.14em; text-transform:uppercase;
@@ -1080,7 +1080,7 @@ body::after {
 
 /* 게시글 제목 영역 — 그라디언트가 본문 색까지 자연스럽게 이어짐 */
 .viewer-header {
-  margin: 0 -62px 0 -62px; padding:14px 62px 64px;
+  margin: 0 -62px 0 -62px; padding:14px 62px 22px;
   border-bottom:2px solid var(--border); position:relative;
 }
 .viewer-header::before {
@@ -1106,11 +1106,14 @@ body::after {
   font-family:'Hahmlet',serif;
   font-size:clamp(26px,6.4vw,42px);
   font-weight:500; line-height:1.2;
-  color:var(--text); margin-bottom:12px;
+  color:var(--text); margin-bottom:4px;
+}
+.viewer-author-row {
+  margin-top:-4px; margin-bottom:14px;
 }
 .viewer-info-row {
   display:flex; align-items:center; gap:16px; flex-wrap:wrap;
-  margin-top:50px;
+  margin-top:10px;
 }
 /* 작가명 (뷰어용) */
 .viewer-author {
@@ -2751,8 +2754,10 @@ async function loadContent(cat, sub, idx, pushState = true) {
     </div>
     <div class="viewer-header">
       <h1 class="viewer-title">${escH(item.title)}</h1>
-      <div class="viewer-info-row">
+      <div class="viewer-author-row">
         <span class="viewer-author">${escH(item.author || 'Anonymous')}</span>
+      </div>
+      <div class="viewer-info-row">
         <span class="type-badge ${item.type}" style="display:none;">${item.type.toUpperCase()}</span>
         <div class="viewer-controls-right">
           ${item.type === 'fiction' ? `
