@@ -1109,7 +1109,7 @@ body::after {
   color:var(--text); margin-bottom:4px;
 }
 .viewer-author-row {
-  margin-top:-10px; margin-bottom:14px;
+  margin-top:-2px; margin-bottom:14px;
 }
 .viewer-info-row {
   display:flex; align-items:center; gap:16px; flex-wrap:wrap;
@@ -1609,6 +1609,22 @@ body::after {
   .burger  { display:none }
   #overlay { display:none }
   #header  { padding-left:calc(var(--sidebar-w) + 24px) }
+}
+
+/* 모바일(900px 미만): 헤더/배너의 데스크탑용 -62px/-70px 베젤이
+   #main의 실제 모바일 패딩(22px)보다 커서 화면 밖으로 튀어나가
+   가로 스크롤이 생기던 문제 수정 — 베젤을 22px로 맞춤 */
+@media(max-width:899px) {
+  .viewer-header, .catpage-head {
+    margin-left:-22px; margin-right:-22px;
+    padding-left:22px; padding-right:22px;
+  }
+  .viewer-header::before, .catpage-head::before {
+    left:0; right:0;
+  }
+  .viewer-banner {
+    margin-left:-22px; margin-right:-22px;
+  }
 }
 </style>
 </head>
