@@ -966,18 +966,18 @@ body::after {
   margin-top:20px; position:relative; z-index:2;
 }
 .sub-tab {
-  padding:7px; background:var(--surface);
-  border:1px solid var(--border); border-radius:2px;
+  background:none; border:none; padding:0;
   font-family:'Pretendard',sans-serif;
   font-size:10.5px; letter-spacing:0.12em; text-transform:uppercase;
   color:var(--text-muted); cursor:pointer; transition:all var(--trans);
   display:flex; align-items:center; justify-content:center;
-  min-height:44px;
 }
 .sub-tab img {
   max-width:100%; width:auto; height:auto; display:block;
+  transition:filter var(--trans), transform var(--trans);
 }
-.sub-tab:hover, .sub-tab.active { background:var(--text); border-color:var(--text); color:var(--bg) }
+.sub-tab:hover img { filter:brightness(1.1); transform:scale(1.03); }
+.sub-tab.active img { filter:brightness(1.15) drop-shadow(0 0 6px rgba(176,32,32,0.5)); }
 
 /* 게시글 카드 목록 */
 .content-grid { display:flex; flex-direction:column; align-items:center; gap:16px }
@@ -2598,10 +2598,10 @@ function goCategory(cat, defaultSub, pushState = true) {
     Videos: 'https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EB%9E%9C%EC%84%AC%EB%85%B8%ED%8A%B8-%EB%B9%84%EB%94%94%EC%98%A4.png?raw=true'
   };
   const subTabImages = {
-    '전체': 'https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EC%86%8C%EB%AA%A9%EC%B0%A8%EC%9D%B8%EB%8D%B1%EC%8A%A4-04.png?raw=true',
+    '전체': 'https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EC%86%8C%EB%AA%A9%EC%B0%A8%EC%9D%B8%EB%8D%B1%EC%8A%A4-08.png?raw=true',
     '황캥': 'https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EC%86%8C%EB%AA%A9%EC%B0%A8%EC%9D%B8%EB%8D%B1%EC%8A%A4-06.png?raw=true',
     '황밍': 'https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EC%86%8C%EB%AA%A9%EC%B0%A8%EC%9D%B8%EB%8D%B1%EC%8A%A4-02.png?raw=true',
-    '황창': 'https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EC%86%8C%EB%AA%A9%EC%B0%A8%EC%9D%B8%EB%8D%B1%EC%8A%A4-04.png?raw=true',
+    '황창': 'https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EC%86%8C%EB%AA%A9%EC%B0%A8%EC%9D%B8%EB%8D%B1%EC%8A%A4-07.png?raw=true',
     '황쳌': 'https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EC%86%8C%EB%AA%A9%EC%B0%A8%EC%9D%B8%EB%8D%B1%EC%8A%A4-04.png?raw=true',
     '황필': 'https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EC%86%8C%EB%AA%A9%EC%B0%A8%EC%9D%B8%EB%8D%B1%EC%8A%A4-01.png?raw=true',
     '황승': 'https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EC%86%8C%EB%AA%A9%EC%B0%A8%EC%9D%B8%EB%8D%B1%EC%8A%A4-03.png?raw=true',
