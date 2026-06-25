@@ -970,14 +970,14 @@ body::after {
   font-family:'Pretendard',sans-serif;
   font-size:10.5px; letter-spacing:0.12em; text-transform:uppercase;
   color:var(--text-muted); cursor:pointer; transition:all var(--trans);
-  display:flex; align-items:center; justify-content:center;
+  display:flex; align-items:flex-end; justify-content:center;
 }
 .sub-tab img {
   width:auto; height:auto; display:block;
-  transform:scale(1.15);
+  transform:scale(0.7);
   transition:filter var(--trans), transform var(--trans);
 }
-.sub-tab:hover img { filter:brightness(1.1); transform:scale(1.22) translateY(-5px); }
+.sub-tab:hover img { filter:brightness(1.1); transform:scale(0.76) translateY(-5px); }
 .sub-tab.active img { filter:brightness(1.15) drop-shadow(0 0 6px rgba(176,32,32,0.5)); }
 
 /* 게시글 카드 목록 */
