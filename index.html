@@ -960,7 +960,7 @@ body::after {
 
 /* 소목차 탭 버튼들 — 한 줄에 4개씩, 이미지 크기에 따라 다르게 */
 .sub-tabs {
-  display:flex; flex-wrap:wrap; justify-content:flex-start; align-items:flex-end; gap:2px;
+  display:grid; grid-template-columns:repeat(4, 1fr); gap:0px;
   margin-bottom:20px; padding-bottom:24px;
   border-bottom:2px solid var(--border);
   margin-top:20px; position:relative; z-index:2;
@@ -971,10 +971,10 @@ body::after {
   font-size:10.5px; letter-spacing:0.12em; text-transform:uppercase;
   color:var(--text-muted); cursor:pointer; transition:all var(--trans);
   display:flex; align-items:flex-end; justify-content:center;
-  flex:0 0 auto;
+  overflow:visible;
 }
 .sub-tab img {
-  max-width:90px; width:auto; height:auto; display:block;
+  max-width:130px; width:auto; height:auto; display:block;
   transition:filter var(--trans), transform var(--trans);
 }
 .sub-tab:hover img { filter:brightness(1.1); transform:translateY(-5px); }
@@ -1012,7 +1012,7 @@ body::after {
   font-family:'Pretendard',sans-serif; font-size:10px; font-weight:600;
   letter-spacing:0.15em; text-transform:uppercase;
   color:var(--text-mid);
-  margin-bottom:6px;
+  margin-bottom:3px;
 }
 .card-meta-cat {
   color:var(--accent); font-weight:700;
