@@ -916,9 +916,12 @@ body::after {
   margin: 0 -62px 0 -62px; padding:14px 62px 32px;
   display:flex; align-items:center; justify-content:flex-start;
   flex-wrap:nowrap; gap:12px;
-  position:relative;
+  position:relative; z-index:3;
 }
-.catpage-head .back-btn { margin-left:auto; flex-shrink:0; }
+.catpage-head .back-btn { margin-left:auto; flex-shrink:0; transform:translateY(-10px); }
+.viewer-banner.catpage-banner {
+  margin-top:-50px;
+}
 .catpage-title {
   font-family:'Noto Serif SC','Noto Serif KR',serif;
   font-size:clamp(28px,6.2vw,46px);
@@ -1119,7 +1122,7 @@ body::after {
 /* 헤더 이미지 배너 (제목 위) */
 .viewer-banner {
   position: relative;
-  margin: 0 -74px 0 -90px;
+  margin: 0 -88px 0 -104px;
   overflow: hidden;
 }
 .viewer-banner img {
@@ -1823,12 +1826,12 @@ body::after {
 
   <!-- 카테고리 목록 페이지 -->
   <section id="catPage">
-    <div class="viewer-banner">
-      <img src="https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%ED%97%A4%EB%8D%94.png?raw=true" alt="">
-    </div>
     <div class="catpage-head">
       <h2 class="catpage-title" id="catPageTitle"></h2>
       <button class="back-btn" onclick="goLanding()">← Back</button>
+    </div>
+    <div class="viewer-banner catpage-banner">
+      <img src="https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%ED%97%A4%EB%8D%94.png?raw=true" alt="">
     </div>
     <div class="sub-tabs" id="subTabs"></div>
     <div class="content-grid" id="contentGrid"></div>
