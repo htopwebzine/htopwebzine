@@ -914,7 +914,6 @@ body::after {
 
 .catpage-head {
   margin: 0 -62px 0 -62px; padding:14px 62px 32px;
-  border-bottom:2px solid var(--border);
   display:flex; align-items:center; justify-content:flex-start;
   flex-wrap:nowrap; gap:12px;
   position:relative;
@@ -962,7 +961,8 @@ body::after {
 /* 소목차 탭 버튼들 — 한 줄에 4개씩, 이미지 크기에 따라 다르게 */
 .sub-tabs {
   display:grid; grid-template-columns:repeat(4, 1fr); gap:0px;
-  margin-bottom:20px;
+  margin-bottom:20px; padding-bottom:24px;
+  border-bottom:2px solid var(--border);
   margin-top:20px; position:relative; z-index:2;
 }
 .sub-tab {
@@ -1015,10 +1015,16 @@ body::after {
 }
 .card-meta-cat {
   color:var(--accent); font-weight:700;
+  text-shadow:
+    0 0 8px rgba(255,253,248,1),
+    0 0 16px rgba(255,253,248,0.85);
 }
 .card-meta-sub {
   font-size:10px; font-weight:500; letter-spacing:0.15em;
   color:var(--text-mid);
+  text-shadow:
+    0 0 8px rgba(255,253,248,1),
+    0 0 16px rgba(255,253,248,0.85);
 }
 /* 게시글 제목 (가독성 높인 명조 계열 폰트) */
 .card-title  {
@@ -1026,7 +1032,6 @@ body::after {
   font-size:15px; font-weight:600;
   color:var(--text); line-height:1.35; margin-bottom:6px;
   text-shadow:
-    0 0 3px rgba(20,12,5,0.45),
     0 0 12px rgba(255,253,248,1),
     0 0 22px rgba(255,253,248,0.9),
     0 0 34px rgba(255,253,248,0.6);
@@ -1037,7 +1042,6 @@ body::after {
   font-size:12px; color:var(--text-mid); font-weight:700;
   letter-spacing:0.04em;
   text-shadow:
-    0 0 3px rgba(20,12,5,0.4),
     0 0 10px rgba(255,253,248,1),
     0 0 18px rgba(255,253,248,0.85);
 }
@@ -2607,10 +2611,10 @@ function goCategory(cat, defaultSub, pushState = true) {
   };
   const subTabImages = {
     '전체': 'https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EC%86%8C%EB%AA%A9%EC%B0%A8%EC%9D%B8%EB%8D%B1%EC%8A%A4-08.png?raw=true',
-    '황캥': 'https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EC%86%8C%EB%AA%A9%EC%B0%A8%EC%9D%B8%EB%8D%B1%EC%8A%A4-06.png?raw=true',
-    '황밍': 'https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EC%86%8C%EB%AA%A9%EC%B0%A8%EC%9D%B8%EB%8D%B1%EC%8A%A4-02.png?raw=true',
+    '황캥': 'https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EC%86%8C%EB%AA%A9%EC%B0%A8%EC%9D%B8%EB%8D%B1%EC%8A%A4-02.png?raw=true',
+    '황밍': 'https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EC%86%8C%EB%AA%A9%EC%B0%A8%EC%9D%B8%EB%8D%B1%EC%8A%A4-04.png?raw=true',
     '황창': 'https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EC%86%8C%EB%AA%A9%EC%B0%A8%EC%9D%B8%EB%8D%B1%EC%8A%A4-07.png?raw=true',
-    '황쳌': 'https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EC%86%8C%EB%AA%A9%EC%B0%A8%EC%9D%B8%EB%8D%B1%EC%8A%A4-04.png?raw=true',
+    '황쳌': 'https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EC%86%8C%EB%AA%A9%EC%B0%A8%EC%9D%B8%EB%8D%B1%EC%8A%A4-06.png?raw=true',
     '황필': 'https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EC%86%8C%EB%AA%A9%EC%B0%A8%EC%9D%B8%EB%8D%B1%EC%8A%A4-01.png?raw=true',
     '황승': 'https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EC%86%8C%EB%AA%A9%EC%B0%A8%EC%9D%B8%EB%8D%B1%EC%8A%A4-03.png?raw=true',
     '현양': 'https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EC%86%8C%EB%AA%A9%EC%B0%A8%EC%9D%B8%EB%8D%B1%EC%8A%A4-05.png?raw=true'
