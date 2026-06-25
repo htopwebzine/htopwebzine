@@ -973,10 +973,11 @@ body::after {
   display:flex; align-items:center; justify-content:center;
 }
 .sub-tab img {
-  max-width:100%; width:auto; height:auto; display:block;
+  width:auto; height:auto; display:block;
+  transform:scale(2.2);
   transition:filter var(--trans), transform var(--trans);
 }
-.sub-tab:hover img { filter:brightness(1.1); transform:scale(1.03); }
+.sub-tab:hover img { filter:brightness(1.1); transform:scale(2.35); }
 .sub-tab.active img { filter:brightness(1.15) drop-shadow(0 0 6px rgba(176,32,32,0.5)); }
 
 /* 게시글 카드 목록 */
