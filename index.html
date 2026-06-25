@@ -961,7 +961,7 @@ body::after {
 
 /* 소목차 탭 버튼들 — 한 줄에 4개씩, 이미지 크기에 따라 다르게 */
 .sub-tabs {
-  display:grid; grid-template-columns:repeat(4, 1fr); gap:4px;
+  display:grid; grid-template-columns:repeat(4, 1fr); gap:0px;
   margin-bottom:20px;
   margin-top:20px; position:relative; z-index:2;
 }
@@ -974,10 +974,10 @@ body::after {
 }
 .sub-tab img {
   width:auto; height:auto; display:block;
-  transform:scale(0.1);
+  transform:scale(0.45);
   transition:filter var(--trans), transform var(--trans);
 }
-.sub-tab:hover img { filter:brightness(1.1); transform:scale(0.11) translateY(-5px); }
+.sub-tab:hover img { filter:brightness(1.1); transform:scale(0.5) translateY(-5px); }
 .sub-tab.active img { filter:brightness(1.15) drop-shadow(0 0 6px rgba(176,32,32,0.5)); }
 
 /* 게시글 카드 목록 */
