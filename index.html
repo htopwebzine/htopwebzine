@@ -1125,7 +1125,7 @@ body::after {
 .viewer-back-fixed {
   display:none;
   position:absolute;
-  top:0;
+  top:-32px;
   right:0;
   z-index:10;
 }
@@ -1701,9 +1701,13 @@ body::after {
     right:22px;
   }
 
-  /* 소목차 탭: 모바일에서 2열로 줄임 */
+  /* 소목차 탭: 모바일에서도 무조건 4열 유지, 이미지 축소 */
   .sub-tabs {
-    grid-template-columns:repeat(2, max-content);
+    grid-template-columns:repeat(4, 1fr);
+    width:100%;
+  }
+  .sub-tab img {
+    max-width:calc(25vw - 12px);
   }
 
   /* 랜딩 버튼 대각선 배치 — 모바일에서도 원래 값 유지 (튀어나가도 무시) */
