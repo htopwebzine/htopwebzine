@@ -938,13 +938,14 @@ body::after {
   height:auto;
   display:block;
   margin-left:6px;
-  margin-top:-20px;
+  margin-top:-28px;
   animation:catLogoSlideIn 0.6s cubic-bezier(0.22,1,0.36,1) both;
   filter:
-    brightness(1.08)
-    drop-shadow(0 0 6px rgba(255,255,255,0.55))
-    drop-shadow(0 0 18px rgba(255,255,255,0.25))
-    drop-shadow(0 0 36px rgba(255,255,255,0.12));
+    brightness(1.1)
+    drop-shadow(0 0 2px rgba(255,255,255,1))
+    drop-shadow(0 0 6px rgba(255,255,255,0.9))
+    drop-shadow(0 0 14px rgba(255,255,255,0.6))
+    drop-shadow(0 0 28px rgba(255,255,255,0.3));
 }
 @keyframes catLogoSlideIn {
   from { opacity:0; transform:translateX(-40px); }
@@ -1041,15 +1042,17 @@ body::after {
 .card-meta-cat {
   color:var(--accent); font-weight:700;
   text-shadow:
-    0 0 8px rgba(255,248,220,0.9),
-    0 0 18px rgba(255,248,220,0.50);
+    0 0 4px rgba(255,248,220,1),
+    0 0 10px rgba(255,248,220,1),
+    0 0 20px rgba(255,248,220,0.6);
 }
 .card-meta-sub {
   font-size:10px; font-weight:500; letter-spacing:0.15em;
   color:var(--text-mid);
   text-shadow:
-    0 0 8px rgba(255,248,220,0.9),
-    0 0 18px rgba(255,248,220,0.50);
+    0 0 4px rgba(255,248,220,1),
+    0 0 10px rgba(255,248,220,1),
+    0 0 20px rgba(255,248,220,0.6);
 }
 /* 게시글 제목 (가독성 높인 명조 계열 폰트) */
 .card-title  {
@@ -1057,9 +1060,10 @@ body::after {
   font-size:15px; font-weight:600;
   color:var(--text); line-height:1.35; margin-bottom:6px;
   text-shadow:
-    0 0 8px rgba(255,248,220,1),
-    0 0 18px rgba(255,248,220,0.9),
-    0 0 36px rgba(255,240,180,0.60);
+    0 0 4px rgba(255,248,220,1),
+    0 0 10px rgba(255,248,220,1),
+    0 0 22px rgba(255,248,220,0.8),
+    0 0 40px rgba(255,248,220,0.4);
 }
 /* 작가명 */
 .card-author {
@@ -1067,24 +1071,27 @@ body::after {
   font-size:12px; color:var(--text-mid); font-weight:700;
   letter-spacing:0.04em;
   text-shadow:
-    0 0 8px rgba(255,248,220,1),
-    0 0 18px rgba(255,248,220,0.75);
+    0 0 4px rgba(255,248,220,1),
+    0 0 10px rgba(255,248,220,1),
+    0 0 20px rgba(255,248,220,0.7);
 }
 .card-author::before {
   content:'— ';
   font-family:'Nanum Myeongjo',serif;
   font-size:12px; color:var(--text-mid); margin-right:1px;
   text-shadow:
-    0 0 8px rgba(255,248,220,1),
-    0 0 18px rgba(255,248,220,0.75);
+    0 0 4px rgba(255,248,220,1),
+    0 0 10px rgba(255,248,220,1),
+    0 0 20px rgba(255,248,220,0.7);
 }
 .card-author::after {
   content:' —';
   font-family:'Nanum Myeongjo',serif;
   font-size:12px; color:var(--text-mid); margin-left:1px;
   text-shadow:
-    0 0 8px rgba(255,248,220,1),
-    0 0 18px rgba(255,248,220,0.75);
+    0 0 4px rgba(255,248,220,1),
+    0 0 10px rgba(255,248,220,1),
+    0 0 20px rgba(255,248,220,0.7);
 }
 
 /* 전체 탭에서 소목차 구분 헤더
@@ -1132,7 +1139,7 @@ body::after {
   letter-spacing:0.14em; text-transform:uppercase;
   color:var(--text-muted); flex:1;
   display:flex; align-items:center; gap:6px; flex-wrap:wrap;
-  margin-left:128px;
+  margin-left:160px;
 }
 .viewer-bc span { color:var(--text-dim) }
 
