@@ -636,6 +636,7 @@ body::after {
   padding:40px 22px 84px;
   max-width:740px;
   margin-left:auto; margin-right:auto;
+  overflow-x:hidden;
 }
 #main::before {
   content:'';
@@ -910,17 +911,21 @@ body::after {
   ■ 카테고리 목록 페이지
 ===================================================== */
 #catPage { display:none }
-#catPage.active { display:block; animation:fadeUp 0.5s ease both }
+#catPage.active { display:flex; flex-direction:column; align-items:center; animation:fadeUp 0.5s ease both }
+#catPage .catpage-head,
+#catPage .viewer-banner,
+#catPage .content-grid { width:100%; }
+#catPage .sub-tabs { align-self:center; }
 
 .catpage-head {
-  margin: 0 -62px 0 -62px; padding:14px 62px 32px;
+  margin: 0 -62px 0 -62px; padding:14px 62px 14px;
   display:flex; align-items:center; justify-content:flex-start;
   flex-wrap:nowrap; gap:12px;
   position:relative; z-index:3;
 }
 .catpage-head .back-btn { margin-left:auto; flex-shrink:0; transform:translateY(-20px); }
 .viewer-banner.catpage-banner {
-  margin-top:-70px;
+  margin-top: 0;
 }
 .catpage-title {
   font-family:'Noto Serif SC','Noto Serif KR',serif;
@@ -1129,6 +1134,9 @@ body::after {
   width: 100%;
   height: auto;
   display: block;
+  min-height: 160px;
+  object-fit: cover;
+  object-position: center;
 }
 /* 게시글 제목 (Hahmlet 폰트) */
 .viewer-title {
@@ -1654,6 +1662,39 @@ body::after {
   .viewer-banner {
     margin-left:-22px; margin-right:-22px;
   }
+
+  /* 소목차 탭: 모바일에서 2열로 줄임 */
+  .sub-tabs {
+    grid-template-columns:repeat(2, max-content);
+  }
+
+  /* 랜딩 버튼 대각선 배치 — 모바일에서 translateX 축소 */
+  .cat-btn:nth-child(1) { transform:translateX(-24px); }
+  .cat-btn:nth-child(2) { transform:translateX(24px);  }
+  .cat-btn:nth-child(3) { transform:translateX(-24px); }
+
+  @keyframes btnPulse1 {
+    0%,100% { transform:translateX(-24px) translateY(0)   scale(1);    opacity:1; }
+    50%     { transform:translateX(-24px) translateY(-3px) scale(1.02); opacity:0.93; }
+  }
+  @keyframes btnPulse2 {
+    0%,100% { transform:translateX(24px)  translateY(0)   scale(1);    opacity:1; }
+    50%     { transform:translateX(24px)  translateY(-3px) scale(1.02); opacity:0.93; }
+  }
+  @keyframes btnPulse3 {
+    0%,100% { transform:translateX(-24px) translateY(0)   scale(1);    opacity:1; }
+    50%     { transform:translateX(-24px) translateY(-3px) scale(1.02); opacity:0.93; }
+  }
+
+  .cat-btn:nth-child(1).has-img:hover { transform:translateX(-24px) scale(1.06); }
+  .cat-btn:nth-child(2).has-img:hover { transform:translateX(24px)  scale(1.06); }
+  .cat-btn:nth-child(3).has-img:hover { transform:translateX(-24px) scale(1.06); }
+
+  /* 뷰어 topbar 브레드크럼 마진 줄임 */
+  .viewer-bc { margin-left:0; }
+
+  /* back-btn 위치 조정 */
+  .viewer-topbar .back-btn { transform:translateY(-40px); }
 }
 </style>
 </head>
