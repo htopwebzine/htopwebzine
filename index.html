@@ -170,9 +170,9 @@ body::after {
   pointer-events:none;
 }
 @keyframes introOut {
-  0%   { opacity:1; transform:scale(1); filter:blur(0) }
-  30%  { opacity:1; transform:scale(1.03); filter:blur(0) }
-  100% { opacity:0; transform:scale(1.1); filter:blur(12px) }
+  0%   { opacity:1; filter:blur(0) }
+  30%  { opacity:1; filter:blur(0) }
+  100% { opacity:0; filter:blur(12px) }
 }
 
 /* ── 도트/그레인 노이즈 텍스처 — 더 또렷하게 ── */
@@ -920,7 +920,7 @@ body::after {
 }
 .catpage-head .back-btn { margin-left:auto; flex-shrink:0; transform:translateY(-20px); }
 .viewer-banner.catpage-banner {
-  margin-top:-50px;
+  margin-top:-70px;
 }
 .catpage-title {
   font-family:'Noto Serif SC','Noto Serif KR',serif;
@@ -978,7 +978,7 @@ body::after {
   overflow:visible;
 }
 .sub-tab img {
-  max-width:96px; width:auto; height:auto; display:block;
+  max-width:88px; width:auto; height:auto; display:block;
   transition:filter var(--trans), transform var(--trans);
 }
 .sub-tab:hover img { filter:brightness(1.1); transform:translateY(-5px); }
@@ -1122,7 +1122,7 @@ body::after {
 /* 헤더 이미지 배너 (제목 위) */
 .viewer-banner {
   position: relative;
-  margin: 0 -100px 0 -116px;
+  margin: 0 -114px 0 -130px;
   overflow: hidden;
 }
 .viewer-banner img {
@@ -2241,7 +2241,7 @@ function triggerLandingAnim() {
 
 function dismissIntro() {
   document.getElementById('intro').classList.add('hidden');
-  window.scrollTo({ top:0, behavior:'smooth' });
+  window.scrollTo(0, 0);
   setTimeout(() => { document.getElementById('intro').style.display = 'none'; }, 900);
   if (window.__stopIntroTimecode) window.__stopIntroTimecode();
   /* 인트로 퇴장 직후 — URL 해시가 있으면 해당 페이지로, 없으면 랜딩 */
