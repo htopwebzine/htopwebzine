@@ -457,7 +457,6 @@ body::after {
   font-family:'Noto Serif SC','Noto Serif KR',serif;
   font-size:19px; color:var(--text); cursor:pointer;
   letter-spacing:0.05em; display:flex; align-items:baseline; gap:8px;
-  margin-top:10px;
 }
 .logo-hanja {
   font-weight:600; font-size:19px; letter-spacing:0.06em;
@@ -951,6 +950,7 @@ body::after {
   height:auto;
   display:block;
   margin-left:-16px;
+  margin-top:32px;
   animation:catLogoSlideIn 0.6s cubic-bezier(0.22,1,0.36,1) both;
   filter:brightness(1.08);
 }
@@ -1108,14 +1108,23 @@ body::after {
 #viewer { display:none }
 #viewer.active { display:block; animation:fadeUp 0.5s ease both; padding-top:32px; }
 
-/* 뷰어 상단 바 (뒤로가기 + 경로 표시) */
+/* 뷰어 상단 바 (경로 표시만) */
 .viewer-topbar {
   display:flex; align-items:center; gap:10px;
   margin-bottom:-46px; flex-wrap:wrap;
   justify-content:flex-start;
   position:relative; z-index:2;
+  pointer-events:none;
 }
-.viewer-topbar .back-btn { flex-shrink:0; order:1; margin-left:auto; transform:translateY(-90px); }
+/* 뷰어 백버튼 — viewer와 완전히 독립, 화면 우상단 고정 */
+.viewer-back-fixed {
+  display:none;
+  position:fixed;
+  top:calc(var(--header-h) - 36px);
+  right:24px;
+  z-index:120;
+}
+.viewer-back-fixed.visible { display:flex; }
 .viewer-bc {
   font-family:'Pretendard',sans-serif; font-size:12px;
   letter-spacing:0.14em; text-transform:uppercase;
@@ -1685,27 +1694,7 @@ body::after {
     grid-template-columns:repeat(2, max-content);
   }
 
-  /* 랜딩 버튼 대각선 배치 — 모바일에서 translateX 축소 */
-  .cat-btn:nth-child(1) { transform:translateX(-24px); }
-  .cat-btn:nth-child(2) { transform:translateX(24px);  }
-  .cat-btn:nth-child(3) { transform:translateX(-24px); }
-
-  @keyframes btnPulse1 {
-    0%,100% { transform:translateX(-24px) translateY(0)   scale(1);    opacity:1; }
-    50%     { transform:translateX(-24px) translateY(-3px) scale(1.02); opacity:0.93; }
-  }
-  @keyframes btnPulse2 {
-    0%,100% { transform:translateX(24px)  translateY(0)   scale(1);    opacity:1; }
-    50%     { transform:translateX(24px)  translateY(-3px) scale(1.02); opacity:0.93; }
-  }
-  @keyframes btnPulse3 {
-    0%,100% { transform:translateX(-24px) translateY(0)   scale(1);    opacity:1; }
-    50%     { transform:translateX(-24px) translateY(-3px) scale(1.02); opacity:0.93; }
-  }
-
-  .cat-btn:nth-child(1).has-img:hover { transform:translateX(-24px) scale(1.06); }
-  .cat-btn:nth-child(2).has-img:hover { transform:translateX(24px)  scale(1.06); }
-  .cat-btn:nth-child(3).has-img:hover { transform:translateX(-24px) scale(1.06); }
+  /* 랜딩 버튼 대각선 배치 — 모바일에서도 원래 값 유지 (튀어나가도 무시) */
 
   /* 뷰어 topbar 브레드크럼 마진 줄임 */
   .viewer-bc { margin-left:0; }
@@ -1898,11 +1887,13 @@ body::after {
   <!-- 게시글 뷰어 -->
   <section id="viewer">
     <div class="viewer-topbar">
-      <button class="back-btn" id="viewerBackBtn">← Back</button>
       <div class="viewer-bc" id="viewerBc"></div>
     </div>
     <div id="viewerInner"></div>
   </section>
+
+  <!-- 뷰어 백버튼 — 독립 고정 위치 -->
+  <button class="back-btn viewer-back-fixed" id="viewerBackBtn">← Back</button>
 
 </main>
 
@@ -2646,6 +2637,8 @@ function hideAll() {
     el.classList.remove('active');
     el.style.display = 'none';
   });
+  const vbf = document.getElementById('viewerBackBtn');
+  if (vbf) vbf.classList.remove('visible');
 }
 function show(id) {
   const el = document.getElementById(id);
@@ -2845,7 +2838,8 @@ async function loadContent(cat, sub, idx, pushState = true) {
   const next = fi < flatList.length - 1 ? flatList[fi+1] : null;
 
   document.getElementById('viewerBc').innerHTML = `${cat} <span>›</span> ${sub}`;
-  document.getElementById('viewerBackBtn').onclick = () => goCategory(cat);
+  const vbf = document.getElementById('viewerBackBtn');
+  if (vbf) { vbf.onclick = () => goCategory(cat); vbf.classList.add('visible'); }
 
   /* 이전/다음 버튼 */
   const pagerHTML = `
