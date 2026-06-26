@@ -920,25 +920,20 @@ body::after {
 #catPage { display:none }
 #catPage.active { display:block; animation:fadeUp 0.5s ease both }
 
-/* 카테고리 헤드: 배너 위에 z-index로 올림 */
+/* 카테고리 헤드 영역: 배너 위 절대 레이어 */
 .catpage-head {
-  margin: 0 -62px 0 -62px; padding:14px 62px 14px;
-  display:flex; align-items:center; justify-content:flex-start;
-  flex-wrap:nowrap; gap:12px;
   position:relative; z-index:5;
+  height:0;   /* 높이 차지 안 함 — 배너가 그대로 위로 올라옴 */
+  margin: 0 -62px;
 }
+/* 백버튼: 우상단 */
 .catpage-head .back-btn {
-  margin-left:auto; flex-shrink:0;
-  position:relative; z-index:6;
+  position:absolute;
+  top:-52px;
+  right:62px;
+  z-index:6;
 }
-
-/* 배너: catpage-head 높이만큼 올려서 로고·헤더와 겹치게 */
-.viewer-banner.catpage-banner {
-  margin-top: calc(-28px - 1em);   /* catpage-head 대략 높이만큼 올림 */
-  margin-left: -62px;
-  margin-right: -62px;
-  position:relative; z-index:1;    /* 헤더(z:100)는 위, 배너는 뒤 */
-}
+/* 목차로고: catpage-head 아래에 따로 배치 */
 .catpage-title {
   font-family:'Noto Serif SC','Noto Serif KR',serif;
   font-size:clamp(28px,6.2vw,46px);
@@ -949,14 +944,22 @@ body::after {
   max-width:min(460px, 76vw);
   height:auto;
   display:block;
-  margin-left:-16px;
-  margin-top:32px;
+  margin-left:6px;
+  margin-top:64px;
   animation:catLogoSlideIn 0.6s cubic-bezier(0.22,1,0.36,1) both;
   filter:brightness(1.08);
 }
 @keyframes catLogoSlideIn {
   from { opacity:0; transform:translateX(-40px); }
   to   { opacity:1; transform:translateX(0); }
+}
+
+/* 배너: 헤더 바로 아래서 시작, 좌우 가득 */
+.viewer-banner.catpage-banner {
+  margin-top:0;
+  margin-left:-62px;
+  margin-right:-62px;
+  position:relative; z-index:1;
 }
 
 /* 뒤로가기 버튼 — 프레임 이미지 원본 비율(356:132) 유지 */
@@ -979,13 +982,15 @@ body::after {
 }
 .back-btn:hover { transform:translateY(-1px); filter:brightness(1.08) drop-shadow(0 2px 4px rgba(0,0,0,0.3)); }
 
-/* 소목차 탭 버튼들 — 4개씩 줄바꿈, 화면 중앙 */
+/* 소목차 탭 버튼들 — 4개씩 한 줄, 화면 중앙 */
 .sub-tabs {
   display:grid; grid-template-columns:repeat(4, max-content); gap:0px;
   width:fit-content; max-width:100%;
   margin:20px auto 20px auto; padding-bottom:24px;
   border-bottom:2px solid var(--border);
   position:relative; z-index:2;
+  /* 블록 요소 margin:auto 중앙 정렬 보장 */
+  left:0; right:0;
 }
 .sub-tab {
   background:none; border:none; padding:0;
@@ -1105,7 +1110,7 @@ body::after {
 /* =====================================================
   ■ 게시글 뷰어 (읽기 화면)
 ===================================================== */
-#viewer { display:none }
+#viewer { display:none; position:relative; }
 #viewer.active { display:block; animation:fadeUp 0.5s ease both; padding-top:32px; }
 
 /* 뷰어 상단 바 (경로 표시만) */
@@ -1116,13 +1121,13 @@ body::after {
   position:relative; z-index:2;
   pointer-events:none;
 }
-/* 뷰어 백버튼 — viewer와 완전히 독립, 화면 우상단 고정 */
+/* 뷰어 백버튼 — viewer와 독립, 스크롤 따라가는 절대 위치 */
 .viewer-back-fixed {
   display:none;
-  position:fixed;
-  top:calc(var(--header-h) - 36px);
-  right:24px;
-  z-index:120;
+  position:absolute;
+  top:0;
+  right:0;
+  z-index:10;
 }
 .viewer-back-fixed.visible { display:flex; }
 .viewer-bc {
@@ -1674,11 +1679,11 @@ body::after {
    #main의 실제 모바일 패딩(22px)보다 커서 화면 밖으로 튀어나가
    가로 스크롤이 생기던 문제 수정 — 베젤을 22px로 맞춤 */
 @media(max-width:899px) {
-  .viewer-header, .catpage-head {
+  .viewer-header {
     margin-left:-22px; margin-right:-22px;
     padding-left:22px; padding-right:22px;
   }
-  .viewer-header::before, .catpage-head::before {
+  .viewer-header::before {
     left:0; right:0;
   }
   .viewer-banner {
@@ -1687,6 +1692,13 @@ body::after {
   /* 카테고리 배너도 모바일 패딩에 맞춤 */
   .viewer-banner.catpage-banner {
     margin-left:-22px; margin-right:-22px;
+  }
+  /* catpage-head 백버튼 모바일 위치 */
+  .catpage-head {
+    margin-left:-22px; margin-right:-22px;
+  }
+  .catpage-head .back-btn {
+    right:22px;
   }
 
   /* 소목차 탭: 모바일에서 2열로 줄임 */
@@ -1886,14 +1898,13 @@ body::after {
 
   <!-- 게시글 뷰어 -->
   <section id="viewer">
+    <!-- 뷰어 백버튼 — 스크롤 따라가는 절대 위치 -->
+    <button class="back-btn viewer-back-fixed" id="viewerBackBtn">← Back</button>
     <div class="viewer-topbar">
       <div class="viewer-bc" id="viewerBc"></div>
     </div>
     <div id="viewerInner"></div>
   </section>
-
-  <!-- 뷰어 백버튼 — 독립 고정 위치 -->
-  <button class="back-btn viewer-back-fixed" id="viewerBackBtn">← Back</button>
 
 </main>
 
