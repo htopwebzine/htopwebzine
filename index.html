@@ -457,6 +457,7 @@ body::after {
   font-family:'Noto Serif SC','Noto Serif KR',serif;
   font-size:19px; color:var(--text); cursor:pointer;
   letter-spacing:0.05em; display:flex; align-items:baseline; gap:8px;
+  margin-top:10px;
 }
 .logo-hanja {
   font-weight:600; font-size:19px; letter-spacing:0.06em;
@@ -811,6 +812,13 @@ body::after {
   align-items:center;
   gap:8px;
   margin-top:-52px;
+  /* SR 클래스의 transform이 버튼 위치를 덮어쓰지 않도록
+     cat-buttons 자체는 opacity만 transition */
+  opacity:0;
+  transition:opacity 0.65s cubic-bezier(0.22,1,0.36,1);
+}
+.cat-buttons.visible {
+  opacity:1;
 }
 
 /* 기본 상태: 대각선 배치 */
@@ -971,10 +979,10 @@ body::after {
 }
 .back-btn:hover { transform:translateY(-1px); filter:brightness(1.08) drop-shadow(0 2px 4px rgba(0,0,0,0.3)); }
 
-/* 소목차 탭 버튼들 — 4개씩 2줄 (최대 8개), 화면 중앙 */
+/* 소목차 탭 버튼들 — 4개씩 줄바꿈, 화면 중앙 */
 .sub-tabs {
   display:grid; grid-template-columns:repeat(4, max-content); gap:0px;
-  width:fit-content;
+  width:fit-content; max-width:100%;
   margin:20px auto 20px auto; padding-bottom:24px;
   border-bottom:2px solid var(--border);
   position:relative; z-index:2;
@@ -1107,7 +1115,7 @@ body::after {
   justify-content:flex-start;
   position:relative; z-index:2;
 }
-.viewer-topbar .back-btn { flex-shrink:0; order:1; margin-left:auto; transform:translateY(-58px); }
+.viewer-topbar .back-btn { flex-shrink:0; order:1; margin-left:auto; transform:translateY(-90px); }
 .viewer-bc {
   font-family:'Pretendard',sans-serif; font-size:12px;
   letter-spacing:0.14em; text-transform:uppercase;
@@ -1849,7 +1857,7 @@ body::after {
       이미지는 정사각형(180×180px 내외) 권장. 비워두면 텍스트 버튼 그대로 표시됩니다.
       예) src="https://raw.githubusercontent.com/내이름/webzine/main/btn-fiction.jpg"
     -->
-    <div class="cat-buttons sr" data-sr-delay="160">
+    <div class="cat-buttons" data-sr-delay="160">
       <button class="cat-btn" onclick="goCategory('Fiction')">
         <!-- ★ Fiction 버튼 이미지 → src="" 안에 URL 입력 -->
         <img class="cat-btn-img" src="https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EB%B2%84%ED%8A%BC-%ED%94%BD%EC%85%98.png?raw=true" alt="Fiction">
@@ -2137,9 +2145,14 @@ document.addEventListener('keydown', e => {
 function triggerLandingAnim() {
   const landing = document.getElementById('landing');
   landing.classList.remove('landing-animate');
+  /* cat-buttons opacity 리셋 후 재등장 */
+  const catBtns = landing.querySelector('.cat-buttons');
+  if (catBtns) { catBtns.classList.remove('visible'); }
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {
       landing.classList.add('landing-animate');
+      /* 약간 딜레이 후 cat-buttons fade-in */
+      if (catBtns) setTimeout(() => catBtns.classList.add('visible'), 300);
     });
   });
 }
@@ -2673,11 +2686,11 @@ function goCategory(cat, defaultSub, pushState = true) {
   const subTabImages = {
     '전체': 'https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EC%86%8C%EB%AA%A9%EC%B0%A8%EC%9D%B8%EB%8D%B1%EC%8A%A4-08.png?raw=true',
     '황캥': 'https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EC%86%8C%EB%AA%A9%EC%B0%A8%EC%9D%B8%EB%8D%B1%EC%8A%A4-02.png?raw=true',
-    '황밍': 'https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EC%86%8C%EB%AA%A9%EC%B0%A8%EC%9D%B8%EB%8D%B1%EC%8A%A4-04.png?raw=true',
+    '황밍': 'https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EC%86%8C%EB%AA%A9%EC%B0%A8%EC%9D%B8%EB%8D%B1%EC%8A%A4-03.png?raw=true',
     '황창': 'https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EC%86%8C%EB%AA%A9%EC%B0%A8%EC%9D%B8%EB%8D%B1%EC%8A%A4-07.png?raw=true',
     '황쳌': 'https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EC%86%8C%EB%AA%A9%EC%B0%A8%EC%9D%B8%EB%8D%B1%EC%8A%A4-06.png?raw=true',
     '황필': 'https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EC%86%8C%EB%AA%A9%EC%B0%A8%EC%9D%B8%EB%8D%B1%EC%8A%A4-01.png?raw=true',
-    '황승': 'https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EC%86%8C%EB%AA%A9%EC%B0%A8%EC%9D%B8%EB%8D%B1%EC%8A%A4-03.png?raw=true',
+    '황승': 'https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EC%86%8C%EB%AA%A9%EC%B0%A8%EC%9D%B8%EB%8D%B1%EC%8A%A4-04.png?raw=true',
     '현양': 'https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EC%86%8C%EB%AA%A9%EC%B0%A8%EC%9D%B8%EB%8D%B1%EC%8A%A4-05.png?raw=true'
   };
   document.getElementById('catPageTitle').innerHTML = `<img class="catpage-title-img" src="${logos[cat]||''}" alt="${cat}">`;
