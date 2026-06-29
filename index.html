@@ -2807,13 +2807,15 @@ function renderGridAll(cat) {
   const grid = document.getElementById('contentGrid');
   grid.innerHTML = '';
   Object.entries(contentData[cat]).forEach(([sub, items]) => {
-    const validItems = items.filter(item => item.body || item.bodyURL || item.bodyFile);
+    const validItems = items
+      .map((item, idx) => ({ item, idx }))
+      .filter(({ item }) => item.body || item.bodyURL || item.bodyFile);
     if (!validItems.length) return;
     const hdr = document.createElement('div');
     hdr.className = 'sub-section-label';
     hdr.textContent = sub;
     grid.appendChild(hdr);
-    validItems.forEach((item, idx) => grid.appendChild(makeCard(item, cat, sub, items.indexOf(item))));
+    validItems.forEach(({ item, idx }) => grid.appendChild(makeCard(item, cat, sub, idx)));
   });
 }
 
