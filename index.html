@@ -2130,7 +2130,10 @@ function buildFlatList() {
   flatList = [];
   for (const [cat, subs] of Object.entries(contentData))
     for (const [sub, items] of Object.entries(subs))
-      items.forEach((item, idx) => flatList.push({ cat, sub, idx, item }));
+      items.forEach((item, idx) => {
+        if (item.body || item.bodyURL || item.bodyFile)
+          flatList.push({ cat, sub, idx, item });
+      });
 }
 buildFlatList();
 
@@ -2804,11 +2807,13 @@ function renderGridAll(cat) {
   const grid = document.getElementById('contentGrid');
   grid.innerHTML = '';
   Object.entries(contentData[cat]).forEach(([sub, items]) => {
+    const validItems = items.filter(item => item.body || item.bodyURL || item.bodyFile);
+    if (!validItems.length) return;
     const hdr = document.createElement('div');
     hdr.className = 'sub-section-label';
     hdr.textContent = sub;
     grid.appendChild(hdr);
-    items.forEach((item, idx) => grid.appendChild(makeCard(item, cat, sub, idx)));
+    validItems.forEach((item, idx) => grid.appendChild(makeCard(item, cat, sub, items.indexOf(item))));
   });
 }
 
@@ -2817,9 +2822,11 @@ function renderGrid(cat, sub) {
   currentSub = sub;
   const grid = document.getElementById('contentGrid');
   grid.innerHTML = '';
-  (contentData[cat][sub] || []).forEach((item, idx) =>
-    grid.appendChild(makeCard(item, cat, sub, idx))
-  );
+  (contentData[cat][sub] || [])
+    .forEach((item, idx) => {
+      if (!item.body && !item.bodyURL && !item.bodyFile) return; /* 글 없으면 스킵 */
+      grid.appendChild(makeCard(item, cat, sub, idx));
+    });
 }
 
 /* =====================================================
