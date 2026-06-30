@@ -923,6 +923,9 @@ body::after {
 .cat-btn:nth-child(1).has-img:hover { transform:translateX(-50px) scale(1.06); }
 .cat-btn:nth-child(2).has-img:hover { transform:translateX(50px)  scale(1.06); }
 .cat-btn:nth-child(3).has-img:hover { transform:translateX(-50px) scale(1.06); }
+.cat-btn:nth-child(1).has-img:active { transform:translateX(-50px) scale(1.0); }
+.cat-btn:nth-child(2).has-img:active { transform:translateX(50px)  scale(1.0); }
+.cat-btn:nth-child(3).has-img:active { transform:translateX(-50px) scale(1.0); }
 .cat-btn.has-img:hover .cat-btn-img { transform:scale(1.06); }
 /* has-img 버튼의 텍스트 span 완전히 숨김 */
 .cat-btn.has-img > span { display:none }
@@ -1186,7 +1189,7 @@ body::after {
   color:#5a4a3a;
   position:relative;
   display:inline-flex; align-items:center; justify-content:center; gap:5px; flex-wrap:wrap;
-  margin-left:150px;
+  margin-left:100px;
   width:170px;
   aspect-ratio:569 / 215;
   padding:0 42px 4px 34px;  /* 좌측 고리, 우측 클로버/별 피해서 텍스트 배치 */
@@ -1601,6 +1604,27 @@ body::after {
 @keyframes fadeUp   { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
 @keyframes fadeIn   { from{opacity:0} to{opacity:1} }
 @keyframes scaleIn  { from{opacity:0;transform:scale(0.96)} to{opacity:1;transform:scale(1)} }
+
+/* 버튼류 눌림 피드백 — 클릭 시 살짝 눌리는 촉각적 느낌 */
+.back-btn:active,
+.sub-tab:active,
+.content-card:active,
+.pager-btn:not([disabled]):active,
+.cat-btn:not(.has-img):active {
+  transform: scale(0.96);
+  transition: transform 0.1s cubic-bezier(0.4,0,0.6,1);
+}
+
+/* 페이지 전환 — 떠날 때 부드럽게 사라짐 (hideAll의 page-exiting과 연결) */
+#landing.page-exiting, #catPage.page-exiting, #viewer.page-exiting {
+  animation:pageExit 0.22s cubic-bezier(0.4,0,0.2,1) both;
+  pointer-events:none;
+}
+@keyframes pageExit {
+  from { opacity:1; transform:translateY(0)    scale(1); }
+  to   { opacity:0; transform:translateY(-10px) scale(0.985); }
+}
+
 /* 로고 부유 — 빠르고 진폭 작음 */
 @keyframes titleFloat {
   0%,100% { transform:translateY(0px) }
@@ -2790,11 +2814,25 @@ window.addEventListener('popstate', (e) => {
 /* =====================================================
   ■ 화면 전환
 ===================================================== */
-function hideAll() {
+/* 페이지 전환용 페이드아웃 트랜지션 시간(ms) — CSS exitFade와 동기화 */
+const PAGE_EXIT_MS = 220;
+
+function hideAll(immediate = false) {
   ['landing','catPage','viewer'].forEach(id => {
     const el = document.getElementById(id);
+    if (!el.classList.contains('active')) { el.style.display = 'none'; return; }
+    if (immediate) {
+      el.classList.remove('active');
+      el.style.display = 'none';
+      return;
+    }
+    /* 부드러운 페이드아웃 후 숨김 */
+    el.classList.add('page-exiting');
     el.classList.remove('active');
-    el.style.display = 'none';
+    setTimeout(() => {
+      el.classList.remove('page-exiting');
+      el.style.display = 'none';
+    }, PAGE_EXIT_MS);
   });
   const vbf = document.getElementById('viewerBackBtn');
   if (vbf) vbf.classList.remove('visible');
@@ -2802,7 +2840,10 @@ function hideAll() {
 function show(id) {
   const el = document.getElementById(id);
   el.style.display = id === 'landing' ? 'flex' : 'block';
-  el.classList.add('active');
+  /* 살짝 딜레이를 줘 hideAll의 페이드아웃과 자연스럽게 겹치며 등장 */
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => el.classList.add('active'));
+  });
 }
 function goLanding(pushState = true) {
   hideAll(); show('landing');
