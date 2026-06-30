@@ -1183,9 +1183,13 @@ body::after {
 .viewer-bc {
   font-family:'Pretendard',sans-serif; font-size:12px;
   letter-spacing:0.14em; text-transform:uppercase;
-  color:var(--text-muted); flex:1;
-  display:flex; align-items:center; gap:6px; flex-wrap:wrap;
-  margin-left:160px;
+  color:var(--text-muted);
+  display:inline-flex; align-items:center; gap:6px; flex-wrap:wrap;
+  margin-left:200px;
+  padding:7px 14px;
+  border:1px solid var(--c-border2);
+  border-radius:var(--radius);
+  background:var(--surface);
 }
 .viewer-bc span { color:var(--text-dim) }
 
@@ -1786,8 +1790,8 @@ body::after {
 
   /* 랜딩 버튼 대각선 배치 — 모바일에서도 원래 값 유지 (튀어나가도 무시) */
 
-  /* 뷰어 topbar 브레드크럼 마진 줄임 */
-  .viewer-bc { margin-left:0; }
+  /* 뷰어 topbar 브레드크럼 마진 — 모바일에서도 오른쪽으로 */
+  .viewer-bc { margin-left:40px; }
 
   /* back-btn 위치 조정 */
   .viewer-topbar .back-btn { transform:translateY(-40px); }
@@ -2172,12 +2176,21 @@ let currentFontFamily = 'default';
 /* 본문 미색 영역 다크모드 켜짐/꺼짐 */
 let contentDarkMode = false;
 
+/* 항목에 실제 콘텐츠(글/이미지/영상)가 있는지 판별 */
+function hasContent(item) {
+  return !!(
+    item.body || item.bodyURL || item.bodyFile ||
+    (item.images && item.images.length) ||
+    item.youtubeId
+  );
+}
+
 function buildFlatList() {
   flatList = [];
   for (const [cat, subs] of Object.entries(contentData))
     for (const [sub, items] of Object.entries(subs))
       items.forEach((item, idx) => {
-        if (item.body || item.bodyURL || item.bodyFile)
+        if (hasContent(item))
           flatList.push({ cat, sub, idx, item });
       });
 }
@@ -2891,7 +2904,7 @@ function renderGridAll(cat) {
   Object.entries(contentData[cat]).forEach(([sub, items]) => {
     const validItems = items
       .map((item, idx) => ({ item, idx }))
-      .filter(({ item }) => item.body || item.bodyURL || item.bodyFile);
+      .filter(({ item }) => hasContent(item));
     if (!validItems.length) return;
     const hdr = document.createElement('div');
     hdr.className = 'sub-section-label';
@@ -2908,7 +2921,7 @@ function renderGrid(cat, sub) {
   grid.innerHTML = '';
   (contentData[cat][sub] || [])
     .forEach((item, idx) => {
-      if (!item.body && !item.bodyURL && !item.bodyFile) return; /* 글 없으면 스킵 */
+      if (!hasContent(item)) return; /* 콘텐츠 없으면 스킵 */
       grid.appendChild(makeCard(item, cat, sub, idx));
     });
 }
