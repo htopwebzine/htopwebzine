@@ -1181,19 +1181,33 @@ body::after {
 }
 .viewer-back-fixed.visible { display:flex; }
 .viewer-bc {
-  font-family:'Pretendard',sans-serif; font-size:11px;
-  letter-spacing:0.1em; text-transform:uppercase;
+  font-family:'Pretendard',sans-serif; font-size:10px;
+  letter-spacing:0.08em; text-transform:uppercase;
   color:#5a4a3a;
-  display:inline-flex; align-items:center; justify-content:center; gap:6px; flex-wrap:wrap;
+  position:relative;
+  display:inline-flex; align-items:center; justify-content:center; gap:5px; flex-wrap:wrap;
   margin-left:200px;
-  width:280px;
+  width:170px;
   aspect-ratio:569 / 264;
+  padding:0 42px 6px 34px;  /* 좌측 고리, 우측 클로버/별 피해서 텍스트 배치 */
+  box-sizing:border-box;
+  z-index:1;
+}
+.viewer-bc::before {
+  content:'';
+  position:absolute;
+  inset:0;
+  z-index:-1;
   background-image:url('https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EC%9D%B8%EB%8D%B1%EC%8A%A4-0.png?raw=true');
   background-size:contain;
   background-repeat:no-repeat;
   background-position:center;
-  padding:0 70px 8px 56px;  /* 좌측 고리, 우측 클로버/별 피해서 텍스트 배치 */
-  box-sizing:border-box;
+  filter:
+    brightness(1.1)
+    drop-shadow(0 0 2px rgba(240,238,230,1))
+    drop-shadow(0 0 6px rgba(240,238,230,0.9))
+    drop-shadow(0 0 14px rgba(240,238,230,0.6))
+    drop-shadow(0 0 28px rgba(240,238,230,0.3));
 }
 .viewer-bc span { color:#8a6a4a }
 
