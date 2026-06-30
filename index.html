@@ -2983,7 +2983,6 @@ async function loadContent(cat, sub, idx, pushState = true) {
   const prev = fi > 0                   ? flatList[fi-1] : null;
   const next = fi < flatList.length - 1 ? flatList[fi+1] : null;
 
-  document.getElementById('viewerBc').innerHTML = `${cat} <span>›</span> ${sub}`;
   const vbf = document.getElementById('viewerBackBtn');
   if (vbf) { vbf.onclick = () => goCategory(cat); vbf.classList.add('visible'); }
 
@@ -3045,6 +3044,10 @@ async function loadContent(cat, sub, idx, pushState = true) {
     <div id="contentBody" style="padding-top:40px; padding-bottom:48px">${await renderBody(item)}</div>
     ${pagerHTML}
   `;
+
+  /* viewerInner 렌더링 후 — 경로 표시 채우기 */
+  const bc = document.getElementById('viewerBc');
+  if (bc) bc.innerHTML = `${cat} <span>›</span> ${sub}`;
 
   /* 글씨 크기 현재 설정값 적용 */
   applyFontSize();
