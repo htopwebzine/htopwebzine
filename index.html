@@ -1181,17 +1181,21 @@ body::after {
 }
 .viewer-back-fixed.visible { display:flex; }
 .viewer-bc {
-  font-family:'Pretendard',sans-serif; font-size:12px;
-  letter-spacing:0.14em; text-transform:uppercase;
-  color:var(--text-muted);
-  display:inline-flex; align-items:center; gap:6px; flex-wrap:wrap;
+  font-family:'Pretendard',sans-serif; font-size:11px;
+  letter-spacing:0.1em; text-transform:uppercase;
+  color:#5a4a3a;
+  display:inline-flex; align-items:center; justify-content:center; gap:6px; flex-wrap:wrap;
   margin-left:200px;
-  padding:7px 14px;
-  border:1px solid var(--c-border2);
-  border-radius:var(--radius);
-  background:var(--surface);
+  width:280px;
+  aspect-ratio:569 / 264;
+  background-image:url('https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EC%9D%B8%EB%8D%B1%EC%8A%A4-0.png?raw=true');
+  background-size:contain;
+  background-repeat:no-repeat;
+  background-position:center;
+  padding:0 70px 8px 56px;  /* 좌측 고리, 우측 클로버/별 피해서 텍스트 배치 */
+  box-sizing:border-box;
 }
-.viewer-bc span { color:var(--text-dim) }
+.viewer-bc span { color:#8a6a4a }
 
 /* 게시글 제목 영역 — 그라디언트가 본문 색까지 자연스럽게 이어짐 */
 .viewer-header {
