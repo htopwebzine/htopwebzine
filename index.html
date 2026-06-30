@@ -905,6 +905,7 @@ body::after {
   box-shadow:none;
   border-radius:var(--radius);
   overflow:visible;      /* 이미지가 overflow:hidden에 잘리지 않도록 */
+  perspective:800px;     /* 3D 틸트를 위한 시점 */
 }
 /* has-img 버튼 hover — translateX 유지하며 확대 */
 .cat-btn:nth-child(1).has-img:hover { transform:translateX(-50px) scale(1.06); }
@@ -913,6 +914,39 @@ body::after {
 .cat-btn.has-img:hover .cat-btn-img { transform:scale(1.06); }
 /* has-img 버튼의 텍스트 span 완전히 숨김 */
 .cat-btn.has-img > span { display:none }
+
+/* ── 3D 오브젝트 느낌: 마우스 따라 살짝 기울어짐 + 떠 있는 그림자 ── */
+.cat-btn.has-img {
+  --rx:0deg; --ry:0deg;
+}
+.cat-btn.has-img .cat-btn-img {
+  transform-style:preserve-3d;
+  transform:rotateX(var(--rx)) rotateY(var(--ry));
+  transition:transform 0.25s ease-out, filter 0.25s ease-out;
+  filter:drop-shadow(0 14px 18px rgba(0,0,0,0.45)) drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+  will-change:transform;
+}
+.cat-btn.has-img:hover .cat-btn-img {
+  filter:drop-shadow(0 22px 26px rgba(0,0,0,0.55)) drop-shadow(0 4px 6px rgba(0,0,0,0.35))
+         drop-shadow(0 0 18px rgba(176,32,32,0.25));
+}
+/* 떠 있는 타원 그림자 — 이미지 아래 깔림, hover 시 살짝 커지고 흐려짐 */
+.cat-btn.has-img::after {
+  content:'';
+  position:absolute;
+  left:50%; bottom:-6px;
+  width:62%; height:14px;
+  transform:translateX(-50%);
+  background:radial-gradient(ellipse at center, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 75%);
+  border-radius:50%;
+  z-index:-1;
+  transition:opacity 0.3s ease, transform 0.3s ease;
+  opacity:0.7;
+}
+.cat-btn.has-img:hover::after {
+  opacity:0.4;
+  transform:translateX(-50%) scale(1.18, 1.05);
+}
 
 /* =====================================================
   ■ 카테고리 목록 페이지
@@ -2193,6 +2227,42 @@ function triggerLandingAnim() {
     });
   });
 }
+
+/* =====================================================
+  ■ 랜딩 카테고리 버튼 3D 틸트 (마우스 추적)
+  마우스가 버튼 위에서 움직이는 위치에 따라 이미지가
+  살짝 기울어져 입체적인 오브젝트처럼 보이게 함
+===================================================== */
+(function() {
+  const MAX_TILT = 14; /* 최대 기울기(deg) */
+  function bindTilt(btn) {
+    const img = btn.querySelector('.cat-btn-img');
+    if (!img) return;
+    btn.addEventListener('mousemove', (e) => {
+      const r = btn.getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width;   /* 0~1 */
+      const py = (e.clientY - r.top)  / r.height;  /* 0~1 */
+      const ry = (px - 0.5) * MAX_TILT * 2;   /* 좌우 기울기 */
+      const rx = (0.5 - py) * MAX_TILT * 2;   /* 상하 기울기 */
+      btn.style.setProperty('--rx', rx.toFixed(2) + 'deg');
+      btn.style.setProperty('--ry', ry.toFixed(2) + 'deg');
+    });
+    btn.addEventListener('mouseleave', () => {
+      btn.style.setProperty('--rx', '0deg');
+      btn.style.setProperty('--ry', '0deg');
+    });
+    /* 모바일 터치 — 가볍게 한 번 기울였다가 복귀 */
+    btn.addEventListener('touchstart', () => {
+      btn.style.setProperty('--rx', '4deg');
+      btn.style.setProperty('--ry', '-4deg');
+    }, { passive:true });
+    btn.addEventListener('touchend', () => {
+      btn.style.setProperty('--rx', '0deg');
+      btn.style.setProperty('--ry', '0deg');
+    }, { passive:true });
+  }
+  document.querySelectorAll('.cat-btn.has-img, .cat-btn').forEach(bindTilt);
+})();
 
 /* =====================================================
   ■ 스크롤 reveal 애니메이션
