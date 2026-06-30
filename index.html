@@ -333,13 +333,21 @@ body::after {
 .heart-svg {
   position:absolute;
   left:-0.65em; top:58%;
-  transform:translateY(-50%);
+  transform:translateY(-50%) scale(0);
+  transform-origin:center;
   width:2.2em; height:1.44em;
   z-index:0;
-  opacity:0.9;
+  opacity:0;
   fill:#c23a28;
   filter:drop-shadow(0 0 12px rgba(200,50,30,0.65));
-  animation:heartGlow 2.4s ease-in-out 2.0s infinite alternate;
+  animation:heartPop 0.7s cubic-bezier(0.34,1.56,0.64,1) 0.3s forwards,
+            heartGlow 2.4s ease-in-out 2.0s infinite alternate;
+}
+@keyframes heartPop {
+  0%   { opacity:0; transform:translateY(-50%) scale(0) rotate(-25deg); }
+  55%  { opacity:1; transform:translateY(-50%) scale(1.35) rotate(8deg); }
+  75%  { transform:translateY(-50%) scale(0.9) rotate(-4deg); }
+  100% { opacity:0.9; transform:translateY(-50%) scale(1) rotate(0deg); }
 }
 @keyframes heartGlow {
   from { filter:drop-shadow(0 0 8px rgba(200,50,30,0.5)) drop-shadow(0 0 18px rgba(200,50,30,0.18)) }
@@ -370,12 +378,12 @@ body::after {
 @keyframes charIn {
   0%   { opacity:0; transform:translateY(22px) scale(0.88); filter:blur(6px);
          text-shadow:1px 0 0 rgba(220,70,50,0), -1px 0 0 rgba(40,180,190,0), 0 2px 8px rgba(0,0,0,0.6); }
-  40%  { opacity:1; transform:translateY(-4px) scale(1.07) translateX(2px); filter:blur(0);
-         text-shadow:2px 0 0 rgba(220,70,50,0.55), -2px 0 0 rgba(40,180,190,0.45), 0 2px 20px rgba(0,0,0,0.4); }
-  55%  { transform:translateY(-2px) scale(1.03) translateX(-1px);
-         text-shadow:-1.5px 0 0 rgba(220,70,50,0.4), 1.5px 0 0 rgba(40,180,190,0.35), 0 2px 16px rgba(0,0,0,0.4); }
-  72%  { transform:translateY(1px) scale(0.99) translateX(0);
-         text-shadow:1px 0 0 rgba(220,70,50,0.2), -1px 0 0 rgba(40,180,190,0.18), 0 2px 10px rgba(0,0,0,0.5); }
+  35%  { opacity:1; transform:translateY(-5px) scale(1.1) translateX(3px); filter:blur(0);
+         text-shadow:3px 0 0 rgba(220,70,50,0.75), -3px 0 0 rgba(40,180,190,0.65), 0 2px 24px rgba(0,0,0,0.4); }
+  50%  { transform:translateY(-3px) scale(1.04) translateX(-2px);
+         text-shadow:-2.2px 0 0 rgba(220,70,50,0.55), 2.2px 0 0 rgba(40,180,190,0.5), 0 2px 18px rgba(0,0,0,0.4); }
+  72%  { transform:translateY(1px) scale(0.99) translateX(1px);
+         text-shadow:1.2px 0 0 rgba(220,70,50,0.28), -1.2px 0 0 rgba(40,180,190,0.24), 0 2px 10px rgba(0,0,0,0.5); }
   100% { opacity:1; transform:translateY(0) scale(1); filter:blur(0);
          text-shadow:1px 0 0 rgba(220,70,50,0), -1px 0 0 rgba(40,180,190,0), 0 2px 8px rgba(0,0,0,0.6); }
 }
@@ -971,7 +979,7 @@ body::after {
   ■ 카테고리 목록 페이지
 ===================================================== */
 #catPage { display:none }
-#catPage.active { display:block; animation:fadeUp 0.5s ease both; padding-top:60px; }
+#catPage.active { display:block; animation:fadeUp 0.5s ease both; padding-top:36px; }
 
 /* 카테고리 헤드 영역: 배너 위 절대 레이어 */
 .catpage-head {
@@ -982,7 +990,7 @@ body::after {
 /* 백버튼: 우상단 — 공백 아래 */
 .catpage-head .back-btn {
   position:absolute;
-  top:-48px;
+  top:-24px;
   right:62px;
   z-index:6;
 }
