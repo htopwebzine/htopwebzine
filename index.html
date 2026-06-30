@@ -1070,12 +1070,13 @@ body::after {
   position: relative; overflow: visible;
   filter: brightness(1.08);
 }
-/* 호버: 프레임 전체가 살짝 위로 올라옴 (밝기는 상시 적용) */
+/* 호버: 프레임 전체가 살짝 위로 올라오고 밝아짐 */
 .content-card::before { display: none; }
 .content-card:hover {
   transform: translateY(-2px) translateX(2px);
   background: transparent;
   padding-left: 24px;
+  filter: brightness(1.28);
 }
 
 .card-info   { flex:1; text-align:center; }
@@ -1188,8 +1189,8 @@ body::after {
   display:inline-flex; align-items:center; justify-content:center; gap:5px; flex-wrap:wrap;
   margin-left:200px;
   width:170px;
-  aspect-ratio:569 / 264;
-  padding:0 42px 6px 34px;  /* 좌측 고리, 우측 클로버/별 피해서 텍스트 배치 */
+  aspect-ratio:569 / 215;
+  padding:0 42px 4px 34px;  /* 좌측 고리, 우측 클로버/별 피해서 텍스트 배치 */
   box-sizing:border-box;
   z-index:1;
 }
@@ -1199,7 +1200,7 @@ body::after {
   inset:0;
   z-index:-1;
   background-image:url('https://github.com/htopwebzine/htopwebzine/blob/main/%EC%82%AC%EC%A7%84/%EC%9B%B9%EC%A7%84%EC%9D%B8%EB%8D%B1%EC%8A%A4-0.png?raw=true');
-  background-size:contain;
+  background-size:100% 100%;
   background-repeat:no-repeat;
   background-position:center;
   filter:
